@@ -1,10 +1,13 @@
 package model.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
-public class Treino {
+public class Treino implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private Integer id;
 	private String nome;
 	private Date dataInicio;
@@ -19,6 +22,12 @@ public class Treino {
 		this.nome = nome;
 		this.dataInicio = dataInicio;
 		this.mapTreinos = mapTreinos;
+	}
+
+	public Treino(Integer id, String nome, Date dataInicio) {
+		this.id = id;
+		this.nome = nome;
+		this.dataInicio = dataInicio;
 	}
 
 	public Integer getId() {
