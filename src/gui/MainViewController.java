@@ -31,37 +31,37 @@ public class MainViewController implements Initializable {
 	private MenuItem menuItemAjudaSobre;
 
 	@FXML
-	public void onMenuItemCadastroAluno() {
+	public void onMenuItemCadastroAlunoAction() {
 		System.out.println("Menu Item Cadastro Aluno");
 	}
 
 	@FXML
-	public void onMenuItemCadastroTreino() {
+	public void onMenuItemCadastroTreinoAction() {
 		System.out.println("Menu Item Cadastro Treino");
 	}
 
 	@FXML
-	public void onMenuItemCadastroAula() {
+	public void onMenuItemCadastroAulaAction() {
 		System.out.println("Menu Item Cadastro Aula");
 	}
 	
 	@FXML
-	public void onMenuItemConsultaAluno() {
+	public void onMenuItemConsultaAlunoAction() {
 		System.out.println("Menu Item Consulta Aluno");
 	}
 
 	@FXML
-	public void onMenuItemConsultaTreino() {
+	public void onMenuItemConsultaTreinoAction() {
 		System.out.println("Menu Item Consulta Treino");
 	}
 	
 	@FXML
-	public void onMenuItemConsultaAula() {
+	public void onMenuItemConsultaAulaAction() {
 		System.out.println("Menu Item Consulta Aula");
 	}
 	
 	@FXML
-	public void onMenuItemAjudaSobre() {
+	public void onMenuItemAjudaSobreAction() {
 		System.out.println("Menu Item Ajuda Sobre");
 	}
 

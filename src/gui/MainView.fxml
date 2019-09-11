@@ -14,21 +14,21 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Cadastro">
                   <items>
-                    <MenuItem fx:id="menuItemCadastroAluno" mnemonicParsing="false" onAction="#onMenuItemCadastroAluno" text="Alunos" />
-                        <MenuItem fx:id="menuItemCadastroTreino" mnemonicParsing="false" onAction="#onMenuItemCadastroTreino" text="Treinos" />
-                        <MenuItem fx:id="menuItemCadastroAula" mnemonicParsing="false" onAction="#onMenuItemCadastroAula" text="Aulas" />
+                    <MenuItem fx:id="menuItemCadastroAluno" mnemonicParsing="false" onAction="#onMenuItemCadastroAlunoAction" text="Alunos" />
+                        <MenuItem fx:id="menuItemCadastroTreino" mnemonicParsing="false" onAction="#onMenuItemCadastroTreinoAction" text="Treinos" />
+                        <MenuItem fx:id="menuItemCadastroAula" mnemonicParsing="false" onAction="#onMenuItemCadastroAulaAction" text="Aulas" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Consulta">
                   <items>
-                    <MenuItem fx:id="menuItemConsultaAluno" mnemonicParsing="false" onAction="#onMenuItemConsultaAluno" text="Alunos" />
-                        <MenuItem fx:id="menuItemConsultaTreino" mnemonicParsing="false" onAction="#onMenuItemConsultaTreino" text="Treinos" />
-                        <MenuItem fx:id="menuItemConsultaAula" mnemonicParsing="false" onAction="#onMenuItemConsultaAula" text="Aulas" />
+                    <MenuItem fx:id="menuItemConsultaAluno" mnemonicParsing="false" onAction="#onMenuItemConsultaAlunoAction" text="Alunos" />
+                        <MenuItem fx:id="menuItemConsultaTreino" mnemonicParsing="false" onAction="#onMenuItemConsultaTreinoAction" text="Treinos" />
+                        <MenuItem fx:id="menuItemConsultaAula" mnemonicParsing="false" onAction="#onMenuItemConsultaAulaAction" text="Aulas" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Ajuda">
                   <items>
-                    <MenuItem fx:id="menuItemAjudaSobre" mnemonicParsing="false" onAction="#onMenuItemAjudaSobre" text="Sobre" />
+                    <MenuItem fx:id="menuItemAjudaSobre" mnemonicParsing="false" onAction="#onMenuItemAjudaSobreAction" text="Sobre" />
                   </items>
                 </Menu>
               </menus>
