@@ -21,7 +21,7 @@ public class Main extends Application {
 			
 			mainScene = new Scene(scrollPane);
 			primaryStage.setScene(mainScene);
-			primaryStage.setTitle("Sistema Gerencial Academia Mulher & Forma - Home");
+			primaryStage.setTitle("Sistema Gerencial Academia Mulher & Forma");
 			primaryStage.show();
 			
 		} catch (Exception e) {
