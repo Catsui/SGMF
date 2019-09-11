@@ -1,22 +1,24 @@
 package model.entities;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 public class Treino {
 
 	private Integer id;
+	private String nome;
 	private Date dataInicio;
-	private List<String> listTreinos;
+	private Map<String, String> mapTreinos;
 
 	public Treino() {
 
 	}
 
-	public Treino(Integer id, Date dataInicio, List<String> listTreinos) {
+	public Treino(Integer id, String nome, Date dataInicio, Map<String, String> mapTreinos) {
 		this.id = id;
+		this.nome = nome;
 		this.dataInicio = dataInicio;
-		this.listTreinos = listTreinos;
+		this.mapTreinos = mapTreinos;
 	}
 
 	public Integer getId() {
@@ -25,6 +27,14 @@ public class Treino {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	public String getNome() {
+		return nome;
+	}
+	
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public Date getDataInicio() {
@@ -35,12 +45,12 @@ public class Treino {
 		this.dataInicio = dataInicio;
 	}
 
-	public List<String> getListTreinos() {
-		return listTreinos;
+	public Map<String, String> getMapTreinos() {
+		return mapTreinos;
 	}
 
-	public void setListTreinos(List<String> listTreinos) {
-		this.listTreinos = listTreinos;
+	public void setMapTreinos(Map<String, String> mapTreinos) {
+		this.mapTreinos = mapTreinos;
 	}
 
 	@Override
@@ -70,7 +80,8 @@ public class Treino {
 
 	@Override
 	public String toString() {
-		return "Treino [id=" + id + ", dataInicio=" + dataInicio + ", listTreinos=" + listTreinos + "]";
+		return "Treino [id=" + id + ", nome=" + nome + ", dataInicio=" + dataInicio + ", mapTreinos=" + mapTreinos
+				+ "]";
 	}
 
 }

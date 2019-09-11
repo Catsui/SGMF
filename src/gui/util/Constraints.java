@@ -24,7 +24,7 @@ public class Constraints {
 			if (newValue != null && newValue.length()>max) {
 				txt.setText(oldValue);
 			}
-		});
+		});	
 	}
 
 }
