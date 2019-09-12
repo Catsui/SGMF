@@ -25,6 +25,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -62,6 +63,12 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private Button btnNovo;
+	
+	@FXML
+	private Button btnPesquisaNome;
+	
+	@FXML
+	private TextField txtPesquisaNome;
 
 	private ObservableList<Aluno> obsList;
 
@@ -150,6 +157,20 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 		}
 	}
+	
+	public void findByName() {
+		if (service == null) {
+			throw new IllegalStateException("Serviço nulo.");
+		}
+		if (txtPesquisaNome.getText().length()>0) {
+			obsList = FXCollections.observableArrayList(service.findByName(txtPesquisaNome.getText(), txtPesquisaNome.getText().length()));
+		} else {
+			obsList = FXCollections.observableArrayList(service.findAll());
+		}
+		tableViewAluno.setItems(obsList);
+		initEditButtons();
+		initRemoveButtons();
+	}
 
 	public void updateTableView() {
 		if (service == null) {
@@ -159,6 +180,10 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		tableViewAluno.setItems(obsList);
 		initEditButtons();
 		initRemoveButtons();
+	}
+	
+	public void onBtnPesquisaNomeAction() {
+		findByName();
 	}
 
 	public void createDialogForm(Aluno obj, String absoluteName, Stage parentStage) {

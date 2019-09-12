@@ -108,7 +108,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 		ResultSet rs = null;
 		
 		try {
-			st = conn.prepareStatement("SELECT aluno.* WHERE Id = ?");
+			st = conn.prepareStatement("SELECT * FROM aluno WHERE Id = ?");
 					
 			st.setInt(1, id);
 			rs = st.executeQuery();
@@ -123,6 +123,32 @@ public class AlunoDaoJDBC implements AlunoDao {
 			DB.closeResultSet(rs);
 			DB.closeStatement(st);
 		}					
+	}
+	
+	@Override
+	public List<Aluno> findByName(String nome, int length) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			st = conn.prepareStatement("SELECT * FROM aluno WHERE substring(Nome,1,?) = ?");
+			
+			st.setInt(1,length);
+			st.setString(2, nome);
+			rs = st.executeQuery();
+
+			List<Aluno> list = new ArrayList<>();
+			while(rs.next()) {
+				Aluno aluno = instantiateAluno(rs);
+				list.add(aluno);
+			}
+			return list;
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
 	}
 
 	private Aluno instantiateAluno(ResultSet rs) throws SQLException {

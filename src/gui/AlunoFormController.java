@@ -183,6 +183,7 @@ public class AlunoFormController implements Initializable {
 			java.util.Date dataInicio = new Date(entity.getDataInicio().getTime());
 			dpDataInicio.setValue(dataInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		}
+		txtTreino.setText(entity.getTreino());
 	}
 
 	private void setErrorMsgs(Map<String, String> errors) {

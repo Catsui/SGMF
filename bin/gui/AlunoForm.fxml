@@ -56,7 +56,7 @@
             <VBox prefHeight="282.0" prefWidth="407.0">
                <children>
                   <Label alignment="CENTER" prefHeight="37.0" prefWidth="432.0" text="Descrição do Treino" textAlignment="CENTER" />
-                  <TextArea fx:id="txtTreino" prefHeight="200.0" prefWidth="398.0" />
+                  <TextArea fx:id="txtTreino" prefHeight="200.0" prefWidth="398.0" wrapText="true" />
                </children>
             </VBox>
          </children>

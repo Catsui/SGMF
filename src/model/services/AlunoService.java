@@ -14,6 +14,10 @@ public class AlunoService {
 		return dao.findAll();	
 	}
 	
+	public List<Aluno> findByName(String nome, int length) {
+		return dao.findByName(nome, length);
+	}
+	
 	public void saveOrUpdate(Aluno obj) {
 		if (obj.getId() == null) {
 			dao.insert(obj);
