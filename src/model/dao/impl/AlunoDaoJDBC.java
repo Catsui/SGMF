@@ -130,7 +130,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 		aluno.setNome(rs.getString("Nome"));
 		aluno.setDataNasc(rs.getDate("DataNasc"));
 		aluno.setTelefone(rs.getString("Telefone"));
-		aluno.setDataInicio(rs.getDate("DataInicio"));	
+		aluno.setDataInicio(rs.getDate("DataInicioTreino"));	
 		aluno.setTreino(rs.getString("Treino"));
 		return aluno;
 	}
@@ -141,8 +141,8 @@ public class AlunoDaoJDBC implements AlunoDao {
 		ResultSet rs = null;
 		
 		try {
-			st=conn.prepareStatement("SELECT aluno.* ORDER by Id");
-			
+			st=conn.prepareStatement("SELECT * FROM aluno ORDER by Id");
+	
 			rs = st.executeQuery();
 			
 			List<Aluno> list = new ArrayList<>();

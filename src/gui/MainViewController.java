@@ -16,62 +16,34 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.AlunoService;
 import model.services.TreinoService;
 
 public class MainViewController implements Initializable {
 
 	@FXML
-	private MenuItem menuItemCadastroAluno;
+	private MenuItem menuItemAlunoConsulta;
 
 	@FXML
-	private MenuItem menuItemCadastroTreino;
-
-	@FXML
-	private MenuItem menuItemCadastroAula;
-
-	@FXML
-	private MenuItem menuItemConsultaAluno;
-
-	@FXML
-	private MenuItem menuItemConsultaTreino;
-
-	@FXML
-	private MenuItem menuItemConsultaAula;
+	private MenuItem menuItemAlunoNovo;
 
 	@FXML
 	private MenuItem menuItemAjudaSobre;
 
 	@FXML
-	public void onMenuItemCadastroAlunoAction() {
-		System.out.println("Menu Item Cadastro Aluno");
-	}
-
-	@FXML
-	public void onMenuItemCadastroTreinoAction() {
-		loadView("/gui/TreinoList.fxml", (TreinoListController controller)-> {
-			controller.setTreinoService(new TreinoService());
+	public void onMenuItemAlunoConsultaAction() {
+		loadView("/gui/AlunoList.fxml", (AlunoListController controller)-> {
+			controller.setAlunoService(new AlunoService());
 			controller.updateTableView();
 		});
 	}
 
 	@FXML
-	public void onMenuItemCadastroAulaAction() {
-		System.out.println("Menu Item Cadastro Aula");
-	}
-
-	@FXML
-	public void onMenuItemConsultaAlunoAction() {
-		System.out.println("Menu Item Consulta Aluno");
-	}
-
-	@FXML
-	public void onMenuItemConsultaTreinoAction() {
-		System.out.println("Menu Item Consulta Treino");
-	}
-
-	@FXML
-	public void onMenuItemConsultaAulaAction() {
-		System.out.println("Menu Item Consulta Aula");
+	public void onMenuItemAlunoNovoAction() {
+		loadView("/gui/TreinoList.fxml", (TreinoListController controller)-> {
+			controller.setTreinoService(new TreinoService());
+			controller.updateTableView();
+		});
 	}
 
 	@FXML

@@ -43,16 +43,16 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	private TableColumn<Aluno, Integer> tableColumnId;
 	
 	@FXML
-	private TableColumn<Aluno, String> tableColumnName;
+	private TableColumn<Aluno, String> tableColumnNome;
 	
 	@FXML
-	private TableColumn<Aluno, String> tableColumnEmail;
+	private TableColumn<Aluno, Date> tableColumnDataNasc;
 	
 	@FXML
-	private TableColumn<Aluno, Date> tableColumnBirthDate;
+	private TableColumn<Aluno, Date> tableColumnDataInicio;
 	
 	@FXML
-	private TableColumn<Aluno, Double> tableColumnBaseSalary;
+	private TableColumn<Aluno, String> tableColumnTelefone;
 	
 	@FXML
 	private TableColumn<Aluno, Aluno> tableColumnEDIT;
@@ -61,12 +61,12 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	private TableColumn<Aluno, Aluno> tableColumnREMOVE;
 	
 	@FXML
-	private Button btnNew;
+	private Button btnNovo;
 	
 	private ObservableList<Aluno> obsList;
 	
 	@FXML
-	public void onBtnNewAction(ActionEvent event) {
+	public void onBtnNovoAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
 		Aluno obj = new Aluno();
 		createDialogForm(obj,"/gui/AlunoForm.fxml", parentStage);
@@ -83,12 +83,12 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 	private void initializeNodes() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
-		tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-		tableColumnBirthDate.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
-		Utils.formatTableColumnDate(tableColumnBirthDate, "dd/MM/yyyy");
-		tableColumnBaseSalary.setCellValueFactory(new PropertyValueFactory<>("baseSalary"));
-		Utils.formatTableColumnDouble(tableColumnBaseSalary, 2);
+		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+		tableColumnDataNasc.setCellValueFactory(new PropertyValueFactory<>("dataNasc"));
+		Utils.formatTableColumnDate(tableColumnDataNasc, "dd/MM/yyyy");
+		tableColumnDataInicio.setCellValueFactory(new PropertyValueFactory<>("dataInicio"));
+		Utils.formatTableColumnDate(tableColumnDataInicio, "dd/MM/yyyy");
+		tableColumnTelefone.setCellValueFactory(new PropertyValueFactory<>("telefone"));
 		
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewAluno.prefHeightProperty().bind(stage.heightProperty());
@@ -137,7 +137,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	}
 	
 	private void removeEntity(Aluno obj) {
-		Optional<ButtonType> confirm = Alerts.showConfirmation("Confirmação de exclusão", "Tem certeza que deseja excluir o vendedor?");
+		Optional<ButtonType> confirm = Alerts.showConfirmation("Confirmação de exclusão", "Tem certeza que deseja excluir o aluno?");
 		if (confirm.get() == ButtonType.OK) {
 			if (service == null) {
 				throw new IllegalStateException("Serviço nulo");
@@ -174,7 +174,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 			controller.updateFormData();
 			
 			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Informe os dados do vendedor");
+			dialogStage.setTitle("Informe os dados do aluno");
 			dialogStage.setScene(new Scene(pane));
 			dialogStage.setResizable(false);
 			dialogStage.initOwner(parentStage);
