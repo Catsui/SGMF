@@ -29,6 +29,11 @@ public class Treino implements Serializable {
 		this.nome = nome;
 		this.dataInicio = dataInicio;
 	}
+	
+	public Treino(Integer id, String nome) {
+		this.id = id;
+		this.nome = nome;
+	}
 
 	public Integer getId() {
 		return id;

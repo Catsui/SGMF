@@ -6,25 +6,25 @@ import java.util.Date;
 public class Aluno implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer id;
 	private String nome;
 	private String telefone;
 	private Date dataNasc;
-	private Integer frequencia;
 	private Date dataInicio;
+	private String treino;
 
 	public Aluno() {
 
 	}
 
-	public Aluno(Integer id, String nome, String telefone, Date dataNasc, Integer frequencia, Date dataInicio) {
+	public Aluno(Integer id, String nome, String telefone, Date dataNasc, Date dataInicio, String treino) {
 		this.id = id;
 		this.nome = nome;
 		this.telefone = telefone;
 		this.dataNasc = dataNasc;
-		this.frequencia = frequencia;
 		this.dataInicio = dataInicio;
+		this.treino = treino;
 	}
 
 	public Integer getId() {
@@ -59,14 +59,6 @@ public class Aluno implements Serializable {
 		this.dataNasc = dataNasc;
 	}
 
-	public Integer getFrequencia() {
-		return frequencia;
-	}
-
-	public void setFrequencia(Integer frequencia) {
-		this.frequencia = frequencia;
-	}
-
 	public Date getDataInicio() {
 		return dataInicio;
 	}
@@ -74,11 +66,19 @@ public class Aluno implements Serializable {
 	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
 	}
+	
+	public String getTreino() {
+		return treino;
+	}
+
+	public void setTreino(String treino) {
+		this.treino = treino;
+	}
 
 	@Override
 	public String toString() {
 		return "Aluno [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", dataNasc=" + dataNasc
-				+ ", frequencia=" + frequencia + ", dataInicio=" + dataInicio + "]";
+				+ ", dataInicio=" + dataInicio + "]";
 	}
 
 	@Override
