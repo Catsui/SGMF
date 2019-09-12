@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import application.Main;
 import gui.util.Alerts;
@@ -27,13 +28,13 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	private MenuItem menuItemCadastroAula;
-	
+
 	@FXML
 	private MenuItem menuItemConsultaAluno;
-	
+
 	@FXML
 	private MenuItem menuItemConsultaTreino;
-	
+
 	@FXML
 	private MenuItem menuItemConsultaAula;
 
@@ -47,14 +48,17 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemCadastroTreinoAction() {
-		loadView2("/gui/TreinoList.fxml");
+		loadView("/gui/TreinoList.fxml", (TreinoListController controller)-> {
+			controller.setTreinoService(new TreinoService());
+			controller.updateTableView();
+		});
 	}
 
 	@FXML
 	public void onMenuItemCadastroAulaAction() {
 		System.out.println("Menu Item Cadastro Aula");
 	}
-	
+
 	@FXML
 	public void onMenuItemConsultaAlunoAction() {
 		System.out.println("Menu Item Consulta Aluno");
@@ -64,64 +68,43 @@ public class MainViewController implements Initializable {
 	public void onMenuItemConsultaTreinoAction() {
 		System.out.println("Menu Item Consulta Treino");
 	}
-	
+
 	@FXML
 	public void onMenuItemConsultaAulaAction() {
 		System.out.println("Menu Item Consulta Aula");
 	}
-	
+
 	@FXML
 	public void onMenuItemAjudaSobreAction() {
-		loadView("/gui/AboutView.fxml");
+		loadView("/gui/AboutView.fxml", x-> {});
 	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 
 	}
-	
-	private synchronized void loadView(String absoluteName) {
+
+	private synchronized <T> void loadView(String absoluteName, Consumer<T> initializingAction) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			VBox newVBox = loader.load();
-			
+
 			Scene mainScene = Main.getMainScene();
 			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
-			
+
 			Node mainMenu = mainVBox.getChildren().get(0);
 			mainVBox.getChildren().clear();
 			mainVBox.getChildren().add(mainMenu);
 			mainVBox.getChildren().addAll(newVBox.getChildren());
 			
-			
+			T controller = loader.getController();
+			initializingAction.accept(controller);
+
 		} catch (IOException e) {
-			Alerts.showAlert("Erro ao carregar a página", null, "Houve um erro ao carregar a página: " + e.getMessage(), AlertType.ERROR);
+			Alerts.showAlert("Erro ao carregar a página", null, "Houve um erro ao carregar a página: " + e.getMessage(),
+					AlertType.ERROR);
 		}
-		
-	}
-	
-	private synchronized void loadView2(String absoluteName) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			VBox newVBox = loader.load();
-			
-			Scene mainScene = Main.getMainScene();
-			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
-			
-			Node mainMenu = mainVBox.getChildren().get(0);
-			mainVBox.getChildren().clear();
-			mainVBox.getChildren().add(mainMenu);
-			mainVBox.getChildren().addAll(newVBox.getChildren());
-			
-			TreinoListController controller = loader.getController();
-			controller.setTreinoService(new TreinoService());
-			controller.updateTableView();
-			
-			
-		} catch (IOException e) {
-			Alerts.showAlert("Erro ao carregar a página", null, "Houve um erro ao carregar a página: " + e.getMessage(), AlertType.ERROR);
-		}
-		
+
 	}
 
 }
