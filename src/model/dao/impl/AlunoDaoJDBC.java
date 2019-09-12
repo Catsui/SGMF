@@ -76,6 +76,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 			st.setString(3, aluno.getTelefone());
 			st.setDate(4, new java.sql.Date(aluno.getDataInicio().getTime()));
 			st.setString(5, aluno.getTreino());
+			st.setInt(6, aluno.getId());
 			
 			st.executeUpdate();
 		} catch (SQLException e) {
