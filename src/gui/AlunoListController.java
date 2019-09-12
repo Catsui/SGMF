@@ -31,7 +31,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Aluno;
 import model.services.AlunoService;
-import model.services.TreinoService;
 
 public class AlunoListController implements Initializable, DataChangeListener {
 	
@@ -170,8 +169,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 			
 			AlunoFormController controller = loader.getController();
 			controller.setAluno(obj);
-			controller.setServices(new AlunoService(), new TreinoService());
-			controller.loadAssociatedObjects();
+			controller.setServices(new AlunoService());
 			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
 			

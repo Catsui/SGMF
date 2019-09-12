@@ -7,7 +7,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -17,7 +16,6 @@ import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,11 +23,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.util.Callback;
 import model.entities.Aluno;
 import model.exceptions.ValidationException;
 import model.services.AlunoService;
@@ -61,7 +56,7 @@ public class AlunoFormController implements Initializable {
 	private TextArea txtTreino;
 	
 	@FXML
-	private Label labelErrorName;
+	private Label labelErrorNome;
 	
 	@FXML
 	private Label labelErrorTelefone;
@@ -126,32 +121,32 @@ public class AlunoFormController implements Initializable {
 		ValidationException exception = new ValidationException("Erro de validação");
 		
 		obj.setId(Utils.tryParseToInt(txtId.getText()));
-		if (txtName.getText()==null || txtName.getText().trim().equals("")) {
-			exception.addError("name", "Campo não deve ser vazio.");
+		if (txtNome.getText()==null || txtNome.getText().trim().equals("")) {
+			exception.addError("nome", "Campo obrigatório.");
 		}
-		obj.setNome(txtName.getText());
-		if (txtEmail.getText()==null || txtEmail.getText().trim().equals("")) {
-			exception.addError("email", "Campo não deve ser vazio.");
+		obj.setNome(txtNome.getText());
+		
+		if (txtTelefone.getText()==null || txtTelefone.getText().trim().equals("")) {
+			exception.addError("email", "Campo obrigatório.");
 		}
-		obj.set(txtEmail.getText());
+		obj.setTelefone(txtTelefone.getText());
 		
 		if (dpDataNasc.getValue()==null) {
-			exception.addError("birthDate", "Campo não deve ser vazio.");
+			exception.addError("birthDate", "Campo obrigatório.");
 		} else {
 			Instant instant = Instant.from(dpDataNasc.getValue().atStartOfDay(ZoneId.systemDefault()));
 			obj.setDataNasc(Date.from(instant));
 		}
 		
-		
-		if (txtBaseSalary.getText()==null || txtBaseSalary.getText().trim().equals("")) {
-			exception.addError("baseSalary", "Campo não deve ser vazio.");
-		}
-		obj.setBaseSalary(Utils.tryParseToDouble(txtBaseSalary.getText()));
-		if (exception.getErrors().size()>0) {
-			throw exception;
+		if (dpDataInicio.getValue()==null) {
+			exception.addError("birthDate", "Campo obrigatório.");
+		} else {
+			Instant instant = Instant.from(dpDataInicio.getValue().atStartOfDay(ZoneId.systemDefault()));
+			obj.setDataInicio(Date.from(instant));
 		}
 		
-		obj.setDepartment(comboBoxDepartment.getValue());
+		obj.setTreino(txtTreino.getText());
+
 		return obj;
 	}
 
@@ -167,61 +162,54 @@ public class AlunoFormController implements Initializable {
 	
 	private void initializeNodes() {
 		Constraints.setTextFieldInteger(txtId);
-		Constraints.setTextFieldMaxLength(txtName, 70);
-		Constraints.setTextFieldDouble(txtBaseSalary);
-		Constraints.setTextFieldMaxLength(txtEmail, 70);
+		Constraints.setTextFieldMaxLength(txtNome, 70);
+		Constraints.setTextFieldMaxLength(txtTelefone, 20);
+		Constraints.setTextFieldMaxLength(txtTelefone, 70);
 		Utils.formatDatePicker(dpDataNasc, "dd/MM/yyyy");
-		initializeComboBoxDepartment();
 	}
 	
-	private void initializeComboBoxDepartment() {
-		Callback<ListView<Department>, ListCell<Department>> factory = lv -> new ListCell<Department> () {
-			@Override
-			protected void updateItem(Department item, boolean empty) {
-				super.updateItem(item,empty);
-				setText(empty? "":item.getName());
-			}
-		};
-		
-		comboBoxDepartment.setCellFactory(factory);
-		comboBoxDepartment.setButtonCell(factory.call(null));
-	}
+//	private void initializeComboBoxDepartment() {
+//		Callback<ListView<Department>, ListCell<Department>> factory = lv -> new ListCell<Department> () {
+//			@Override
+//			protected void updateItem(Department item, boolean empty) {
+//				super.updateItem(item,empty);
+//				setText(empty? "":item.getNome());
+//			}
+//		};
+//		
+//		comboBoxDepartment.setCellFactory(factory);
+//		comboBoxDepartment.setButtonCell(factory.call(null));
+//	}
 	
 	public void updateFormData() {
 		if (entity == null) {
 			throw new IllegalStateException("Entidade nula.");
 		}
 		txtId.setText(entity.getId()==null? "": String.valueOf(entity.getId()));
-		txtName.setText(entity.getName());
-		txtEmail.setText(entity.getEmail());
+		txtNome.setText(entity.getNome());
+		txtTelefone.setText(entity.getTelefone());
 		if(entity.getDataNasc()!=null) {
 			dpDataNasc.setValue(LocalDate.ofInstant(entity.getDataNasc().toInstant(), ZoneId.systemDefault()));
 		}
-		Locale.setDefault(Locale.US);
-		txtBaseSalary.setText(entity.getBaseSalary()==null? "":String.format("%.2f",entity.getBaseSalary()));
-		if(entity.getDepartment()==null) {
-			comboBoxDepartment.getSelectionModel().selectFirst();
-		} else {
-			comboBoxDepartment.setValue(entity.getDepartment());
-		}
-	}	
+	}
+
 	
 	private void setErrorMsgs(Map<String, String> errors) {
 		Set<String> fields = errors.keySet();
 		
-		labelErrorName.setText(fields.contains("name")? errors.get("name"):"");
-		labelErrorEmail.setText(fields.contains("email")? errors.get("email"):"");
+		labelErrorNome.setText(fields.contains("nome")? errors.get("nome"):"");
+		labelErrorTelefone.setText(fields.contains("email")? errors.get("email"):"");
 		labelErrorDataNasc.setText(fields.contains("birthDate")? errors.get("birthDate"):"");
-		labelErrorBaseSalary.setText(fields.contains("baseSalary")? errors.get("baseSalary"):"");		
+		labelErrorDataInicio.setText(fields.contains("baseSalary")? errors.get("baseSalary"):"");		
 	}
-	
-	public void loadAssociatedObjects() {
-		if(departmentService == null) {
-			throw new IllegalStateException("Serviço de departamento está nulo.");
-		}
-		List<Department> list = departmentService.findAll();
-		obsList = FXCollections.observableArrayList(list);
-		comboBoxDepartment.setItems(obsList);
-	}
+//	
+//	public void loadAssociatedObjects() {
+//		if(departmentService == null) {
+//			throw new IllegalStateException("Serviço de departamento está nulo.");
+//		}
+//		List<Department> list = departmentService.findAll();
+//		obsList = FXCollections.observableArrayList(list);
+//		comboBoxDepartment.setItems(obsList);
+//	}
 
 }
