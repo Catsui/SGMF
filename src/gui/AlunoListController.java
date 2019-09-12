@@ -56,6 +56,9 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	private TableColumn<Aluno, String> tableColumnTelefone;
 
 	@FXML
+	private TableColumn<Aluno, Aluno> tableColumnVIEW;
+
+	@FXML
 	private TableColumn<Aluno, Aluno> tableColumnEDIT;
 
 	@FXML
@@ -63,10 +66,13 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private Button btnNovo;
-	
+
 	@FXML
 	private Button btnPesquisaNome;
 	
+	@FXML
+	private Button btnLimpaNome;
+
 	@FXML
 	private TextField txtPesquisaNome;
 
@@ -77,6 +83,17 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		Stage parentStage = Utils.currentStage(event);
 		Aluno obj = new Aluno();
 		createDialogForm(obj, "/gui/AlunoForm.fxml", parentStage);
+	}
+	
+	@FXML
+	public void onBtnPesquisaNomeAction() {
+		findByName();
+	}
+	
+	@FXML
+	public void onBtnLimpaNomeAction() {
+		txtPesquisaNome.setText("");
+		findByName();
 	}
 
 	public void setAlunoService(AlunoService service) {
@@ -103,6 +120,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 	private void initEditButtons() {
 		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnEDIT.setPrefWidth(53);
 		tableColumnEDIT.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
 			private final Button button = new Button("Editar");
 
@@ -121,8 +139,30 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		});
 	}
 
+	private void initViewButtons() {
+		tableColumnVIEW.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnVIEW.setPrefWidth(80);
+		tableColumnVIEW.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
+			private final Button button = new Button("Visualizar");
+
+			@Override
+			protected void updateItem(Aluno obj, boolean empty) {
+				super.updateItem(obj, empty);
+
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				
+				setGraphic(button);
+				button.setOnAction(event -> createDialogView(obj, "/gui/AlunoView.fxml", Utils.currentStage(event)));
+			}
+		});
+	}
+
 	private void initRemoveButtons() {
 		tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnREMOVE.setPrefWidth(70);
 		tableColumnREMOVE.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
 			private final Button button = new Button("Remover");
 
@@ -157,13 +197,14 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 		}
 	}
-	
+
 	public void findByName() {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");
 		}
-		if (txtPesquisaNome.getText().length()>0) {
-			obsList = FXCollections.observableArrayList(service.findByName(txtPesquisaNome.getText(), txtPesquisaNome.getText().length()));
+		if (txtPesquisaNome.getText().length() > 0) {
+			obsList = FXCollections.observableArrayList(
+					service.findByName(txtPesquisaNome.getText(), txtPesquisaNome.getText().length()));
 		} else {
 			obsList = FXCollections.observableArrayList(service.findAll());
 		}
@@ -180,10 +221,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		tableViewAluno.setItems(obsList);
 		initEditButtons();
 		initRemoveButtons();
-	}
-	
-	public void onBtnPesquisaNomeAction() {
-		findByName();
+		initViewButtons();
 	}
 
 	public void createDialogForm(Aluno obj, String absoluteName, Stage parentStage) {
@@ -194,6 +232,29 @@ public class AlunoListController implements Initializable, DataChangeListener {
 			AlunoFormController controller = loader.getController();
 			controller.setAluno(obj);
 			controller.setServices(new AlunoService());
+			controller.subscribeDataChangeListener(this);
+			controller.updateFormData();
+
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Informe os dados do aluno");
+			dialogStage.setScene(new Scene(pane));
+			dialogStage.setResizable(false);
+			dialogStage.initOwner(parentStage);
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.showAndWait();
+		} catch (IOException e) {
+			e.printStackTrace();
+			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
+		}
+	}
+	
+	public void createDialogView(Aluno obj, String absoluteName, Stage parentStage) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+
+			AlunoViewController controller = loader.getController();
+			controller.setAluno(obj);
 			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
 
