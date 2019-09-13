@@ -1,25 +1,12 @@
-CREATE TABLE treino (
-  Id int(11) NOT NULL AUTO_INCREMENT,
-  Nome varchar(60) DEFAULT NULL,
-  DataInicio datetime(6) NOT NULL,
-  PRIMARY KEY (Id)
-);
-
 CREATE TABLE aluno (
   Id int(11) NOT NULL AUTO_INCREMENT,
   Nome varchar(60) NOT NULL,
   DataNasc datetime(6) NOT NULL,
-  Telefone varchar(20) NOT NULL,
-  DataInicioTreino datetime(6) NOT NULL,
+  Telefone varchar(20) DEFAULT NULL,
+  DataInicioTreino datetime(6) DEFAULT NULL,
   Treino varchar(2000) DEFAULT NULL,
   PRIMARY KEY (Id)
 );
-
-INSERT INTO treino (Nome) VALUES 
-  ('Hipertrofia'),
-  ('Emagrecimento'),
-  ('Definição'),
-  ('Só pra tirar foto');
 
 INSERT INTO aluno (Nome, DataNasc, Telefone, DataInicioTreino, Treino) VALUES 
   ('AlunoTeste1','1991-07-25 00:00:00',998499840,'2019-05-12 00:00:00','Teste de inserção do treino do aluno número 1.'),

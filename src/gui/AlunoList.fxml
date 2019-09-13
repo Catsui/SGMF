@@ -13,38 +13,38 @@
 
 <VBox prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.AlunoListController">
    <children>
-      <Label text="Visualização e Cadastro de Alunos">
+      <Label text="GERENCIAMENTO DE ALUNOS">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
          <padding>
-            <Insets left="5.0" top="5.0" />
+            <Insets left="10.0" top="10.0" />
          </padding>
       </Label>
-      <ToolBar prefHeight="40.0" prefWidth="200.0">
+      <ToolBar prefHeight="65.0" prefWidth="800.0">
         <items>
-            <VBox prefHeight="79.0" prefWidth="389.0">
+            <VBox prefHeight="65.0" prefWidth="307.0">
                <children>
-                <Button fx:id="btnNovo" mnemonicParsing="false" onAction="#onBtnNovoAction" text="Cadastrar Novo Aluno">
+                  <Button fx:id="btnNovo" mnemonicParsing="false" onAction="#onBtnNovoAction" text="Novo Aluno">
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets left="5.0" top="5.0" />
                      </VBox.margin>
                   </Button>
-                  <HBox prefHeight="100.0" prefWidth="726.0">
+                  <HBox prefHeight="46.0" prefWidth="389.0">
                      <children>
-                        <TextField fx:id="txtPesquisaNome">
+                        <TextField fx:id="txtPesquisaNome" onAction="#onBtnPesquisaNomeAction">
                            <HBox.margin>
-                              <Insets top="10.0" />
+                              <Insets bottom="5.0" left="5.0" top="5.0" />
                            </HBox.margin>
                         </TextField>
                         <Button fx:id="btnPesquisaNome" mnemonicParsing="false" onAction="#onBtnPesquisaNomeAction" text="Pesquisar">
                            <HBox.margin>
-                              <Insets left="10.0" top="10.0" />
+                              <Insets bottom="5.0" left="10.0" top="5.0" />
                            </HBox.margin>
                         </Button>
                         <Button fx:id="btnLimpaNome" mnemonicParsing="false" onAction="#onBtnLimpaNomeAction" text="Limpar">
                            <HBox.margin>
-                              <Insets left="10.0" top="10.0" />
+                              <Insets bottom="5.0" left="10.0" top="5.0" />
                            </HBox.margin>
                         </Button>
                      </children>

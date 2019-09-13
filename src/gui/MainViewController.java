@@ -17,7 +17,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import model.services.AlunoService;
-import model.services.TreinoService;
 
 public class MainViewController implements Initializable {
 
@@ -34,14 +33,6 @@ public class MainViewController implements Initializable {
 	public void onMenuItemAlunoConsultaAction() {
 		loadView("/gui/AlunoList.fxml", (AlunoListController controller)-> {
 			controller.setAlunoService(new AlunoService());
-			controller.updateTableView();
-		});
-	}
-
-	@FXML
-	public void onMenuItemAlunoNovoAction() {
-		loadView("/gui/TreinoList.fxml", (TreinoListController controller)-> {
-			controller.setTreinoService(new TreinoService());
 			controller.updateTableView();
 		});
 	}

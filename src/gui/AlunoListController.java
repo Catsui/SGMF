@@ -141,7 +141,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 	private void initViewButtons() {
 		tableColumnVIEW.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tableColumnVIEW.setPrefWidth(80);
+		tableColumnVIEW.setPrefWidth(72);
 		tableColumnVIEW.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
 			private final Button button = new Button("Visualizar");
 
