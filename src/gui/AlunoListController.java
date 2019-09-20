@@ -200,6 +200,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 					return;
 				}
 				setGraphic(presenca);
+				presenca.setSelected(obj.getPresenca());
 				presenca.setOnAction(event -> updateAttend(obj,presenca.isSelected()));
 			}
 		});
