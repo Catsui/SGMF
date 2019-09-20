@@ -57,7 +57,7 @@ public class AlunoFormController implements Initializable {
 
 	@FXML
 	private DatePicker dpDataInicio;
-	
+
 	@FXML
 	private ComboBox<Integer> comboBoxPresenca;
 
@@ -84,8 +84,6 @@ public class AlunoFormController implements Initializable {
 
 	@FXML
 	private Button btnCancel;
-	
-	
 
 	public void setAluno(Aluno entity) {
 		this.entity = entity;
@@ -179,18 +177,19 @@ public class AlunoFormController implements Initializable {
 		Utils.formatDatePicker(dpDataNasc, "dd/MM/yyyy");
 		Utils.formatDatePicker(dpDataInicio, "dd/MM/yyyy");
 	}
-	
+
 	private void initializeComboBoxAttend() {
-		ObservableList<Integer> opcoes = FXCollections.observableArrayList(1,0);
+		ObservableList<Integer> opcoes = FXCollections.observableArrayList(1, 0);
 		comboBoxPresenca.getItems().addAll(opcoes);
+		comboBoxPresenca.getSelectionModel().select(1);
 		comboBoxPresenca.setCellFactory((ListView<Integer> param) -> {
 			final ListCell<Integer> celulas = new ListCell<Integer>() {
 				@Override
 				protected void updateItem(Integer t, boolean bln) {
-					super.updateItem(t,bln);				
-					
-					if(t != null) {
-						setText(t == 1 ? "Presente":"Ausente");
+					super.updateItem(t, bln);
+
+					if (t != null) {
+						setText(t == 1 ? "Presente" : "Ausente");
 					} else {
 						setText(null);
 					}
@@ -198,11 +197,11 @@ public class AlunoFormController implements Initializable {
 			};
 			return celulas;
 		});
-		
+
 		comboBoxPresenca.valueProperty().addListener((ov, oldVal, newVal) -> {
-			System.out.println("Mudou de " + oldVal + "para " + newVal);
+			System.out.println("ComboBox presença mudou de " + oldVal + " para " + newVal);
 		});
-		
+
 		comboBoxPresenca.setConverter(new StringConverter<Integer>() {
 			@Override
 			public String toString(Integer obj) {
@@ -212,26 +211,14 @@ public class AlunoFormController implements Initializable {
 					return obj == 1 ? "Presente" : "Ausente";
 				}
 			}
-			
+
 			@Override
 			public Integer fromString(String str) {
 				return null;
 			}
-			
+
 		});
-		
-//		IntegerProperty presenca = new SimpleIntegerProperty();
-//		ObservableList<String> opcoes = FXCollections.observableArrayList("Presente", "Ausente");
-//		
-//		comboBoxPresenca.getItems().addAll(opcoes);
-//		presenca.bind(Bindings.when(comboBoxPresenca.valueProperty().isEqualTo("Presente")).then(1).otherwise(0));
-//		
-//		comboBoxPresenca.valueProperty().addListener((ov, oldVal, newVal) -> {
-//			System.out.println(presenca.asString());
-//		});
-//		
-		
-		
+
 	}
 
 	public void updateFormData() {

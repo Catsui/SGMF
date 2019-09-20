@@ -28,9 +28,9 @@ public class AlunoDaoJDBC implements AlunoDao {
 		try {
 			st = conn.prepareStatement(
 					"INSERT INTO aluno "
-					+ "(Nome, DataNasc, Telefone, DataInicioTreino, Treino) "
+					+ "(Nome, DataNasc, Telefone, DataInicioTreino, Presenca, Treino) "
 					+ "VALUES "
-					+ "(?,?,?,?,?)",
+					+ "(?,?,?,?,?,?)",
 					Statement.RETURN_GENERATED_KEYS
 					);
 					
@@ -42,7 +42,8 @@ public class AlunoDaoJDBC implements AlunoDao {
 			} else {
 				st.setDate(4, new java.sql.Date(aluno.getDataInicio().getTime()));
 			}
-			st.setString(5, aluno.getTreino());
+			st.setBoolean(5, false);
+			st.setString(6, aluno.getTreino());
 			
 			int rowsAffected = st.executeUpdate();
 			
@@ -72,15 +73,16 @@ public class AlunoDaoJDBC implements AlunoDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE aluno "
-					+ "SET Nome = ?, DataNasc = ?, Telefone = ?, DataInicioTreino = ?, Treino = ? "
+					+ "SET Nome = ?, DataNasc = ?, Telefone = ?, DataInicioTreino = ?, Presenca = ?, Treino = ? "
 					+ "WHERE Id = ?");
 			
 			st.setString(1, aluno.getNome());
 			st.setDate(2, new java.sql.Date(aluno.getDataNasc().getTime()));
 			st.setString(3, aluno.getTelefone());
 			st.setDate(4, new java.sql.Date(aluno.getDataInicio().getTime()));
-			st.setString(5, aluno.getTreino());
-			st.setInt(6, aluno.getId());
+			st.setBoolean(5, aluno.getPresenca());
+			st.setString(6, aluno.getTreino());		
+			st.setInt(7, aluno.getId());
 			
 			st.executeUpdate();
 		} catch (SQLException e) {
@@ -162,6 +164,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 		aluno.setDataNasc(rs.getDate("DataNasc"));
 		aluno.setTelefone(rs.getString("Telefone"));
 		aluno.setDataInicio(rs.getDate("DataInicioTreino"));	
+		aluno.setPresenca(rs.getBoolean("Presenca"));
 		aluno.setTreino(rs.getString("Treino"));
 		return aluno;
 	}

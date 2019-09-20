@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -54,6 +55,9 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private TableColumn<Aluno, String> tableColumnTelefone;
+
+	@FXML
+	private TableColumn<Aluno, Aluno> tableColumnATTEND;
 
 	@FXML
 	private TableColumn<Aluno, Aluno> tableColumnVIEW;
@@ -181,6 +185,26 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		});
 	}
 
+	private void initCheckBoxesAttend() {
+		tableColumnATTEND.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnATTEND.setPrefWidth(70);
+		tableColumnATTEND.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
+			private final CheckBox presenca = new CheckBox();
+
+			@Override
+			protected void updateItem(Aluno obj, boolean empty) {
+				super.updateItem(obj, empty);
+
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(presenca);
+				presenca.setOnAction(event -> updateAttend(obj,presenca.isSelected()));
+			}
+		});
+	}
+
 	private void removeEntity(Aluno obj) {
 		Optional<ButtonType> confirm = Alerts.showConfirmation("Confirmação de exclusão",
 				"Tem certeza que deseja excluir o aluno?");
@@ -195,6 +219,18 @@ public class AlunoListController implements Initializable, DataChangeListener {
 				Alerts.showAlert("Erro ao remover o objeto", null, e.getMessage(), AlertType.ERROR);
 			}
 
+		}
+	}
+	
+	private void updateAttend(Aluno obj, Boolean presenca) {
+		if (service == null) {
+			throw new IllegalStateException("Serviço nulo");
+		}
+		try {
+			obj.setPresenca(presenca);
+			service.saveOrUpdate(obj);
+		} catch (DBIntegrityException e) {
+			Alerts.showAlert("Erro ao atualizar a presença", null, e.getMessage(), AlertType.ERROR);
 		}
 	}
 
@@ -223,6 +259,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		initEditButtons();
 		initRemoveButtons();
 		initViewButtons();
+		initCheckBoxesAttend();
 	}
 
 	public void createDialogForm(Aluno obj, String absoluteName, Stage parentStage) {
@@ -260,7 +297,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 			controller.updateFormData();
 
 			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Informe os dados do aluno");
+			dialogStage.setTitle("Dados do aluno");
 			dialogStage.setScene(new Scene(pane));
 			dialogStage.setResizable(false);
 			dialogStage.initOwner(parentStage);
