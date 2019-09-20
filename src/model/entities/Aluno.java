@@ -12,18 +12,20 @@ public class Aluno implements Serializable {
 	private String telefone;
 	private Date dataNasc;
 	private Date dataInicio;
+	private Integer presenca;
 	private String treino;
 
 	public Aluno() {
 
 	}
 
-	public Aluno(Integer id, String nome, String telefone, Date dataNasc, Date dataInicio, String treino) {
+	public Aluno(Integer id, String nome, String telefone, Date dataNasc, Date dataInicio, Integer presenca, String treino) {
 		this.id = id;
 		this.nome = nome;
 		this.telefone = telefone;
 		this.dataNasc = dataNasc;
 		this.dataInicio = dataInicio;
+		this.presenca = presenca;
 		this.treino = treino;
 	}
 
@@ -65,6 +67,14 @@ public class Aluno implements Serializable {
 
 	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
+	}
+	
+	public Integer getPresenca() {
+		return presenca;
+	}
+	
+	public void setPresenca(Integer presenca) {
+		this.presenca = presenca;
 	}
 	
 	public String getTreino() {

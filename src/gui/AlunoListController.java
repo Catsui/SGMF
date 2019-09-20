@@ -69,7 +69,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private Button btnPesquisaNome;
-	
+
 	@FXML
 	private Button btnLimpaNome;
 
@@ -84,12 +84,12 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		Aluno obj = new Aluno();
 		createDialogForm(obj, "/gui/AlunoForm.fxml", parentStage);
 	}
-	
+
 	@FXML
 	public void onBtnPesquisaNomeAction() {
 		findByName();
 	}
-	
+
 	@FXML
 	public void onBtnLimpaNomeAction() {
 		txtPesquisaNome.setText("");
@@ -153,7 +153,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 					setGraphic(null);
 					return;
 				}
-				
+
 				setGraphic(button);
 				button.setOnAction(event -> createDialogView(obj, "/gui/AlunoView.fxml", Utils.currentStage(event)));
 			}
@@ -211,6 +211,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		tableViewAluno.setItems(obsList);
 		initEditButtons();
 		initRemoveButtons();
+		initViewButtons();
 	}
 
 	public void updateTableView() {
@@ -247,7 +248,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
 		}
 	}
-	
+
 	public void createDialogView(Aluno obj, String absoluteName, Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));

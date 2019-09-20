@@ -3,8 +3,9 @@ package gui.util;
 import java.util.Optional;
 
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 
 public class Alerts {
 
@@ -21,6 +22,14 @@ public class Alerts {
 		alert.setTitle(title);
 		alert.setHeaderText(null);
 		alert.setContentText(content);
+		
+		alert.getButtonTypes().clear();
+		alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+		Button btnSim = (Button) alert.getDialogPane().lookupButton(ButtonType.YES);
+		btnSim.setDefaultButton(false);
+		
+		Button btnNao = (Button) alert.getDialogPane().lookupButton(ButtonType.NO);
+		btnNao.setDefaultButton(true);
 		return alert.showAndWait();
 	}
 }

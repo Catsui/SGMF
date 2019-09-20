@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.AlunoListController">
+<VBox prefHeight="480.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.AlunoListController">
    <children>
       <Label text="GERENCIAMENTO DE ALUNOS">
          <font>
@@ -60,6 +60,7 @@
             <TableColumn fx:id="tableColumnTelefone" prefWidth="100.0" text="Telefone" />
             <TableColumn fx:id="tableColumnDataNasc" prefWidth="120.0" text="Data de Nascimento" />
             <TableColumn fx:id="tableColumnDataInicio" prefWidth="100.0" text="Início do Treino" />
+            <TableColumn fx:id="tableColumnATTEND" prefWidth="75.0" text="Presença" />
             <TableColumn fx:id="tableColumnVIEW" prefWidth="75.0" />
             <TableColumn fx:id="tableColumnEDIT" prefWidth="75.0" />
             <TableColumn fx:id="tableColumnREMOVE" prefWidth="75.0" />

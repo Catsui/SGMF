@@ -16,15 +16,21 @@ import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.util.StringConverter;
 import model.entities.Aluno;
 import model.exceptions.ValidationException;
 import model.services.AlunoService;
@@ -51,6 +57,9 @@ public class AlunoFormController implements Initializable {
 
 	@FXML
 	private DatePicker dpDataInicio;
+	
+	@FXML
+	private ComboBox<Integer> comboBoxPresenca;
 
 	@FXML
 	private TextArea txtTreino;
@@ -75,6 +84,8 @@ public class AlunoFormController implements Initializable {
 
 	@FXML
 	private Button btnCancel;
+	
+	
 
 	public void setAluno(Aluno entity) {
 		this.entity = entity;
@@ -157,6 +168,7 @@ public class AlunoFormController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializeNodes();
+		initializeComboBoxAttend();
 	}
 
 	private void initializeNodes() {
@@ -166,6 +178,60 @@ public class AlunoFormController implements Initializable {
 		Constraints.setTextFieldMaxLength(txtTelefone, 70);
 		Utils.formatDatePicker(dpDataNasc, "dd/MM/yyyy");
 		Utils.formatDatePicker(dpDataInicio, "dd/MM/yyyy");
+	}
+	
+	private void initializeComboBoxAttend() {
+		ObservableList<Integer> opcoes = FXCollections.observableArrayList(1,0);
+		comboBoxPresenca.getItems().addAll(opcoes);
+		comboBoxPresenca.setCellFactory((ListView<Integer> param) -> {
+			final ListCell<Integer> celulas = new ListCell<Integer>() {
+				@Override
+				protected void updateItem(Integer t, boolean bln) {
+					super.updateItem(t,bln);				
+					
+					if(t != null) {
+						setText(t == 1 ? "Presente":"Ausente");
+					} else {
+						setText(null);
+					}
+				}
+			};
+			return celulas;
+		});
+		
+		comboBoxPresenca.valueProperty().addListener((ov, oldVal, newVal) -> {
+			System.out.println("Mudou de " + oldVal + "para " + newVal);
+		});
+		
+		comboBoxPresenca.setConverter(new StringConverter<Integer>() {
+			@Override
+			public String toString(Integer obj) {
+				if (obj == null) {
+					return null;
+				} else {
+					return obj == 1 ? "Presente" : "Ausente";
+				}
+			}
+			
+			@Override
+			public Integer fromString(String str) {
+				return null;
+			}
+			
+		});
+		
+//		IntegerProperty presenca = new SimpleIntegerProperty();
+//		ObservableList<String> opcoes = FXCollections.observableArrayList("Presente", "Ausente");
+//		
+//		comboBoxPresenca.getItems().addAll(opcoes);
+//		presenca.bind(Bindings.when(comboBoxPresenca.valueProperty().isEqualTo("Presente")).then(1).otherwise(0));
+//		
+//		comboBoxPresenca.valueProperty().addListener((ov, oldVal, newVal) -> {
+//			System.out.println(presenca.asString());
+//		});
+//		
+		
+		
 	}
 
 	public void updateFormData() {

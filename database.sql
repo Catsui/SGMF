@@ -4,6 +4,7 @@ CREATE TABLE aluno (
   DataNasc datetime(6) NOT NULL,
   Telefone varchar(20) DEFAULT NULL,
   DataInicioTreino datetime(6) DEFAULT NULL,
+  Presenca int(1) DEFAULT NULL,
   Treino varchar(2000) DEFAULT NULL,
   PRIMARY KEY (Id)
 );
