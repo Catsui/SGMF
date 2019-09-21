@@ -80,6 +80,15 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	@FXML
 	private TextField txtPesquisaNome;
 
+	@FXML
+	private Button btnMostrarTodos;
+
+	@FXML
+	private Button btnMostrarPresentes;
+
+	@FXML
+	private Button btnMostrarAusentes;
+
 	private ObservableList<Aluno> obsList;
 
 	@FXML
@@ -98,6 +107,21 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	public void onBtnLimpaNomeAction() {
 		txtPesquisaNome.setText("");
 		findByName();
+	}
+
+	@FXML
+	public void onBtnMostrarTodosAction() {
+		findAll();
+	}
+
+	@FXML
+	public void onBtnMostrarPresentesAction() {
+		findByPresenca(true);
+	}
+
+	@FXML
+	public void onBtnMostrarAusentesAction() {
+		findByPresenca(false);
 	}
 
 	public void setAlunoService(AlunoService service) {
@@ -125,6 +149,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	private void initEditButtons() {
 		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnEDIT.setPrefWidth(53);
+		tableColumnEDIT.setStyle("-fx-alignment: CENTER");
 		tableColumnEDIT.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
 			private final Button button = new Button("Editar");
 
@@ -146,6 +171,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	private void initViewButtons() {
 		tableColumnVIEW.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnVIEW.setPrefWidth(72);
+		tableColumnVIEW.setStyle("-fx-alignment: CENTER");
 		tableColumnVIEW.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
 			private final Button button = new Button("Visualizar");
 
@@ -167,6 +193,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	private void initRemoveButtons() {
 		tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnREMOVE.setPrefWidth(70);
+		tableColumnREMOVE.setStyle("-fx-alignment: CENTER");
 		tableColumnREMOVE.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
 			private final Button button = new Button("Remover");
 
@@ -178,16 +205,19 @@ public class AlunoListController implements Initializable, DataChangeListener {
 					setGraphic(null);
 					return;
 				}
-
+				
 				setGraphic(button);
-				button.setOnAction(event -> removeEntity(obj));
+				button.setOnAction(event -> {
+					removeEntity(obj);
+				});
 			}
 		});
 	}
 
 	private void initCheckBoxesAttend() {
 		tableColumnATTEND.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tableColumnATTEND.setPrefWidth(70);
+		tableColumnATTEND.setPrefWidth(58);
+		tableColumnATTEND.setStyle("-fx-alignment: CENTER");
 		tableColumnATTEND.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
 			private final CheckBox presenca = new CheckBox();
 
@@ -201,7 +231,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 				}
 				setGraphic(presenca);
 				presenca.setSelected(obj.getPresenca());
-				presenca.setOnAction(event -> updateAttend(obj,presenca.isSelected()));
+				presenca.setOnAction(event -> updateAttend(obj, presenca.isSelected()));
 			}
 		});
 	}
@@ -209,7 +239,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	private void removeEntity(Aluno obj) {
 		Optional<ButtonType> confirm = Alerts.showConfirmation("Confirmação de exclusão",
 				"Tem certeza que deseja excluir o aluno?");
-		if (confirm.get() == ButtonType.OK) {
+		if (confirm.get() == ButtonType.YES) {
 			if (service == null) {
 				throw new IllegalStateException("Serviço nulo");
 			}
@@ -222,14 +252,14 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 		}
 	}
-	
+
 	private void updateAttend(Aluno obj, Boolean presenca) {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo");
 		}
 		try {
 			obj.setPresenca(presenca);
-			service.saveOrUpdate(obj);
+			service.updatePresenca(obj);
 		} catch (DBIntegrityException e) {
 			Alerts.showAlert("Erro ao atualizar a presença", null, e.getMessage(), AlertType.ERROR);
 		}
@@ -249,6 +279,32 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		initEditButtons();
 		initRemoveButtons();
 		initViewButtons();
+		initCheckBoxesAttend();
+	}
+
+	public void findByPresenca(Boolean presenca) {
+		if (service == null) {
+			throw new IllegalStateException("Serviço nulo.");
+		}
+		obsList = FXCollections.observableArrayList(service.findByPresenca(presenca));
+		tableViewAluno.setItems(obsList);
+		initEditButtons();
+		initRemoveButtons();
+		initViewButtons();
+		initCheckBoxesAttend();
+	}
+
+	public void findAll() {
+		if (service == null) {
+			throw new IllegalStateException("Serviço nulo.");
+		}
+		obsList = FXCollections.observableArrayList(service.findAll());
+
+		tableViewAluno.setItems(obsList);
+		initEditButtons();
+		initRemoveButtons();
+		initViewButtons();
+		initCheckBoxesAttend();
 	}
 
 	public void updateTableView() {

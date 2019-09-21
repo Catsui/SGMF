@@ -16,26 +16,22 @@ import model.entities.Aluno;
 public class AlunoDaoJDBC implements AlunoDao {
 
 	private Connection conn;
-	
+
 	public AlunoDaoJDBC(Connection conn) {
 		this.conn = conn;
 	}
-	
+
 	@Override
 	public void insert(Aluno aluno) {
 		PreparedStatement st = null;
-		
+
 		try {
-			st = conn.prepareStatement(
-					"INSERT INTO aluno "
-					+ "(Nome, DataNasc, Telefone, DataInicioTreino, Presenca, Treino) "
-					+ "VALUES "
-					+ "(?,?,?,?,?,?)",
-					Statement.RETURN_GENERATED_KEYS
-					);
-					
-			st.setString(1,aluno.getNome());
-			st.setDate(2,new java.sql.Date(aluno.getDataNasc().getTime()));
+			st = conn.prepareStatement("INSERT INTO aluno "
+					+ "(Nome, DataNasc, Telefone, DataInicioTreino, Presenca, Treino) " + "VALUES " + "(?,?,?,?,?,?)",
+					Statement.RETURN_GENERATED_KEYS);
+
+			st.setString(1, aluno.getNome());
+			st.setDate(2, new java.sql.Date(aluno.getDataNasc().getTime()));
 			st.setString(3, aluno.getTelefone());
 			if (aluno.getDataInicio() == null) {
 				st.setDate(4, null);
@@ -44,9 +40,9 @@ public class AlunoDaoJDBC implements AlunoDao {
 			}
 			st.setBoolean(5, false);
 			st.setString(6, aluno.getTreino());
-			
+
 			int rowsAffected = st.executeUpdate();
-			
+
 			if (rowsAffected > 0) {
 				ResultSet rs = st.getGeneratedKeys();
 				if (rs.next()) {
@@ -57,48 +53,65 @@ public class AlunoDaoJDBC implements AlunoDao {
 			} else {
 				throw new DBException("Erro inesperado: Nenhuma linha foi afetada.");
 			}
-		
+
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
 		}
-		
+
 	}
 
 	@Override
 	public void update(Aluno aluno) {
 		PreparedStatement st = null;
-		
+
 		try {
-			st = conn.prepareStatement(
-					"UPDATE aluno "
-					+ "SET Nome = ?, DataNasc = ?, Telefone = ?, DataInicioTreino = ?, Presenca = ?, Treino = ? "
+			st = conn.prepareStatement("UPDATE aluno "
+					+ "SET Nome = ?, DataNasc = ?, Telefone = ?, DataInicioTreino = ?, Treino = ? "
 					+ "WHERE Id = ?");
-			
+
 			st.setString(1, aluno.getNome());
 			st.setDate(2, new java.sql.Date(aluno.getDataNasc().getTime()));
 			st.setString(3, aluno.getTelefone());
-			st.setDate(4, new java.sql.Date(aluno.getDataInicio().getTime()));
-			st.setBoolean(5, aluno.getPresenca());
-			st.setString(6, aluno.getTreino());		
-			st.setInt(7, aluno.getId());
-			
+			if (aluno.getDataInicio() != null) {
+				st.setDate(4, new java.sql.Date(aluno.getDataInicio().getTime()));
+			} else {
+				st.setDate(4, null);
+			}
+			st.setString(5, aluno.getTreino());
+			st.setInt(6, aluno.getId());
+
 			st.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
 		}
-		
+
+	}
+	
+	@Override
+	public void updatePresenca(Aluno aluno) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("UPDATE aluno SET Presenca = ? WHERE Id = ?");
+			st.setBoolean(1, aluno.getPresenca());
+			st.setInt(2, aluno.getId());
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
 	public void deleteById(Integer id) {
 		PreparedStatement st = null;
-		
+
 		try {
-			st = conn.prepareStatement("DELETE FROM aluno WHERE Id = ?");		
+			st = conn.prepareStatement("DELETE FROM aluno WHERE Id = ?");
 			st.setInt(1, id);
 			st.executeUpdate();
 		} catch (SQLException e) {
@@ -112,39 +125,39 @@ public class AlunoDaoJDBC implements AlunoDao {
 	public Aluno findById(Integer id) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
-		
+
 		try {
 			st = conn.prepareStatement("SELECT * FROM aluno WHERE Id = ?");
-					
+
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
 				Aluno aluno = instantiateAluno(rs);
 				return aluno;
-			} 
+			}
 			return null;
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
 		} finally {
 			DB.closeResultSet(rs);
 			DB.closeStatement(st);
-		}					
+		}
 	}
-	
+
 	@Override
 	public List<Aluno> findByName(String nome, int length) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
-		
+
 		try {
 			st = conn.prepareStatement("SELECT * FROM aluno WHERE substring(Nome,1,?) = ?");
-			
-			st.setInt(1,length);
+
+			st.setInt(1, length);
 			st.setString(2, nome);
 			rs = st.executeQuery();
 
 			List<Aluno> list = new ArrayList<>();
-			while(rs.next()) {
+			while (rs.next()) {
 				Aluno aluno = instantiateAluno(rs);
 				list.add(aluno);
 			}
@@ -163,7 +176,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 		aluno.setNome(rs.getString("Nome"));
 		aluno.setDataNasc(rs.getDate("DataNasc"));
 		aluno.setTelefone(rs.getString("Telefone"));
-		aluno.setDataInicio(rs.getDate("DataInicioTreino"));	
+		aluno.setDataInicio(rs.getDate("DataInicioTreino"));
 		aluno.setPresenca(rs.getBoolean("Presenca"));
 		aluno.setTreino(rs.getString("Treino"));
 		return aluno;
@@ -173,14 +186,14 @@ public class AlunoDaoJDBC implements AlunoDao {
 	public List<Aluno> findAll() {
 		PreparedStatement st = null;
 		ResultSet rs = null;
-		
+
 		try {
-			st=conn.prepareStatement("SELECT * FROM aluno ORDER by Id");
-	
+			st = conn.prepareStatement("SELECT * FROM aluno ORDER by Id");
+
 			rs = st.executeQuery();
-			
+
 			List<Aluno> list = new ArrayList<>();
-			while(rs.next()) {
+			while (rs.next()) {
 				Aluno aluno = instantiateAluno(rs);
 				list.add(aluno);
 			}
@@ -192,5 +205,29 @@ public class AlunoDaoJDBC implements AlunoDao {
 			DB.closeStatement(st);
 		}
 	}
-	
+
+	@Override
+	public List<Aluno> findByPresenca(Boolean presenca) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+
+		try {
+			st = conn.prepareStatement("SELECT * FROM aluno WHERE Presenca = ?");
+			st.setBoolean(1, presenca);
+			rs = st.executeQuery();
+
+			List<Aluno> list = new ArrayList<>();
+			while (rs.next()) {
+				Aluno aluno = instantiateAluno(rs);
+				list.add(aluno);
+			}
+			return list;
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+
 }

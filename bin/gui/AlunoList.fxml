@@ -21,16 +21,11 @@
             <Insets left="10.0" top="10.0" />
          </padding>
       </Label>
-      <ToolBar prefHeight="65.0" prefWidth="800.0">
+      <ToolBar prefHeight="77.0" prefWidth="900.0">
         <items>
-            <VBox prefHeight="65.0" prefWidth="307.0">
+            <VBox prefHeight="70.0" prefWidth="879.0">
                <children>
-                  <Button fx:id="btnNovo" mnemonicParsing="false" onAction="#onBtnNovoAction" text="Novo Aluno">
-                     <VBox.margin>
-                        <Insets left="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Button>
-                  <HBox prefHeight="46.0" prefWidth="389.0">
+                  <HBox prefHeight="38.0" prefWidth="879.0">
                      <children>
                         <TextField fx:id="txtPesquisaNome" onAction="#onBtnPesquisaNomeAction">
                            <HBox.margin>
@@ -49,11 +44,35 @@
                         </Button>
                      </children>
                   </HBox>
+                  <HBox prefHeight="54.0" prefWidth="879.0">
+                     <children>
+                        <Button fx:id="btnNovo" mnemonicParsing="false" onAction="#onBtnNovoAction" text="Novo Aluno">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnMostrarTodos" mnemonicParsing="false" onAction="#onBtnMostrarTodosAction" text="Mostrar todos">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnMostrarPresentes" mnemonicParsing="false" onAction="#onBtnMostrarPresentesAction" text="Mostrar presentes">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnMostrarAusentes" mnemonicParsing="false" onAction="#onBtnMostrarAusentesAction" text="Mostrar ausentes">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
         </items>
       </ToolBar>
-      <TableView fx:id="tableViewAluno" prefHeight="200.0" prefWidth="200.0">
+      <TableView fx:id="tableViewAluno" prefHeight="171.0" prefWidth="900.0">
         <columns>
           <TableColumn fx:id="tableColumnId" prefWidth="50.0" text="Id" />
           <TableColumn fx:id="tableColumnNome" prefWidth="200.0" text="Nome" />

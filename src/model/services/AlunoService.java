@@ -18,6 +18,14 @@ public class AlunoService {
 		return dao.findByName(nome, length);
 	}
 	
+	public List<Aluno> findByPresenca(Boolean presenca) {
+		return dao.findByPresenca(presenca);
+	}
+	
+	public void updatePresenca(Aluno obj) {
+		dao.updatePresenca(obj);
+	}
+	
 	public void saveOrUpdate(Aluno obj) {
 		if (obj.getId() == null) {
 			dao.insert(obj);
