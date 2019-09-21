@@ -12,6 +12,7 @@ public class Aluno implements Serializable {
 	private String telefone;
 	private Date dataNasc;
 	private Date dataInicio;
+	private Plano plano;
 	private Boolean presenca;
 	private String treino;
 
@@ -19,12 +20,13 @@ public class Aluno implements Serializable {
 
 	}
 
-	public Aluno(Integer id, String nome, String telefone, Date dataNasc, Date dataInicio, Boolean presenca, String treino) {
+	public Aluno(Integer id, String nome, String telefone, Date dataNasc, Date dataInicio, Plano plano, Boolean presenca, String treino) {
 		this.id = id;
 		this.nome = nome;
 		this.telefone = telefone;
 		this.dataNasc = dataNasc;
 		this.dataInicio = dataInicio;
+		this.plano = plano;
 		this.presenca = presenca;
 		this.treino = treino;
 	}
@@ -67,6 +69,14 @@ public class Aluno implements Serializable {
 
 	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
+	}
+	
+	public Plano getPlano() {
+		return plano;
+	}
+	
+	public void setPlano(Plano plano) {
+		this.plano = plano;
 	}
 	
 	public Boolean getPresenca() {

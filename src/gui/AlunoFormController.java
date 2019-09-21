@@ -16,8 +16,6 @@ import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,8 +28,9 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.util.StringConverter;
+import javafx.util.Callback;
 import model.entities.Aluno;
+import model.entities.Plano;
 import model.exceptions.ValidationException;
 import model.services.AlunoService;
 
@@ -59,7 +58,7 @@ public class AlunoFormController implements Initializable {
 	private DatePicker dpDataInicio;
 
 	@FXML
-	private ComboBox<Integer> comboBoxPresenca;
+	private ComboBox<Plano> comboBoxPlano;
 
 	@FXML
 	private TextArea txtTreino;
@@ -166,7 +165,7 @@ public class AlunoFormController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializeNodes();
-		initializeComboBoxAttend();
+		initializeComboBoxPlano();
 	}
 
 	private void initializeNodes() {
@@ -176,47 +175,23 @@ public class AlunoFormController implements Initializable {
 		Constraints.setTextFieldMaxLength(txtTelefone, 70);
 		Utils.formatDatePicker(dpDataNasc, "dd/MM/yyyy");
 		Utils.formatDatePicker(dpDataInicio, "dd/MM/yyyy");
+		initializeComboBoxPlano();
 	}
 
-	private void initializeComboBoxAttend() {
-		ObservableList<Integer> opcoes = FXCollections.observableArrayList(1, 0);
-		comboBoxPresenca.getItems().addAll(opcoes);
-		comboBoxPresenca.getSelectionModel().select(1);
-		comboBoxPresenca.setCellFactory((ListView<Integer> param) -> {
-			final ListCell<Integer> celulas = new ListCell<Integer>() {
-				@Override
-				protected void updateItem(Integer t, boolean bln) {
-					super.updateItem(t, bln);
+	private void initializeComboBoxPlano() {
+		Callback<ListView<Plano>, ListCell<Plano>> factory = lv -> new ListCell<Plano> () {
+			@Override
+			protected void updateItem(Plano item, boolean empty) {
+				super.updateItem(item,empty);
+				setText(empty? "":item.getNome());
+			}
+		};
+		
+		comboBoxPlano.setCellFactory(factory);
+		comboBoxPlano.setButtonCell(factory.call(null));
 
-					if (t != null) {
-						setText(t == 1 ? "Presente" : "Ausente");
-					} else {
-						setText(null);
-					}
-				}
-			};
-			return celulas;
-		});
-
-		comboBoxPresenca.valueProperty().addListener((ov, oldVal, newVal) -> {
+		comboBoxPlano.valueProperty().addListener((ov, oldVal, newVal) -> {
 			System.out.println("ComboBox presença mudou de " + oldVal + " para " + newVal);
-		});
-
-		comboBoxPresenca.setConverter(new StringConverter<Integer>() {
-			@Override
-			public String toString(Integer obj) {
-				if (obj == null) {
-					return null;
-				} else {
-					return obj == 1 ? "Presente" : "Ausente";
-				}
-			}
-
-			@Override
-			public Integer fromString(String str) {
-				return null;
-			}
-
 		});
 
 	}
@@ -237,6 +212,11 @@ public class AlunoFormController implements Initializable {
 			dpDataInicio.setValue(dataInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		}
 		txtTreino.setText(entity.getTreino());
+		if(entity.getPlano()==null) {
+			comboBoxPlano.getSelectionModel().selectFirst();
+		} else {
+			comboBoxPlano.setValue(entity.getPlano());
+		}
 	}
 
 	private void setErrorMsgs(Map<String, String> errors) {
