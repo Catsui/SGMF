@@ -33,6 +33,9 @@ public class PlanoListController implements Initializable {
 	@FXML
 	private TableColumn<Plano, String> tableColumnNomePlano;
 	
+	@FXML
+	private TableColumn<Plano, Double> tableColumnMensalidade;
+	
 	private ObservableList<Plano> obsList;
 	
 	@FXML
@@ -54,6 +57,7 @@ public class PlanoListController implements Initializable {
 	private void initializeNodes() {
 		tableColumnIdPlano.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnNomePlano.setCellValueFactory(new PropertyValueFactory<>("nome"));
+		tableColumnMensalidade.setCellValueFactory(new PropertyValueFactory<>("mensalidade"));
 		
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewPlano.prefHeightProperty().bind(stage.heightProperty());

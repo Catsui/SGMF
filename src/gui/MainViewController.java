@@ -17,24 +17,34 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import model.services.AlunoService;
+import model.services.PlanoService;
 
 public class MainViewController implements Initializable {
 
 	@FXML
-	private MenuItem menuItemAlunoConsulta;
+	private MenuItem menuItemAluno;
 
 	@FXML
-	private MenuItem menuItemAlunoNovo;
+	private MenuItem menuItemPlano;
 
 	@FXML
 	private MenuItem menuItemAjudaSobre;
 
 	@FXML
-	public void onMenuItemAlunoConsultaAction() {
+	public void onMenuItemAlunoAction() {
 		loadView("/gui/AlunoList.fxml", (AlunoListController controller)-> {
 			controller.setAlunoService(new AlunoService());
 			controller.updateTableView();
 		});
+	}
+	
+	@FXML
+	public void onMenuItemPlanoAction() {
+		loadView("/gui/PlanoList.fxml", (PlanoListController controller) -> {
+			controller.setPlanoService(new PlanoService());
+			controller.updateTableView();
+		});
+		
 	}
 
 	@FXML

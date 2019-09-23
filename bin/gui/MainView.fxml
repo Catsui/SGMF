@@ -12,9 +12,10 @@
          <children>
             <MenuBar>
               <menus>
-                <Menu mnemonicParsing="false" text="Alunos">
+                <Menu mnemonicParsing="false" text="Gerenciar">
                   <items>
-                    <MenuItem fx:id="menuItemAlunoConsulta" mnemonicParsing="false" onAction="#onMenuItemAlunoConsultaAction" text="Consulta" />
+                    <MenuItem fx:id="menuItemAluno" mnemonicParsing="false" onAction="#onMenuItemAlunoAction" text="Alunos" />
+                        <MenuItem fx:id="menuItemPlano" mnemonicParsing="false" onAction="#onMenuItemPlanoAction" text="Planos" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Ajuda">
