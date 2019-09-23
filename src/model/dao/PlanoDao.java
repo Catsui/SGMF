@@ -11,5 +11,4 @@ public interface PlanoDao {
 	void deleteById(Integer id);
 	Plano findById(Integer id);
 	List<Plano> findAll();
-
 }

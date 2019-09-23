@@ -14,33 +14,33 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import model.entities.Treino;
-import model.services.TreinoService;
+import model.entities.Plano;
+import model.services.PlanoService;
 
-public class TreinoListController implements Initializable {
+public class PlanoListController implements Initializable {
 	
-	private TreinoService service;
-	
-	@FXML
-	private TableView<Treino> tableViewTreino;
+	private PlanoService service;
 	
 	@FXML
-	private Button btnNovoTreino;
+	private TableView<Plano> tableViewPlano;
 	
 	@FXML
-	private TableColumn<Treino, Integer> tableColumnIdTreino;
+	private Button btnNovoPlano;
 	
 	@FXML
-	private TableColumn<Treino, String> tableColumnNomeTreino;
-	
-	private ObservableList<Treino> obsList;
+	private TableColumn<Plano, Integer> tableColumnIdPlano;
 	
 	@FXML
-	public void onBtnNovoTreinoAction() {
-		System.out.println("Botão Novo Treino");
+	private TableColumn<Plano, String> tableColumnNomePlano;
+	
+	private ObservableList<Plano> obsList;
+	
+	@FXML
+	public void onBtnNovoPlanoAction() {
+		System.out.println("Botão Novo Plano");
 	}
 	
-	public void setTreinoService(TreinoService service) {
+	public void setPlanoService(PlanoService service) {
 		this.service = service;
 	}
 	
@@ -52,20 +52,20 @@ public class TreinoListController implements Initializable {
 
 
 	private void initializeNodes() {
-		tableColumnIdTreino.setCellValueFactory(new PropertyValueFactory<>("id"));
-		tableColumnNomeTreino.setCellValueFactory(new PropertyValueFactory<>("nome"));
+		tableColumnIdPlano.setCellValueFactory(new PropertyValueFactory<>("id"));
+		tableColumnNomePlano.setCellValueFactory(new PropertyValueFactory<>("nome"));
 		
 		Stage stage = (Stage) Main.getMainScene().getWindow();
-		tableViewTreino.prefHeightProperty().bind(stage.heightProperty());
+		tableViewPlano.prefHeightProperty().bind(stage.heightProperty());
 	}
 	
 	public void updateTableView() {
 		if (service == null) {
 			throw new IllegalStateException("O serviço não existe.");
 		}
-		List<Treino> list = service.findAll();
+		List<Plano> list = service.findAll();
 		obsList = FXCollections.observableArrayList(list);
-		tableViewTreino.setItems(obsList);
+		tableViewPlano.setItems(obsList);
 	}
 	
 

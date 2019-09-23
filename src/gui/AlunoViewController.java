@@ -41,6 +41,9 @@ public class AlunoViewController implements Initializable {
 
 	@FXML
 	private DatePicker dpDataInicio;
+	
+	@FXML
+	private TextField txtPlano;
 
 	@FXML
 	private TextArea txtTreino;
@@ -104,6 +107,9 @@ public class AlunoViewController implements Initializable {
 		if (entity.getDataInicio() != null) {
 			java.util.Date dataInicio = new Date(entity.getDataInicio().getTime());
 			dpDataInicio.setValue(dataInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		}
+		if (entity.getPlano() != null) {
+			txtPlano.setText(entity.getPlano().getNome());
 		}
 		txtTreino.setText(entity.getTreino());
 	}

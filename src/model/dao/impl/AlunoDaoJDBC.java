@@ -6,12 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import db.DB;
 import db.DBException;
 import model.dao.AlunoDao;
 import model.entities.Aluno;
+import model.entities.Plano;
 
 public class AlunoDaoJDBC implements AlunoDao {
 
@@ -26,8 +29,9 @@ public class AlunoDaoJDBC implements AlunoDao {
 		PreparedStatement st = null;
 
 		try {
-			st = conn.prepareStatement("INSERT INTO aluno "
-					+ "(Nome, DataNasc, Telefone, DataInicioTreino, Presenca, Treino) " + "VALUES " + "(?,?,?,?,?,?)",
+			st = conn.prepareStatement(
+					"INSERT INTO aluno " + "(Nome, DataNasc, Telefone, DataInicioTreino, PlanoId, Presenca, Treino) "
+							+ "VALUES " + "(?,?,?,?,?,?,?)",
 					Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, aluno.getNome());
@@ -38,8 +42,9 @@ public class AlunoDaoJDBC implements AlunoDao {
 			} else {
 				st.setDate(4, new java.sql.Date(aluno.getDataInicio().getTime()));
 			}
-			st.setBoolean(5, false);
-			st.setString(6, aluno.getTreino());
+			st.setInt(5, aluno.getPlano().getId());
+			st.setBoolean(6, false);
+			st.setString(7, aluno.getTreino());
 
 			int rowsAffected = st.executeUpdate();
 
@@ -68,7 +73,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("UPDATE aluno "
-					+ "SET Nome = ?, DataNasc = ?, Telefone = ?, DataInicioTreino = ?, Treino = ? "
+					+ "SET Nome = ?, DataNasc = ?, Telefone = ?, DataInicioTreino = ?, PlanoId = ?, Treino = ? "
 					+ "WHERE Id = ?");
 
 			st.setString(1, aluno.getNome());
@@ -79,8 +84,9 @@ public class AlunoDaoJDBC implements AlunoDao {
 			} else {
 				st.setDate(4, null);
 			}
-			st.setString(5, aluno.getTreino());
-			st.setInt(6, aluno.getId());
+			st.setInt(5, aluno.getPlano().getId());
+			st.setString(6, aluno.getTreino());
+			st.setInt(7, aluno.getId());
 
 			st.executeUpdate();
 		} catch (SQLException e) {
@@ -90,7 +96,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 		}
 
 	}
-	
+
 	@Override
 	public void updatePresenca(Aluno aluno) {
 		PreparedStatement st = null;
@@ -127,12 +133,14 @@ public class AlunoDaoJDBC implements AlunoDao {
 		ResultSet rs = null;
 
 		try {
-			st = conn.prepareStatement("SELECT * FROM aluno WHERE Id = ?");
+			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
+					+ "ON aluno.PlanoId = plano.Id " + "WHERE aluno.Id = ?");
 
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
-				Aluno aluno = instantiateAluno(rs);
+				Plano plano = instantiatePlano(rs);
+				Aluno aluno = instantiateAluno(rs, plano);
 				return aluno;
 			}
 			return null;
@@ -150,7 +158,8 @@ public class AlunoDaoJDBC implements AlunoDao {
 		ResultSet rs = null;
 
 		try {
-			st = conn.prepareStatement("SELECT * FROM aluno WHERE substring(Nome,1,?) = ?");
+			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
+					+ "ON aluno.PlanoId = plano.Id " + "WHERE substring(Nome,1,?) = ?");
 
 			st.setInt(1, length);
 			st.setString(2, nome);
@@ -158,7 +167,8 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 			List<Aluno> list = new ArrayList<>();
 			while (rs.next()) {
-				Aluno aluno = instantiateAluno(rs);
+				Plano plano = instantiatePlano(rs);
+				Aluno aluno = instantiateAluno(rs, plano);
 				list.add(aluno);
 			}
 			return list;
@@ -170,16 +180,24 @@ public class AlunoDaoJDBC implements AlunoDao {
 		}
 	}
 
-	private Aluno instantiateAluno(ResultSet rs) throws SQLException {
+	private Aluno instantiateAluno(ResultSet rs, Plano plano) throws SQLException {
 		Aluno aluno = new Aluno();
 		aluno.setId(rs.getInt("Id"));
 		aluno.setNome(rs.getString("Nome"));
 		aluno.setDataNasc(rs.getDate("DataNasc"));
 		aluno.setTelefone(rs.getString("Telefone"));
 		aluno.setDataInicio(rs.getDate("DataInicioTreino"));
+		aluno.setPlano(plano);
 		aluno.setPresenca(rs.getBoolean("Presenca"));
 		aluno.setTreino(rs.getString("Treino"));
 		return aluno;
+	}
+
+	private Plano instantiatePlano(ResultSet rs) throws SQLException {
+		Plano plano = new Plano();
+		plano.setId(rs.getInt("PlanoId"));
+		plano.setNome(rs.getString("PlanoNome"));
+		return plano;
 	}
 
 	@Override
@@ -188,13 +206,20 @@ public class AlunoDaoJDBC implements AlunoDao {
 		ResultSet rs = null;
 
 		try {
-			st = conn.prepareStatement("SELECT * FROM aluno ORDER by Id");
+			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
+					+ "ON aluno.PlanoId = plano.Id " + "ORDER BY Id");
 
 			rs = st.executeQuery();
 
 			List<Aluno> list = new ArrayList<>();
+			Map<Integer, Plano> map = new HashMap<>();
 			while (rs.next()) {
-				Aluno aluno = instantiateAluno(rs);
+				Plano plano = map.get(rs.getInt("PlanoId"));
+				if (plano == null) {
+					plano = instantiatePlano(rs);
+					map.put(rs.getInt("PlanoId"), plano);
+				}
+				Aluno aluno = instantiateAluno(rs, plano);
 				list.add(aluno);
 			}
 			return list;
@@ -212,13 +237,15 @@ public class AlunoDaoJDBC implements AlunoDao {
 		ResultSet rs = null;
 
 		try {
-			st = conn.prepareStatement("SELECT * FROM aluno WHERE Presenca = ?");
+			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
+					+ "ON aluno.PlanoId = plano.Id WHERE Presenca = ?");
 			st.setBoolean(1, presenca);
 			rs = st.executeQuery();
 
 			List<Aluno> list = new ArrayList<>();
 			while (rs.next()) {
-				Aluno aluno = instantiateAluno(rs);
+				Plano plano = instantiatePlano(rs);
+				Aluno aluno = instantiateAluno(rs, plano);
 				list.add(aluno);
 			}
 			return list;

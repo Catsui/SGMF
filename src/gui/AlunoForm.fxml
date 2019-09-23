@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -46,12 +47,19 @@
                   <Label fx:id="labelErrorDataNasc" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                   <Label fx:id="labelErrorDataInicio" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                   <DatePicker fx:id="dpDataInicio" prefHeight="25.0" prefWidth="264.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <ComboBox fx:id="comboBoxPresenca" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <ComboBox fx:id="comboBoxPlano" prefHeight="25.0" prefWidth="257.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <Label text="Plano" GridPane.rowIndex="5" />
                </children>
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
             </GridPane>
             <VBox prefHeight="282.0" prefWidth="407.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="37.0" prefWidth="432.0" text="Descrição do Treino" textAlignment="CENTER" />
+                  <Label alignment="CENTER" prefHeight="37.0" prefWidth="432.0" text="Descrição do Treino" textAlignment="CENTER">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin></Label>
                   <TextArea fx:id="txtTreino" prefHeight="200.0" prefWidth="398.0" wrapText="true" />
                </children>
             </VBox>
@@ -59,8 +67,14 @@
       </HBox>
       <HBox layoutX="100.0" layoutY="282.0" prefHeight="37.0" prefWidth="258.0" spacing="5.0">
          <children>
-            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#onBtnSaveAction" text="Salvar" />
-            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#onBtnCancelAction" text="Cancelar" />
+            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#onBtnSaveAction" text="Salvar">
+               <HBox.margin>
+                  <Insets left="10.0" top="5.0" />
+               </HBox.margin></Button>
+            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#onBtnCancelAction" text="Cancelar">
+               <HBox.margin>
+                  <Insets left="10.0" top="5.0" />
+               </HBox.margin></Button>
          </children>
       </HBox>
    </children>

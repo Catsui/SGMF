@@ -30,7 +30,7 @@ public class PlanoDaoJDBC implements PlanoDao {
 			st = conn.prepareStatement(
 					"INSERT into plano "
 					+ "(Nome, Mensalidade) "
-					+ "VALUES (?,?,?)",
+					+ "VALUES (?,?)",
 					Statement.RETURN_GENERATED_KEYS
 					);
 			
@@ -64,11 +64,12 @@ public class PlanoDaoJDBC implements PlanoDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE plano "
-					+ "SET Nome = ? "
+					+ "SET Nome = ?, Mensalidade = ? "
 					+ "WHERE Id = ?"
 					);
 			
 			st.setString(1, plano.getNome());
+			st.setDouble(1, plano.getMensalidade());
 			st.setInt(2, plano.getId());
 					
 			st.executeUpdate();
@@ -150,6 +151,7 @@ public class PlanoDaoJDBC implements PlanoDao {
 		Plano plano = new Plano();
 		plano.setId(rs.getInt("Id"));
 		plano.setNome(rs.getString("Nome"));
+		plano.setMensalidade(rs.getDouble("Mensalidade"));
 		return plano;
 	}
 

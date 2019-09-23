@@ -16,6 +16,8 @@ import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -33,14 +35,19 @@ import model.entities.Aluno;
 import model.entities.Plano;
 import model.exceptions.ValidationException;
 import model.services.AlunoService;
+import model.services.PlanoService;
 
 public class AlunoFormController implements Initializable {
 
 	private Aluno entity;
 
 	private AlunoService service;
+	
+	private PlanoService planoService;
 
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
+	
+	private ObservableList<Plano> obsList;
 
 	@FXML
 	private TextField txtId;
@@ -88,8 +95,9 @@ public class AlunoFormController implements Initializable {
 		this.entity = entity;
 	}
 
-	public void setServices(AlunoService service) {
+	public void setServices(AlunoService service, PlanoService planoService) {
 		this.service = service;
+		this.planoService = planoService;
 	}
 
 	public void subscribeDataChangeListener(DataChangeListener listener) {
@@ -151,6 +159,8 @@ public class AlunoFormController implements Initializable {
 			Instant instant = Instant.from(dpDataInicio.getValue().atStartOfDay(ZoneId.systemDefault()));
 			obj.setDataInicio(Date.from(instant));
 		}
+		
+		obj.setPlano(comboBoxPlano.getValue());
 
 		obj.setTreino(txtTreino.getText());
 
@@ -227,5 +237,14 @@ public class AlunoFormController implements Initializable {
 		labelErrorDataNasc.setText(fields.contains("dataNasc") ? errors.get("dataNasc") : "");
 		labelErrorDataInicio.setText(fields.contains("dataInicio") ? errors.get("dataInicio") : "");
 		labelErrorTreino.setText(fields.contains("treino") ? errors.get("treino") : "");
+	}
+	
+	public void loadAssociatedObjects() {
+		if (planoService == null) {
+			throw new IllegalStateException("Serviço de plano está nulo.");
+		}
+		List<Plano> list = planoService.findAll();
+		obsList = FXCollections.observableArrayList(list);
+		comboBoxPlano.setItems(obsList);
 	}
 }

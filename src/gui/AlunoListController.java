@@ -33,6 +33,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Aluno;
 import model.services.AlunoService;
+import model.services.PlanoService;
 
 public class AlunoListController implements Initializable, DataChangeListener {
 
@@ -326,7 +327,8 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 			AlunoFormController controller = loader.getController();
 			controller.setAluno(obj);
-			controller.setServices(new AlunoService());
+			controller.setServices(new AlunoService(), new PlanoService());
+			controller.loadAssociatedObjects();
 			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
 
@@ -339,7 +341,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 			dialogStage.showAndWait();
 		} catch (IOException e) {
 			e.printStackTrace();
-			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar nova janela.", e.getMessage(), AlertType.ERROR);
 		}
 	}
 
@@ -350,7 +352,6 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 			AlunoViewController controller = loader.getController();
 			controller.setAluno(obj);
-			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
 
 			Stage dialogStage = new Stage();

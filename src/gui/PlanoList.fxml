@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.TreinoListController">
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PlanoListController">
    <children>
-      <Label text="Cadastro de Treinos">
+      <Label text="Gerenciamento de Planos">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
@@ -21,13 +21,14 @@
       </Label>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
-          <Button fx:id="btnNovoTreino" mnemonicParsing="false" onAction="#onBtnNovoTreinoAction" text="Novo" />
+          <Button fx:id="btnNovoPlano" mnemonicParsing="false" onAction="#onBtnNovoTreinoAction" text="Novo" />
         </items>
       </ToolBar>
       <TableView fx:id="tableViewTreino" prefHeight="200.0" prefWidth="200.0">
         <columns>
-          <TableColumn fx:id="tableColumnIdTreino" prefWidth="75.0" text="Id" />
-          <TableColumn fx:id="tableColumnNomeTreino" prefWidth="75.0" text="Nome" />
+          <TableColumn fx:id="tableColumnIdPlano" prefWidth="75.0" text="Id" />
+          <TableColumn fx:id="tableColumnNomePlano" prefWidth="75.0" text="Nome" />
+            <TableColumn prefWidth="81.0" text="Mensalidade" />
         </columns>
       </TableView>
    </children>
