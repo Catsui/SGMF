@@ -9,7 +9,6 @@ public class Plano implements Serializable {
 	private Integer id;
 	private String nome;
 	private Double mensalidade;
-	private Integer num;
 
 	public Plano() {
 	}
@@ -18,7 +17,6 @@ public class Plano implements Serializable {
 		this.id = id;
 		this.nome = nome;
 		this.mensalidade = mensalidade;
-		this.num = num;
 	}
 
 	public Integer getId() {
@@ -43,14 +41,6 @@ public class Plano implements Serializable {
 
 	public void setMensalidade(Double mensalidade) {
 		this.mensalidade = mensalidade;
-	}
-
-	public Integer getNum() {
-		return num;
-	}
-
-	public void setNum(Integer num) {
-		this.num = num;
 	}
 
 	@Override
@@ -80,7 +70,7 @@ public class Plano implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Plano [id=" + id + ", nome=" + nome + ", mensalidade=" + mensalidade + ", num=" + num + "]";
+		return "Plano [id=" + id + ", nome=" + nome + ", mensalidade=" + mensalidade + "]";
 	}
 
 }
