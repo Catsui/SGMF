@@ -7,6 +7,8 @@ import java.util.function.Consumer;
 
 import application.Main;
 import gui.util.Alerts;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -51,8 +53,9 @@ public class MainViewController implements Initializable {
 	}
 	
 	@FXML
-	public void onMenuItemSalvarPresencasAction() {
+	public void onMenuItemSalvarPresencasAction(ActionEvent event) {
 		salvarPresencas(true, "C:\\Users\\ivand\\ws-sgmf\\presencas.csv");
+		Platform.exit();
 	}
 
 	@FXML
@@ -90,8 +93,8 @@ public class MainViewController implements Initializable {
 	
 	private void salvarPresencas(Boolean presenca, String filepath) {
 		AlunoListController controller = new AlunoListController();
+		controller.setAlunoService(new AlunoService());
 		controller.saveByPresenca(presenca, filepath);
-		System.out.println("pelo menosaté aqui chegou");
 	}
 
 }

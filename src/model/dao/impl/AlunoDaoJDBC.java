@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -248,11 +247,9 @@ public class AlunoDaoJDBC implements AlunoDao {
 			rs = st.executeQuery();
 
 			List<Aluno> list = new ArrayList<>();
-			System.out.println(LocalDate.now());
 			while (rs.next()) {
 				Plano plano = instantiatePlano(rs);
 				Aluno aluno = instantiateAluno(rs, plano);
-				System.out.println(aluno.getId());
 				list.add(aluno);
 			}
 
@@ -264,36 +261,42 @@ public class AlunoDaoJDBC implements AlunoDao {
 			DB.closeStatement(st);
 		}
 	}
-	
+
 	@Override
 	public void saveByPresenca(Boolean presenca, String filepath) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		OutputStream os = null;
 		List<Integer> presentes = new ArrayList<>();
-		
+
 		try {
-			st = conn.prepareStatement("SELECT * FROM aluno WHERE Presenca = ?");
+			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
+					+ "ON aluno.PlanoId = plano.Id WHERE Presenca = ?");
 			st.setBoolean(1, presenca);
 			rs = st.executeQuery();
-			
+			System.out.println(rs);
+
 			while (rs.next()) {
 				Plano plano = instantiatePlano(rs);
-				Aluno aluno = instantiateAluno(rs,plano);
+				Aluno aluno = instantiateAluno(rs, plano);
 				presentes.add(aluno.getId());
 			}
 			try {
-				os = new FileOutputStream(filepath,true);
-				os.write((LocalTime.now() + ",").getBytes());
-				for(int id:presentes) {
-					os = new FileOutputStream(filepath,true);
-					os.write((id+",").getBytes());
-					System.out.println(id);
+				os = new FileOutputStream(filepath, true);
+				os.write(("|" + String.valueOf(LocalDate.now())).getBytes());
+				for (int id : presentes) {
+					os = new FileOutputStream(filepath, true);
+					os.write(("," + id).getBytes());
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
+			st = conn.prepareStatement("UPDATE aluno SET Presenca = ? WHERE Presenca = ?");
+			st.setBoolean(1, false);
+			st.setBoolean(2, true);
+			st.executeUpdate();
+
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
 		}
