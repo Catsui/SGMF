@@ -26,6 +26,9 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	private MenuItem menuItemPlano;
+	
+	@FXML
+	private MenuItem menuItemSalvarPresencas;
 
 	@FXML
 	private MenuItem menuItemAjudaSobre;
@@ -45,6 +48,11 @@ public class MainViewController implements Initializable {
 			controller.updateTableView();
 		});
 		
+	}
+	
+	@FXML
+	public void onMenuItemSalvarPresencasAction() {
+		salvarPresencas(true, "C:\\Users\\ivand\\ws-sgmf\\presencas.csv");
 	}
 
 	@FXML
@@ -78,6 +86,12 @@ public class MainViewController implements Initializable {
 					AlertType.ERROR);
 		}
 
+	}
+	
+	private void salvarPresencas(Boolean presenca, String filepath) {
+		AlunoListController controller = new AlunoListController();
+		controller.saveByPresenca(presenca, filepath);
+		System.out.println("pelo menosaté aqui chegou");
 	}
 
 }

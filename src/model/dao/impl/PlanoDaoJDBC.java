@@ -69,8 +69,8 @@ public class PlanoDaoJDBC implements PlanoDao {
 					);
 			
 			st.setString(1, plano.getNome());
-			st.setDouble(1, plano.getMensalidade());
-			st.setInt(2, plano.getId());
+			st.setDouble(2, plano.getMensalidade());
+			st.setInt(3, plano.getId());
 					
 			st.executeUpdate();
 			

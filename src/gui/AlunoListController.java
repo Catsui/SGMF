@@ -294,6 +294,13 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		initViewButtons();
 		initCheckBoxesAttend();
 	}
+	
+	public void saveByPresenca(Boolean presenca, String filepath) {
+		if (service == null) {
+			throw new IllegalStateException("Serviço nulo.");
+		}
+		service.saveByPresenca(presenca, filepath);
+	}
 
 	public void findAll() {
 		if (service == null) {

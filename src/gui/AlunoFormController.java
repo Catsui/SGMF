@@ -199,11 +199,6 @@ public class AlunoFormController implements Initializable {
 		
 		comboBoxPlano.setCellFactory(factory);
 		comboBoxPlano.setButtonCell(factory.call(null));
-
-		comboBoxPlano.valueProperty().addListener((ov, oldVal, newVal) -> {
-			System.out.println("ComboBox presença mudou de " + oldVal + " para " + newVal);
-		});
-
 	}
 
 	public void updateFormData() {

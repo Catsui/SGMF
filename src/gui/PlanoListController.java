@@ -3,12 +3,15 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.Main;
+import db.DBIntegrityException;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +21,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -45,6 +50,12 @@ public class PlanoListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private TableColumn<Plano, Double> tableColumnMensalidade;
+	
+	@FXML
+	private TableColumn<Plano, Plano> tableColumnEDIT;
+	
+	@FXML
+	private TableColumn<Plano, Plano> tableColumnREMOVE;
 
 	private ObservableList<Plano> obsList;
 
@@ -80,6 +91,8 @@ public class PlanoListController implements Initializable, DataChangeListener {
 		List<Plano> list = service.findAll();
 		obsList = FXCollections.observableArrayList(list);
 		tableViewPlano.setItems(obsList);
+		initEditButtons();
+		initRemoveButtons();
 	}
 
 	private void createDialogForm(Plano obj, String absoluteName, Stage parentStage) {
@@ -107,30 +120,73 @@ public class PlanoListController implements Initializable, DataChangeListener {
 		}
 
 	}
+	
+	private void initEditButtons() {
+		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<> (param.getValue()));
+		tableColumnEDIT.setPrefWidth(53);
+		tableColumnEDIT.setStyle("-fx-alignment: CENTER");
+		tableColumnEDIT.setCellFactory(param -> new TableCell<Plano, Plano>() {
+			private final Button button = new Button("Editar");
+			
+			@Override
+			protected void updateItem(Plano obj, boolean empty) {
+				super.updateItem(obj, empty);
+				
+				if (obj ==  null) {
+					setGraphic(null);
+					return;
+				}
+				
+				setGraphic(button);
+				button.setOnAction(event -> createDialogForm(obj, "/gui/PlanoForm.fxml", Utils.currentStage(event)));
+			}
+		});
+	}
+	
+	private void initRemoveButtons() {
+		tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<> (param.getValue()));
+		tableColumnREMOVE.setPrefWidth(70);
+		tableColumnREMOVE.setStyle("-fx-alignment: CENTER");
+		tableColumnREMOVE.setCellFactory(param -> new TableCell<Plano, Plano>() {
+			private final Button button = new Button("Remover");
+			
+			@Override
+			protected void updateItem(Plano obj, boolean empty) {
+				super.updateItem(obj, empty);
+				
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				
+				setGraphic(button);
+				button.setOnAction(event -> removeEntity(obj));
+				
+			}
 
-//	private void createDialogView(Plano obj, String absoluteName, Stage parentStage) {
-//		try {
-//			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-//			Pane pane = loader.load();
-//
-//			PlanoViewController controller = loader.getController();
-//			controller.setPlano(obj);
-//			controller.setService(new PlanoService());
-//			controller.subscribeDataChangeListener(this);
-//			controller.updateFormData();
-//
-//			Stage dialogStage = new Stage();
-//			dialogStage.setTitle("Dados do plano");
-//			dialogStage.setScene(new Scene(pane));
-//			dialogStage.setResizable(false);
-//			dialogStage.initOwner(parentStage);
-//			dialogStage.initModality(Modality.WINDOW_MODAL);
-//			dialogStage.showAndWait();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			Alerts.showAlert("IO Exception", "Erro ao carregar nova janela", e.getMessage(), AlertType.ERROR);
-//		}
-//	}
+		});
+	}
+	
+
+	private void removeEntity(Plano obj) {
+		Optional<ButtonType> confirm = Alerts.showConfirmation("Confirmação de Exclusão",
+				"Tem certeza de que deseja excluir o plano?");
+		if (confirm.get()==ButtonType.YES) {
+			if (service == null) {
+				throw new IllegalStateException ("Serviço nulo.");
+			}
+			
+			try {
+				service.remove(obj);
+				updateTableView();
+			} catch (DBIntegrityException e) {
+				Alerts.showAlert("Erro ao remover o objeto", null, 
+						"Existem alunos vinculados ao plano. Exclusão não realizada.", 
+						AlertType.ERROR);
+			}
+		}
+	}
+
 
 	@Override
 	public void onDataChanged() {

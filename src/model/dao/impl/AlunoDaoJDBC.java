@@ -1,10 +1,15 @@
 package model.dao.impl;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -243,17 +248,54 @@ public class AlunoDaoJDBC implements AlunoDao {
 			rs = st.executeQuery();
 
 			List<Aluno> list = new ArrayList<>();
+			System.out.println(LocalDate.now());
 			while (rs.next()) {
 				Plano plano = instantiatePlano(rs);
 				Aluno aluno = instantiateAluno(rs, plano);
+				System.out.println(aluno.getId());
 				list.add(aluno);
 			}
+
 			return list;
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
 		} finally {
 			DB.closeResultSet(rs);
 			DB.closeStatement(st);
+		}
+	}
+	
+	@Override
+	public void saveByPresenca(Boolean presenca, String filepath) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		OutputStream os = null;
+		List<Integer> presentes = new ArrayList<>();
+		
+		try {
+			st = conn.prepareStatement("SELECT * FROM aluno WHERE Presenca = ?");
+			st.setBoolean(1, presenca);
+			rs = st.executeQuery();
+			
+			while (rs.next()) {
+				Plano plano = instantiatePlano(rs);
+				Aluno aluno = instantiateAluno(rs,plano);
+				presentes.add(aluno.getId());
+			}
+			try {
+				os = new FileOutputStream(filepath,true);
+				os.write((LocalTime.now() + ",").getBytes());
+				for(int id:presentes) {
+					os = new FileOutputStream(filepath,true);
+					os.write((id+",").getBytes());
+					System.out.println(id);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
 		}
 	}
 

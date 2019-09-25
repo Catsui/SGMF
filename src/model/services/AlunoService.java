@@ -34,6 +34,10 @@ public class AlunoService {
 		}
 	}
 	
+	public void saveByPresenca(Boolean presenca, String filepath) {
+		dao.saveByPresenca(presenca, filepath);
+	}
+	
 	public void remove(Aluno obj) {
 		dao.deleteById(obj.getId());
 	}
