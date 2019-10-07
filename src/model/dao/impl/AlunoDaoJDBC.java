@@ -46,6 +46,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 			} else {
 				st.setDate(4, new java.sql.Date(aluno.getDataInicio().getTime()));
 			}
+			
 			st.setInt(5, aluno.getPlano().getId());
 			st.setBoolean(6, false);
 			st.setString(7, aluno.getTreino());
@@ -163,7 +164,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id " + "WHERE substring(Nome,1,?) = ?");
+					+ "ON aluno.PlanoId = plano.Id " + "WHERE substring(aluno.Nome,1,?) = ?");
 
 			st.setInt(1, length);
 			st.setString(2, nome);
@@ -211,7 +212,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id " + "ORDER BY Id");
+					+ "ON aluno.PlanoId = plano.Id " + "ORDER BY aluno.Id");
 
 			rs = st.executeQuery();
 
@@ -297,6 +298,19 @@ public class AlunoDaoJDBC implements AlunoDao {
 			st.setBoolean(2, true);
 			st.executeUpdate();
 
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		}
+	}
+	
+	@Override
+	public void backupDados(String filepath) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("SELECT * INTO OUTFILE '"
+							+ filepath
+							+ "' FROM aluno, plano");
+			st.executeQuery();
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
 		}

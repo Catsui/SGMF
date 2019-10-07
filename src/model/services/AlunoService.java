@@ -42,4 +42,8 @@ public class AlunoService {
 		dao.deleteById(obj.getId());
 	}
 
+	public void backupDados(String filepath) {
+		dao.backupDados(filepath);
+	}
+
 }

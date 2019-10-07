@@ -23,5 +23,7 @@ public interface AlunoDao {
 	List<Aluno> findByPresenca(Boolean presenca);
 
 	void saveByPresenca(Boolean presenca, String filepath);
+	
+	void backupDados(String filepath);
 
 }

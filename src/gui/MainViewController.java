@@ -34,6 +34,9 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	private MenuItem menuItemAjudaSobre;
+	
+	@FXML
+	private MenuItem menuItemBackupSalvarDados;
 
 	@FXML
 	public void onMenuItemAlunoAction() {
@@ -61,6 +64,19 @@ public class MainViewController implements Initializable {
 	@FXML
 	public void onMenuItemAjudaSobreAction() {
 		loadView("/gui/AboutView.fxml", x-> {});
+	}
+	
+	@FXML
+	public void onMenuItemBackupSalvarDadosAction() {
+//		DirectoryChooser dc = new DirectoryChooser();
+//		File file = dc.showDialog(Main.getMainScene().getWindow());
+//		
+//		if (file == null) {
+//			Alerts.showAlert("Erro ao realizar backup", null, "O caminho especificado é inválido ou não existe.", AlertType.ERROR);
+//		} else {
+//			backupDados(file.getAbsolutePath());
+//		}
+		backupDados("C:\\backup1.txt");
 	}
 
 	@Override
@@ -95,6 +111,12 @@ public class MainViewController implements Initializable {
 		AlunoListController controller = new AlunoListController();
 		controller.setAlunoService(new AlunoService());
 		controller.saveByPresenca(presenca, filepath);
+	}
+	
+	private void backupDados(String filepath) {
+		AlunoListController controller = new AlunoListController();
+		controller.setAlunoService(new AlunoService());
+		controller.backupDados(filepath);
 	}
 
 }

@@ -272,7 +272,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		}
 		if (txtPesquisaNome.getText().length() > 0) {
 			obsList = FXCollections.observableArrayList(
-					service.findByName(txtPesquisaNome.getText(), txtPesquisaNome.getText().length()));
+				service.findByName(txtPesquisaNome.getText(), txtPesquisaNome.getText().length()));
 		} else {
 			obsList = FXCollections.observableArrayList(service.findAll());
 		}
@@ -377,6 +377,13 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	@Override
 	public void onDataChanged() {
 		updateTableView();
+	}
+
+	public void backupDados(String filepath) {
+		if (service == null) {
+			throw new IllegalStateException("Serviço nulo.");
+		}
+		service.backupDados(filepath);
 	}
 
 }

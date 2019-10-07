@@ -1,3 +1,7 @@
+CREATE DATABASE coursejdbc;
+
+USE coursejdbc;
+
 CREATE TABLE aluno (
   Id int(11) NOT NULL AUTO_INCREMENT,
   Nome varchar(60) NOT NULL,
