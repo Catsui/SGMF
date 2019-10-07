@@ -18,7 +18,7 @@ CREATE TABLE aluno (
 CREATE TABLE plano (
 	Id int(11) NOT NULL AUTO_INCREMENT,
 	Nome varchar(60) NOT NULL,
-	Mensalidade double(10,2) NOT NULL,
+	Mensalidade decimal(10,2) NOT NULL,
     PRIMARY KEY (Id)
 );
 
