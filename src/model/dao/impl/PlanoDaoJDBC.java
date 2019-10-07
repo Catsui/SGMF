@@ -133,7 +133,7 @@ public class PlanoDaoJDBC implements PlanoDao {
 	
 		try {
 			st = conn.prepareStatement(
-					"SELECT * from plano "
+					"SELECT * FROM PLANO "
 					);
 			rs = st.executeQuery();
 			List<Plano> list = new ArrayList<>();

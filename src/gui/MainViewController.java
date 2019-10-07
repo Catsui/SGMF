@@ -2,6 +2,8 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
@@ -18,6 +20,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.entities.Plano;
 import model.services.AlunoService;
 import model.services.PlanoService;
 
@@ -37,6 +40,9 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	private MenuItem menuItemBackupSalvarDados;
+	
+	@FXML
+	private MenuItem menuItemTesteDB;
 
 	@FXML
 	public void onMenuItemAlunoAction() {
@@ -54,6 +60,15 @@ public class MainViewController implements Initializable {
 		});
 		
 	}
+	
+	@FXML
+	public void onMenuItemTesteDBAction() {
+		PlanoService service = new PlanoService();
+		List<Plano> list = new ArrayList<>();
+		list = service.findAll();
+		list.forEach(System.out::println);
+	}
+	
 	
 	@FXML
 	public void onMenuItemSalvarPresencasAction(ActionEvent event) {
