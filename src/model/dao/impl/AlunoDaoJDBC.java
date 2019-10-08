@@ -164,7 +164,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id " + "WHERE substring(aluno.Nome,1,?) = ?");
+					+ "ON aluno.PlanoId = plano.Id " + "WHERE UPPER(substring(aluno.Nome,1,?)) = UPPER(?)");
 
 			st.setInt(1, length);
 			st.setString(2, nome);
@@ -304,16 +304,13 @@ public class AlunoDaoJDBC implements AlunoDao {
 	}
 	
 	@Override
-	public void backupDados(String filepath) {
-		PreparedStatement st = null;
-		try {
-			st = conn.prepareStatement("SELECT * INTO OUTFILE '"
-							+ filepath
-							+ "' FROM aluno, plano");
-			st.executeQuery();
-		} catch (SQLException e) {
-			throw new DBException(e.getMessage());
-		}
+	public void backupDados() {
+		DB.backupData();
+	}
+	
+	@Override
+	public void lerBackup(String filepath) {
+		DB.lerBackup(filepath);
 	}
 
 }

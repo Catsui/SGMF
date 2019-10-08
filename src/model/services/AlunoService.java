@@ -2,8 +2,8 @@ package model.services;
 
 import java.util.List;
 
-import model.dao.DaoFactory;
 import model.dao.AlunoDao;
+import model.dao.DaoFactory;
 import model.entities.Aluno;
 
 public class AlunoService {
@@ -42,8 +42,12 @@ public class AlunoService {
 		dao.deleteById(obj.getId());
 	}
 
-	public void backupDados(String filepath) {
-		dao.backupDados(filepath);
+	public void backupDados() {
+		dao.backupDados();
+	}
+	
+	public void lerBackup(String filepath) {
+		dao.lerBackup(filepath);
 	}
 
 }

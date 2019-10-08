@@ -78,7 +78,9 @@ public class PlanoListController implements Initializable, DataChangeListener {
 	private void initializeNodes() {
 		tableColumnIdPlano.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnNomePlano.setCellValueFactory(new PropertyValueFactory<>("nome"));
+		tableColumnNomePlano.setPrefWidth(150);
 		tableColumnMensalidade.setCellValueFactory(new PropertyValueFactory<>("mensalidade"));
+		tableColumnMensalidade.setStyle("-fx-alignment: center-right");
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewPlano.prefHeightProperty().bind(stage.heightProperty());

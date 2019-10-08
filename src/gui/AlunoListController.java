@@ -379,11 +379,18 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		updateTableView();
 	}
 
-	public void backupDados(String filepath) {
+	public void backupDados() {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");
 		}
-		service.backupDados(filepath);
+		service.backupDados();
+	}
+	
+	public void lerBackup(String filepath) {
+		if (service == null) {
+			throw new IllegalStateException("Serviço nulo.");
+		}
+		service.lerBackup(filepath);
 	}
 
 }

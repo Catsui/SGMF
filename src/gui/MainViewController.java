@@ -1,9 +1,9 @@
 package gui;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
@@ -20,7 +20,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import model.entities.Plano;
+import javafx.stage.FileChooser;
 import model.services.AlunoService;
 import model.services.PlanoService;
 
@@ -31,67 +31,63 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	private MenuItem menuItemPlano;
-	
+
 	@FXML
 	private MenuItem menuItemSalvarPresencas;
 
 	@FXML
 	private MenuItem menuItemAjudaSobre;
-	
+
 	@FXML
 	private MenuItem menuItemBackupSalvarDados;
 	
 	@FXML
-	private MenuItem menuItemTesteDB;
+	private MenuItem menuItemBackupRecuperarDados;
 
 	@FXML
 	public void onMenuItemAlunoAction() {
-		loadView("/gui/AlunoList.fxml", (AlunoListController controller)-> {
+		loadView("/gui/AlunoList.fxml", (AlunoListController controller) -> {
 			controller.setAlunoService(new AlunoService());
 			controller.updateTableView();
 		});
 	}
-	
+
 	@FXML
 	public void onMenuItemPlanoAction() {
 		loadView("/gui/PlanoList.fxml", (PlanoListController controller) -> {
 			controller.setPlanoService(new PlanoService());
 			controller.updateTableView();
 		});
-		
+
 	}
-	
-	@FXML
-	public void onMenuItemTesteDBAction() {
-		PlanoService service = new PlanoService();
-		List<Plano> list = new ArrayList<>();
-		list = service.findAll();
-		list.forEach(System.out::println);
-	}
-	
-	
+
 	@FXML
 	public void onMenuItemSalvarPresencasAction(ActionEvent event) {
-		salvarPresencas(true, "C:\\Users\\ivand\\ws-sgmf\\presencas.csv");
+		salvarPresencas(true, System.getProperty("user.dir"));
 		Platform.exit();
 	}
 
 	@FXML
 	public void onMenuItemAjudaSobreAction() {
-		loadView("/gui/AboutView.fxml", x-> {});
+		loadView("/gui/AboutView.fxml", x -> {
+		});
+	}
+
+	@FXML
+	public void onMenuItemBackupSalvarDadosAction() {
+		backupDados();
+		Alerts.showAlert("Backup do Banco de Dados", null, "O banco de dados foi salvo com sucesso na pasta raiz do programa. "
+				+ "Para segurança, salve o arquivo de nome backup"+LocalDate.now()+" em outros locais.", AlertType.INFORMATION);
 	}
 	
 	@FXML
-	public void onMenuItemBackupSalvarDadosAction() {
-//		DirectoryChooser dc = new DirectoryChooser();
-//		File file = dc.showDialog(Main.getMainScene().getWindow());
-//		
-//		if (file == null) {
-//			Alerts.showAlert("Erro ao realizar backup", null, "O caminho especificado é inválido ou não existe.", AlertType.ERROR);
-//		} else {
-//			backupDados(file.getAbsolutePath());
-//		}
-		backupDados("C:\\backup1.txt");
+	public void onMenuItemBackupRecuperarDadosAction() {
+		FileChooser chooser = new FileChooser();
+		chooser.setTitle("Indique o Banco de Dados a ser recuperado");
+		File defaultDirectory = new File(System.getProperty("user.dir"));
+		chooser.setInitialDirectory(defaultDirectory);
+		File selectedFile = chooser.showOpenDialog(Main.getMainScene().getWindow());
+		lerBackup(selectedFile.getAbsolutePath());
 	}
 
 	@Override
@@ -111,7 +107,7 @@ public class MainViewController implements Initializable {
 			mainVBox.getChildren().clear();
 			mainVBox.getChildren().add(mainMenu);
 			mainVBox.getChildren().addAll(newVBox.getChildren());
-			
+
 			T controller = loader.getController();
 			initializingAction.accept(controller);
 
@@ -121,17 +117,23 @@ public class MainViewController implements Initializable {
 		}
 
 	}
-	
+
 	private void salvarPresencas(Boolean presenca, String filepath) {
 		AlunoListController controller = new AlunoListController();
 		controller.setAlunoService(new AlunoService());
 		controller.saveByPresenca(presenca, filepath);
 	}
-	
-	private void backupDados(String filepath) {
+
+	private void backupDados() {
 		AlunoListController controller = new AlunoListController();
 		controller.setAlunoService(new AlunoService());
-		controller.backupDados(filepath);
+		controller.backupDados();
+	}
+	
+	private void lerBackup(String filepath) {
+		AlunoListController controller = new AlunoListController();
+		controller.setAlunoService(new AlunoService());
+		controller.lerBackup(filepath);
 	}
 
 }

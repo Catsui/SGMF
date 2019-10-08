@@ -24,6 +24,8 @@ public interface AlunoDao {
 
 	void saveByPresenca(Boolean presenca, String filepath);
 	
-	void backupDados(String filepath);
+	void backupDados();
+	
+	void lerBackup(String filepath);
 
 }

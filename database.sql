@@ -1,6 +1,15 @@
-CREATE DATABASE coursejdbc;
+CREATE DATABASE sgmf;
 
-USE coursejdbc;
+USE sgmf;
+
+CREATE TABLE plano (
+	Id int(11) NOT NULL AUTO_INCREMENT,
+	Nome varchar(60) NOT NULL,
+	Mensalidade decimal(10,2) NOT NULL,
+    PRIMARY KEY (Id)
+);
+
+INSERT INTO plano (Nome, Mensalidade) VALUES ('Plano 1: Todos os dias',92.0);
 
 CREATE TABLE aluno (
   Id int(11) NOT NULL AUTO_INCREMENT,
@@ -15,10 +24,5 @@ CREATE TABLE aluno (
   FOREIGN KEY (PlanoId) REFERENCES plano(Id)
 );
 
-CREATE TABLE plano (
-	Id int(11) NOT NULL AUTO_INCREMENT,
-	Nome varchar(60) NOT NULL,
-	Mensalidade decimal(10,2) NOT NULL,
-    PRIMARY KEY (Id)
-);
+
 
