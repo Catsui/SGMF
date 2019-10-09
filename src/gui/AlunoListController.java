@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import application.Main;
+import application.ExeFX;
 import db.DBIntegrityException;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
@@ -143,7 +143,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		Utils.formatTableColumnDate(tableColumnDataInicio, "dd/MM/yyyy");
 		tableColumnTelefone.setCellValueFactory(new PropertyValueFactory<>("telefone"));
 
-		Stage stage = (Stage) Main.getMainScene().getWindow();
+		Stage stage = (Stage) ExeFX.getMainScene().getWindow();
 		tableViewAluno.prefHeightProperty().bind(stage.heightProperty());
 	}
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import application.Main;
+import application.ExeFX;
 import db.DBIntegrityException;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
@@ -82,7 +82,7 @@ public class PlanoListController implements Initializable, DataChangeListener {
 		tableColumnMensalidade.setCellValueFactory(new PropertyValueFactory<>("mensalidade"));
 		tableColumnMensalidade.setStyle("-fx-alignment: center-right");
 
-		Stage stage = (Stage) Main.getMainScene().getWindow();
+		Stage stage = (Stage) ExeFX.getMainScene().getWindow();
 		tableViewPlano.prefHeightProperty().bind(stage.heightProperty());
 	}
 

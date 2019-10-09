@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-import application.Main;
+import application.ExeFX;
 import gui.util.Alerts;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -86,7 +86,7 @@ public class MainViewController implements Initializable {
 		chooser.setTitle("Indique o Banco de Dados a ser recuperado");
 		File defaultDirectory = new File(System.getProperty("user.dir"));
 		chooser.setInitialDirectory(defaultDirectory);
-		File selectedFile = chooser.showOpenDialog(Main.getMainScene().getWindow());
+		File selectedFile = chooser.showOpenDialog(ExeFX.getMainScene().getWindow());
 		lerBackup(selectedFile.getAbsolutePath());
 	}
 
@@ -100,7 +100,7 @@ public class MainViewController implements Initializable {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			VBox newVBox = loader.load();
 
-			Scene mainScene = Main.getMainScene();
+			Scene mainScene = ExeFX.getMainScene();
 			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
 
 			Node mainMenu = mainVBox.getChildren().get(0);
