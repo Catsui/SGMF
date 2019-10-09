@@ -76,8 +76,8 @@ public class MainViewController implements Initializable {
 	@FXML
 	public void onMenuItemBackupSalvarDadosAction() {
 		backupDados();
-		Alerts.showAlert("Backup do Banco de Dados", null, "O banco de dados foi salvo com sucesso na pasta raiz do programa. "
-				+ "Para segurança, salve o arquivo de nome backup"+LocalDate.now()+" em outros locais.", AlertType.INFORMATION);
+		Alerts.showAlert("Backup do Banco de Dados", null, "O banco de dados foi salvo com sucesso na pasta \"backups\" do programa. "
+				+ "Para segurança, salve o arquivo de nome \"backup"+LocalDate.now()+"\" em outros locais.", AlertType.INFORMATION);
 	}
 	
 	@FXML

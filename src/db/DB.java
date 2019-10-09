@@ -43,7 +43,7 @@ public class DB {
 				String url = props.getProperty("dburl");
 				String usuario = props.getProperty("user");
 				String senha = props.getProperty("pass");
-				Script.process(url, usuario, senha, "backup"+LocalDate.now(),"","");
+				Script.process(url, usuario, senha, "backups\\backup"+LocalDate.now(),"","");
 			} catch (Exception e) {
 				throw new DBException(e.getMessage());
 			}
@@ -77,7 +77,7 @@ public class DB {
 	}
 
 	private static Properties loadProperties() {
-		try (FileInputStream fs = new FileInputStream("db.properties")) {
+		try (FileInputStream fs = new FileInputStream("cfg\\db.properties")) {
 			Properties props = new Properties();
 			props.load(fs);
 			return props;
