@@ -63,7 +63,7 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemSalvarPresencasAction(ActionEvent event) {
-		salvarPresencas(true, System.getProperty("user.dir"));
+		salvarPresencas(true, "presencas.csv");
 		Platform.exit();
 	}
 

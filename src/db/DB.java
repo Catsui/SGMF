@@ -2,6 +2,9 @@ package db;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -43,6 +46,8 @@ public class DB {
 				String url = props.getProperty("dburl");
 				String usuario = props.getProperty("user");
 				String senha = props.getProperty("pass");
+				Path path = Paths.get(System.getProperty("user.dir")+"\\backups");
+				if (!Files.exists(path)) Files.createDirectories(path);
 				Script.process(url, usuario, senha, "backups\\backup"+LocalDate.now(),"","");
 			} catch (Exception e) {
 				throw new DBException(e.getMessage());

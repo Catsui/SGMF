@@ -3,6 +3,9 @@ package model.dao.impl;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -264,7 +267,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 	}
 
 	@Override
-	public void saveByPresenca(Boolean presenca, String filepath) {
+	public void saveByPresenca(Boolean presenca, String filename) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		OutputStream os = null;
@@ -275,18 +278,17 @@ public class AlunoDaoJDBC implements AlunoDao {
 					+ "ON aluno.PlanoId = plano.Id WHERE Presenca = ?");
 			st.setBoolean(1, presenca);
 			rs = st.executeQuery();
-			System.out.println(rs);
-
 			while (rs.next()) {
 				Plano plano = instantiatePlano(rs);
 				Aluno aluno = instantiateAluno(rs, plano);
 				presentes.add(aluno.getId());
 			}
 			try {
-				os = new FileOutputStream(filepath, true);
+				Path path = Paths.get(System.getProperty("user.dir")+"\\presencas");
+				if (!Files.exists(path)) Files.createDirectories(path);
+				os = new FileOutputStream(".\\presencas\\"+filename, true);
 				os.write(("|" + String.valueOf(LocalDate.now())).getBytes());
 				for (int id : presentes) {
-					os = new FileOutputStream(filepath, true);
 					os.write(("," + id).getBytes());
 				}
 			} catch (IOException e) {
