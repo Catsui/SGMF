@@ -43,6 +43,9 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	private MenuItem menuItemBackupRecuperarDados;
+	
+	@FXML
+	private MenuItem menuItemMensalidadesVencimentos;
 
 	@FXML
 	public void onMenuItemAlunoAction() {
@@ -88,6 +91,14 @@ public class MainViewController implements Initializable {
 		chooser.setInitialDirectory(defaultDirectory);
 		File selectedFile = chooser.showOpenDialog(Main.getMainScene().getWindow());
 		lerBackup(selectedFile.getAbsolutePath());
+	}
+	
+	@FXML
+	public void onMenuItemMensalidadesVencimentos() {
+		loadView("/gui/FinancList.fxml", (FinancListController controller) -> {
+			controller.setAlunoService(new AlunoService());
+			controller.updateTableView();
+		});
 	}
 
 	@Override

@@ -14,13 +14,14 @@ public class Aluno implements Serializable {
 	private Date dataInicio;
 	private Plano plano;
 	private Boolean presenca;
+	private Date vencimento;
 	private String treino;
 
 	public Aluno() {
 
 	}
 
-	public Aluno(Integer id, String nome, String telefone, Date dataNasc, Date dataInicio, Plano plano, Boolean presenca, String treino) {
+	public Aluno(Integer id, String nome, String telefone, Date dataNasc, Date dataInicio, Plano plano, Boolean presenca, Date vencimento, String treino) {
 		this.id = id;
 		this.nome = nome;
 		this.telefone = telefone;
@@ -28,6 +29,7 @@ public class Aluno implements Serializable {
 		this.dataInicio = dataInicio;
 		this.plano = plano;
 		this.presenca = presenca;
+		this.vencimento = vencimento;
 		this.treino = treino;
 	}
 
@@ -87,6 +89,14 @@ public class Aluno implements Serializable {
 		this.presenca = presenca;
 	}
 	
+	public Date getVencimento() {
+		return vencimento;
+	}
+	
+	public void setVencimento(Date vencimento) {
+		this.vencimento = vencimento;
+	}
+	
 	public String getTreino() {
 		return treino;
 	}
@@ -98,7 +108,7 @@ public class Aluno implements Serializable {
 	@Override
 	public String toString() {
 		return "Aluno [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", dataNasc=" + dataNasc
-				+ ", dataInicio=" + dataInicio + "]";
+				+ ", dataInicio=" + dataInicio + " vencimento=" + vencimento + "]";
 	}
 
 	@Override

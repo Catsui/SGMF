@@ -1,5 +1,6 @@
 package model.services;
 
+import java.util.Date;
 import java.util.List;
 
 import model.dao.AlunoDao;
@@ -26,6 +27,11 @@ public class AlunoService {
 		dao.updatePresenca(obj);
 	}
 	
+	public List<Aluno> findByVencimento(Date data) {
+		return dao.findByVencimento(data);
+	}
+
+	
 	public void saveOrUpdate(Aluno obj) {
 		if (obj.getId() == null) {
 			dao.insert(obj);
@@ -49,5 +55,6 @@ public class AlunoService {
 	public void lerBackup(String filepath) {
 		dao.lerBackup(filepath);
 	}
+
 
 }

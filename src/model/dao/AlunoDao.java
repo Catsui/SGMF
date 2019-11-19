@@ -1,5 +1,6 @@
 package model.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import model.entities.Aluno;
@@ -21,6 +22,8 @@ public interface AlunoDao {
 	List<Aluno> findByName(String nome, int length);
 
 	List<Aluno> findByPresenca(Boolean presenca);
+	
+	List<Aluno> findByVencimento(Date data);
 
 	void saveByPresenca(Boolean presenca, String filepath);
 	

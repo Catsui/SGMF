@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -197,6 +198,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 		aluno.setDataInicio(rs.getDate("DataInicioTreino"));
 		aluno.setPlano(plano);
 		aluno.setPresenca(rs.getBoolean("Presenca"));
+		aluno.setVencimento(rs.getDate("Vencimento"));
 		aluno.setTreino(rs.getString("Treino"));
 		return aluno;
 	}
@@ -257,6 +259,37 @@ public class AlunoDaoJDBC implements AlunoDao {
 				list.add(aluno);
 			}
 
+			return list;
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+	
+	@Override
+	public List<Aluno> findByVencimento(Date data) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
+					+ "ON aluno.PlanoId = plano.Id WHERE Vencimento < ?");
+			if (data != null) {
+				st.setDate(1, new java.sql.Date(data.getTime()));
+			} else {
+				st.setDate(1, null);
+			}
+			rs = st.executeQuery();
+			
+			List<Aluno> list = new ArrayList<>();
+			while(rs.next()) {
+				Plano plano = instantiatePlano(rs);
+				Aluno aluno = instantiateAluno(rs, plano);
+				list.add(aluno);
+			}
+			
 			return list;
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());

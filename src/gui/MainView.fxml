@@ -19,6 +19,11 @@
                         <MenuItem fx:id="menuItemSalvarPresencas" mnemonicParsing="false" onAction="#onMenuItemSalvarPresencasAction" text="Salvar Presenças" />
                   </items>
                 </Menu>
+                  <Menu mnemonicParsing="false" text="Mensalidades">
+                    <items>
+                      <MenuItem fx:id="menuItemMensalidadesVencimentos" mnemonicParsing="false" onAction="#onMenuItemMensalidadesVencimentos" text="Vencimentos" />
+                    </items>
+                  </Menu>
                   <Menu mnemonicParsing="false" text="Backup">
                     <items>
                       <MenuItem fx:id="menuItemBackupSalvarDados" mnemonicParsing="false" onAction="#onMenuItemBackupSalvarDadosAction" text="Salvar Banco de Dados" />
