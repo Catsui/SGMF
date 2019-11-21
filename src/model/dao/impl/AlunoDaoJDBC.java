@@ -120,6 +120,25 @@ public class AlunoDaoJDBC implements AlunoDao {
 			DB.closeStatement(st);
 		}
 	}
+	
+	@Override
+	public void updateVencimento(Aluno aluno) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("UPDATE aluno SET Vencimento = ? WHERE Id = ?");
+			if (aluno.getVencimento() != null) {
+				st.setDate(1, new java.sql.Date(aluno.getVencimento().getTime()));
+			} else {
+				st.setDate(1, null);
+			}
+			st.setInt(2,  aluno.getId());
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+		}
+	}
 
 	@Override
 	public void deleteById(Integer id) {

@@ -30,6 +30,10 @@ public class AlunoService {
 	public List<Aluno> findByVencimento(Date data) {
 		return dao.findByVencimento(data);
 	}
+	
+	public void updateVencimento(Aluno obj) {
+		dao.updateVencimento(obj);
+	}
 
 	
 	public void saveOrUpdate(Aluno obj) {

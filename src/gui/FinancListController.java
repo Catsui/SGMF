@@ -132,14 +132,14 @@ public class FinancListController implements Initializable, DataChangeListener {
 				}
 
 				setGraphic(button);
-				button.setOnAction(event -> createDialogForm(obj, "/gui/AlunoForm.fxml", Utils.currentStage(event)));
+				button.setOnAction(event -> createDialogFinancForm(obj, "/gui/FinancForm.fxml", Utils.currentStage(event)));
 			}
 		});
 	}
 
 	private void initPayButtons() {
 		tableColumnPAY.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tableColumnPAY.setPrefWidth(72);
+		tableColumnPAY.setPrefWidth(84);
 		tableColumnPAY.setStyle("-fx-alignment: CENTER");
 		tableColumnPAY.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
 			private final Button button = new Button("Pagamento");
@@ -154,7 +154,7 @@ public class FinancListController implements Initializable, DataChangeListener {
 				}
 
 				setGraphic(button);
-				button.setOnAction(event -> createDialogView(obj, "/gui/AlunoView.fxml", Utils.currentStage(event)));
+				button.setOnAction(event -> createDialogPayForm(obj, "/gui/PayForm.fxml", Utils.currentStage(event)));
 			}
 		});
 	}
@@ -207,12 +207,12 @@ public class FinancListController implements Initializable, DataChangeListener {
 		initEditButtons();
 	}
 
-	public void createDialogForm(Aluno obj, String absoluteName, Stage parentStage) {
+	public void createDialogPayForm(Aluno obj, String absoluteName, Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			AlunoFormController controller = loader.getController();
+			PayFormController controller = loader.getController();
 			controller.setAluno(obj);
 			controller.setServices(new AlunoService(), new PlanoService());
 			controller.loadAssociatedObjects();
@@ -220,7 +220,32 @@ public class FinancListController implements Initializable, DataChangeListener {
 			controller.updateFormData();
 
 			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Informe os dados do aluno");
+			dialogStage.setTitle("Pagamento: Informe a quantidade de mensalidades");
+			dialogStage.setScene(new Scene(pane));
+			dialogStage.setResizable(false);
+			dialogStage.initOwner(parentStage);
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.showAndWait();
+		} catch (IOException e) {
+			e.printStackTrace();
+			Alerts.showAlert("IO Exception", "Erro ao carregar nova janela.", e.getMessage(), AlertType.ERROR);
+		}
+	}
+	
+	public void createDialogFinancForm(Aluno obj, String absoluteName, Stage parentStage) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+
+			FinancFormController controller = loader.getController();
+			controller.setAluno(obj);
+			controller.setServices(new AlunoService(), new PlanoService());
+			controller.loadAssociatedObjects();
+			controller.subscribeDataChangeListener(this);
+			controller.updateFormData();
+
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Pagamento: Editar informações de vencimento");
 			dialogStage.setScene(new Scene(pane));
 			dialogStage.setResizable(false);
 			dialogStage.initOwner(parentStage);

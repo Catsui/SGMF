@@ -12,6 +12,8 @@ public interface AlunoDao {
 	void update(Aluno aluno);
 
 	void updatePresenca(Aluno aluno);
+	
+	void updateVencimento(Aluno aluno);
 
 	void deleteById(Integer id);
 
