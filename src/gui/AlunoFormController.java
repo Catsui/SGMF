@@ -183,8 +183,10 @@ public class AlunoFormController implements Initializable {
 		Constraints.setTextFieldMaxLength(txtNome, 70);
 		Constraints.setTextFieldMaxLength(txtTelefone, 20);
 		Constraints.setTextFieldMaxLength(txtTelefone, 70);
+		Utils.enhanceDatePickers(dpDataNasc, dpDataInicio);
 		Utils.formatDatePicker(dpDataNasc, "dd/MM/yyyy");
 		Utils.formatDatePicker(dpDataInicio, "dd/MM/yyyy");
+		
 		initializeComboBoxPlano();
 	}
 
