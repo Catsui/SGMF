@@ -13,7 +13,7 @@ public interface AlunoDao {
 
 	void updatePresenca(Aluno aluno);
 	
-	void updateVencimento(Aluno aluno);
+	void updatePagamento(Aluno aluno);
 
 	void deleteById(Integer id);
 
@@ -25,7 +25,7 @@ public interface AlunoDao {
 
 	List<Aluno> findByPresenca(Boolean presenca);
 	
-	List<Aluno> findByVencimento(Date data);
+	List<Aluno> findByPagamento(Date data);
 
 	void saveByPresenca(Boolean presenca, String filepath);
 	

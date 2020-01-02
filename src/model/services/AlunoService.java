@@ -27,12 +27,12 @@ public class AlunoService {
 		dao.updatePresenca(obj);
 	}
 	
-	public List<Aluno> findByVencimento(Date data) {
-		return dao.findByVencimento(data);
+	public List<Aluno> findByPagamento(Date data) {
+		return dao.findByPagamento(data);
 	}
 	
-	public void updateVencimento(Aluno obj) {
-		dao.updateVencimento(obj);
+	public void updatePagamento(Aluno obj) {
+		dao.updatePagamento(obj);
 	}
 
 	

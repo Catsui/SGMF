@@ -52,7 +52,7 @@ public class PayFormController implements Initializable {
 	private TextField txtTelefone;
 	
 	@FXML
-	private DatePicker dpVencimento;
+	private DatePicker dpPagamento;
 
 	@FXML
 	private ComboBox<Integer> comboBoxMeses;
@@ -88,14 +88,14 @@ public class PayFormController implements Initializable {
 			entity = getFormData();
 			Calendar cal = Calendar.getInstance();
 			Instant hoje = Instant.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()));
-			if (Date.from(hoje).compareTo(entity.getVencimento())>0) {
+			if (Date.from(hoje).compareTo(entity.getPagamento())>0) {
 				cal.setTime(Date.from(hoje));
 			} else {
-				cal.setTime(entity.getVencimento());
+				cal.setTime(entity.getPagamento());
 			}
 			cal.add(Calendar.MONTH, comboBoxMeses.getValue());
-			entity.setVencimento(cal.getTime());
-			service.updateVencimento(entity);
+			entity.setPagamento(cal.getTime());
+			service.updatePagamento(entity);
 			notifyDataChangeListeners();
 			Utils.currentStage(event).close();
 		} catch (DBException e) {
@@ -127,11 +127,11 @@ public class PayFormController implements Initializable {
 		}
 		obj.setTelefone(txtTelefone.getText());
 
-		if (dpVencimento.getValue() == null) {
+		if (dpPagamento.getValue() == null) {
 			exception.addError("birthDate", "Campo obrigatório.");
 		} else {
-			Instant instant = Instant.from(dpVencimento.getValue().atStartOfDay(ZoneId.systemDefault()));
-			obj.setVencimento(Date.from(instant));
+			Instant instant = Instant.from(dpPagamento.getValue().atStartOfDay(ZoneId.systemDefault()));
+			obj.setPagamento(Date.from(instant));
 		}
 		
 		return obj;
@@ -161,9 +161,9 @@ public class PayFormController implements Initializable {
 		txtId.setText(entity.getId() == null ? "" : String.valueOf(entity.getId()));
 		txtNome.setText(entity.getNome());
 		txtTelefone.setText(entity.getTelefone());
-		if (entity.getVencimento() != null) {
-			java.util.Date vencimento = new Date(entity.getVencimento().getTime());
-			dpVencimento.setValue(vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		if (entity.getPagamento() != null) {
+			java.util.Date vencimento = new Date(entity.getPagamento().getTime());
+			dpPagamento.setValue(vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		}
 		comboBoxMeses.getSelectionModel().selectFirst();	
 	}

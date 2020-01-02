@@ -48,7 +48,7 @@ public class FinancListController implements Initializable, DataChangeListener {
 	private TableColumn<Aluno, String> tableColumnTelefone;
 
 	@FXML
-	private TableColumn<Aluno, Date> tableColumnVencimento;
+	private TableColumn<Aluno, Date> tableColumnPagamento;
 
 	@FXML
 	private TableColumn<Aluno, Aluno> tableColumnPAY;
@@ -91,7 +91,7 @@ public class FinancListController implements Initializable, DataChangeListener {
 
 	@FXML
 	public void onBtnMostrarPendentesAction() {
-		findByVencimento(java.sql.Date.valueOf(LocalDate.now()));
+		findByPagamento(java.sql.Date.valueOf(LocalDate.now()));
 	}
 
 
@@ -107,8 +107,8 @@ public class FinancListController implements Initializable, DataChangeListener {
 	private void initializeNodes() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-		tableColumnVencimento.setCellValueFactory(new PropertyValueFactory<>("vencimento"));
-		Utils.formatTableColumnDate(tableColumnVencimento, "dd/MM/yyyy");
+		tableColumnPagamento.setCellValueFactory(new PropertyValueFactory<>("vencimento"));
+		Utils.formatTableColumnDate(tableColumnPagamento, "dd/MM/yyyy");
 		tableColumnTelefone.setCellValueFactory(new PropertyValueFactory<>("telefone"));
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
@@ -185,11 +185,11 @@ public class FinancListController implements Initializable, DataChangeListener {
 		initEditButtons();
 	}
 	
-	public void findByVencimento(Date data) {
+	public void findByPagamento(Date data) {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");
 		}
-		obsList = FXCollections.observableArrayList(service.findByVencimento(data));
+		obsList = FXCollections.observableArrayList(service.findByPagamento(data));
 		
 		tableViewAluno.setItems(obsList);
 		initPayButtons();

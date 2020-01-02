@@ -58,12 +58,12 @@
                   <TextField fx:id="txtId" editable="false" GridPane.columnIndex="1" />
                   <TextField fx:id="txtNome" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="txtTelefone" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label text="Vencimento" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                  <Label text="Pagamento" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <DatePicker fx:id="dpVencimento" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <DatePicker fx:id="dpPagamento" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </children>

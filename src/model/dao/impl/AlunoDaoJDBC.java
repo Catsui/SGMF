@@ -122,12 +122,12 @@ public class AlunoDaoJDBC implements AlunoDao {
 	}
 	
 	@Override
-	public void updateVencimento(Aluno aluno) {
+	public void updatePagamento(Aluno aluno) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("UPDATE aluno SET Vencimento = ? WHERE Id = ?");
-			if (aluno.getVencimento() != null) {
-				st.setDate(1, new java.sql.Date(aluno.getVencimento().getTime()));
+			st = conn.prepareStatement("UPDATE aluno SET Pagamento = ? WHERE Id = ?");
+			if (aluno.getPagamento() != null) {
+				st.setDate(1, new java.sql.Date(aluno.getPagamento().getTime()));
 			} else {
 				st.setDate(1, null);
 			}
@@ -187,7 +187,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id " + "WHERE UPPER(substring(aluno.Nome,1,?)) = UPPER(?)");
+					+ "ON aluno.PlanoId = plano.Id " + "WHERE UPPER(substring(aluno.Nome,1,?)) = UPPER(?) ORDER BY aluno.Nome");
 
 			st.setInt(1, length);
 			st.setString(2, nome);
@@ -217,7 +217,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 		aluno.setDataInicio(rs.getDate("DataInicioTreino"));
 		aluno.setPlano(plano);
 		aluno.setPresenca(rs.getBoolean("Presenca"));
-		aluno.setVencimento(rs.getDate("Vencimento"));
+		aluno.setPagamento(rs.getDate("Pagamento"));
 		aluno.setTreino(rs.getString("Treino"));
 		return aluno;
 	}
@@ -236,7 +236,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id " + "ORDER BY aluno.Id");
+					+ "ON aluno.PlanoId = plano.Id " + "ORDER BY SUBSTRING(aluno.Nome, 1, 1)");
 
 			rs = st.executeQuery();
 
@@ -267,7 +267,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id WHERE Presenca = ?");
+					+ "ON aluno.PlanoId = plano.Id WHERE Presenca = ? ORDER BY aluno.Nome");
 			st.setBoolean(1, presenca);
 			rs = st.executeQuery();
 
@@ -288,13 +288,13 @@ public class AlunoDaoJDBC implements AlunoDao {
 	}
 	
 	@Override
-	public List<Aluno> findByVencimento(Date data) {
+	public List<Aluno> findByPagamento(Date data) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id WHERE Vencimento < ?");
+					+ "ON aluno.PlanoId = plano.Id WHERE Pagamento < ? ORDER BY aluno.Nome");
 			if (data != null) {
 				st.setDate(1, new java.sql.Date(data.getTime()));
 			} else {

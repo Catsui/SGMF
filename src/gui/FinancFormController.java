@@ -45,7 +45,7 @@ public class FinancFormController implements Initializable {
 	private TextField txtTelefone;
 	
 	@FXML
-	private DatePicker dpVencimento;
+	private DatePicker dpPagamento;
 
 	@FXML
 	private Button btnConfirm;
@@ -76,7 +76,7 @@ public class FinancFormController implements Initializable {
 		}
 		try {
 			entity = getFormData();
-			service.updateVencimento(entity);
+			service.updatePagamento(entity);
 			notifyDataChangeListeners();
 			Utils.currentStage(event).close();
 		} catch (DBException e) {
@@ -108,11 +108,11 @@ public class FinancFormController implements Initializable {
 		}
 		obj.setTelefone(txtTelefone.getText());
 
-		if (dpVencimento.getValue() == null) {
+		if (dpPagamento.getValue() == null) {
 			exception.addError("birthDate", "Campo obrigatório.");
 		} else {
-			Instant instant = Instant.from(dpVencimento.getValue().atStartOfDay(ZoneId.systemDefault()));
-			obj.setVencimento(Date.from(instant));
+			Instant instant = Instant.from(dpPagamento.getValue().atStartOfDay(ZoneId.systemDefault()));
+			obj.setPagamento(Date.from(instant));
 		}
 		
 		return obj;
@@ -142,9 +142,9 @@ public class FinancFormController implements Initializable {
 		txtId.setText(entity.getId() == null ? "" : String.valueOf(entity.getId()));
 		txtNome.setText(entity.getNome());
 		txtTelefone.setText(entity.getTelefone());
-		if (entity.getVencimento() != null) {
-			java.util.Date vencimento = new Date(entity.getVencimento().getTime());
-			dpVencimento.setValue(vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		if (entity.getPagamento() != null) {
+			java.util.Date vencimento = new Date(entity.getPagamento().getTime());
+			dpPagamento.setValue(vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		}
 	}
 	
