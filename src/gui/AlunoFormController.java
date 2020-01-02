@@ -30,6 +30,8 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.robot.Robot;
 import javafx.util.Callback;
 import model.entities.Aluno;
 import model.entities.Plano;
@@ -124,13 +126,23 @@ public class AlunoFormController implements Initializable {
 		}
 
 	}
+	
+	@FXML
+	private void validateDatePickers() {
+		Robot robot = new Robot();
+		dpDataNasc.requestFocus();
+		robot.keyType(KeyCode.ENTER);
+		robot.keyType(KeyCode.TAB);
+		robot.keyType(KeyCode.ENTER);
+	}
 
 	private void notifyDataChangeListeners() {
 		for (DataChangeListener listener : dataChangeListeners) {
 			listener.onDataChanged();
 		}
 	}
-
+	
+	
 	private Aluno getFormData() {
 		Aluno obj = new Aluno();
 		ValidationException exception = new ValidationException("Erro de validação");
@@ -153,12 +165,11 @@ public class AlunoFormController implements Initializable {
 			obj.setDataNasc(Date.from(instant));
 		}
 
-		if (dpDataInicio.getValue() == null) {
-			exception.addError("birthDate", "Campo obrigatório.");
-		} else {
+		if (dpDataInicio.getValue()!=null) {
 			Instant instant = Instant.from(dpDataInicio.getValue().atStartOfDay(ZoneId.systemDefault()));
 			obj.setDataInicio(Date.from(instant));
 		}
+		
 		
 		obj.setPlano(comboBoxPlano.getValue());
 

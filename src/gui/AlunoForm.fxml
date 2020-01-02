@@ -67,7 +67,7 @@
       </HBox>
       <HBox layoutX="100.0" layoutY="282.0" prefHeight="37.0" prefWidth="258.0" spacing="5.0">
          <children>
-            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#onBtnSaveAction" text="Salvar">
+            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#onBtnSaveAction" onMouseEntered="#validateDatePickers" text="Salvar">
                <HBox.margin>
                   <Insets left="10.0" top="5.0" />
                </HBox.margin></Button>

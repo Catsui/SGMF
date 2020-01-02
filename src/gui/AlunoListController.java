@@ -89,7 +89,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private Button btnMostrarAusentes;
-
+	
 	private ObservableList<Aluno> obsList;
 
 	@FXML
