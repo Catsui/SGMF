@@ -42,7 +42,7 @@ public class AlunoService {
 		return dao.findByPagamento(data);
 	}
 	
-	public List<Aluno> findByvencimento(Date data) {
+	public List<Aluno> findByVencimento(Date data) {
 		return dao.findByVencimento(data);
 	}
 	

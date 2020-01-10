@@ -17,11 +17,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.KeyCode;
-import javafx.scene.robot.Robot;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.robot.Robot;
 import model.entities.Aluno;
 import model.exceptions.ValidationException;
 import model.services.AlunoService;
@@ -116,29 +116,24 @@ public class FinancFormController implements Initializable {
 		}
 		obj.setTelefone(txtTelefone.getText());
 
-		if (dpPagamento.getValue() == null) {
-			exception.addError("birthDate", "Campo obrigatório.");
-		} else {
+		if (dpPagamento.getValue() != null) {
 			Instant instant = Instant.from(dpPagamento.getValue().atStartOfDay(ZoneId.systemDefault()));
 			obj.setPagamento(Date.from(instant));
 		}
 		
-		if (dpReferencia.getValue() == null) {
-			exception.addError("referencia", "Campo obrigatório");
-		} else {
+		if (dpReferencia.getValue() != null) {
 			Instant instant = Instant.from(dpReferencia.getValue().atStartOfDay(ZoneId.systemDefault()));
 			obj.setReferencia(Date.from(instant));
 		}
 		
-		if (dpVencimento.getValue() == null) {
-			exception.addError("vencimento", "Campo obrigatório");
-		} else {
+		if (dpVencimento.getValue() != null) {
 			Instant instant = Instant.from(dpVencimento.getValue().atStartOfDay(ZoneId.systemDefault()));
 			obj.setVencimento(Date.from(instant));
 		}
 		
 		return obj;
 	}
+	
 	
 	@FXML
 	private void validateDatePickers() {
@@ -178,9 +173,9 @@ public class FinancFormController implements Initializable {
 		txtId.setText(entity.getId() == null ? "" : String.valueOf(entity.getId()));
 		txtNome.setText(entity.getNome());
 		txtTelefone.setText(entity.getTelefone());
-		if (entity.getPagamento() != null) {
-			java.util.Date vencimento = new Date(entity.getPagamento().getTime());
-			dpPagamento.setValue(vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		if (entity.getVencimento() != null) {
+			java.util.Date referencia = new Date(entity.getVencimento().getTime());
+			dpReferencia.setValue(referencia.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		}
 	}
 	

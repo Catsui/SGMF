@@ -217,8 +217,8 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	private void initCheckBoxesAtivo() {
 		tableColumnATIVO.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnATIVO.setPrefWidth(58);
-		tableColumnATTEND.setStyle("-fx-alignment: CENTER");
-		tableColumnATTEND.setCellFactory(param -> new TableCell<Aluno, Aluno>(){
+		tableColumnATIVO.setStyle("-fx-alignment: CENTER");
+		tableColumnATIVO.setCellFactory(param -> new TableCell<Aluno, Aluno>(){
 			private final CheckBox ativo = new CheckBox();
 			
 			@Override
@@ -348,6 +348,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		initEditButtons();
 		initRemoveButtons();
 		initViewButtons();
+		initCheckBoxesAtivo();
 		initCheckBoxesAttend();
 	}
 

@@ -91,7 +91,7 @@ public class FinancListController implements Initializable, DataChangeListener {
 
 	@FXML
 	public void onBtnMostrarPendentesAction() {
-		findByPagamento(java.sql.Date.valueOf(LocalDate.now()));
+		findByVencimento(java.sql.Date.valueOf(LocalDate.now()));
 	}
 
 
@@ -195,6 +195,17 @@ public class FinancListController implements Initializable, DataChangeListener {
 		initPayButtons();
 		initEditButtons();
 		
+	}
+	
+	public void findByVencimento(Date data) {
+		if (service ==  null) {
+			throw new IllegalStateException("Serviço nulo.");
+		}
+		obsList = FXCollections.observableArrayList(service.findByVencimento(data));
+		
+		tableViewAluno.setItems(obsList);
+		initPayButtons();
+		initEditButtons();
 	}
 
 	public void updateTableView() {

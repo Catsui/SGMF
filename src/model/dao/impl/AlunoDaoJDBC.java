@@ -20,6 +20,8 @@ import java.util.Map;
 
 import db.DB;
 import db.DBException;
+import gui.util.Alerts;
+import javafx.scene.control.Alert.AlertType;
 import model.dao.AlunoDao;
 import model.entities.Aluno;
 import model.entities.Plano;
@@ -141,24 +143,17 @@ public class AlunoDaoJDBC implements AlunoDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement("UPDATE aluno SET Pagamento = ?, Referencia = ?, Vencimento = ? WHERE Id = ?");
-			if (aluno.getPagamento() != null) {
-				st.setDate(1, new java.sql.Date(aluno.getPagamento().getTime()));
-			} else {
-				st.setDate(1, null);
-			}
-			if (aluno.getReferencia() != null) {
-				st.setDate(2, new java.sql.Date(aluno.getReferencia().getTime()));
-			} else {
-				st.setDate(2,  null);
-			}
-			if (aluno.getVencimento() != null) {
-				st.setDate(3, new java.sql.Date(aluno.getVencimento().getTime()));
-			} else {
-				st.setDate(3,  null);
-			}
-			st.setInt(4,  aluno.getId());
+			st.setDate(1, new java.sql.Date(aluno.getPagamento().getTime()));
+			st.setDate(2, new java.sql.Date(aluno.getReferencia().getTime()));
+			st.setDate(3, new java.sql.Date(aluno.getVencimento().getTime()));
+			st.setInt(4, aluno.getId());
 			st.executeUpdate();
-		} catch (SQLException e) {
+		} 
+		catch (NullPointerException e) {
+			Alerts.showAlert("Erro ao salvar as informações de pagamento", null, "Existem campos "
+					+ "obrigatórios sem preenchimento. Verifique as datas informadas e tente novamente.", AlertType.ERROR);
+		}
+		catch (SQLException e) {
 			throw new DBException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
@@ -175,7 +170,8 @@ public class AlunoDaoJDBC implements AlunoDao {
 			st.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
-		} finally {
+		}
+		finally {
 			DB.closeStatement(st);
 		}
 	}
@@ -240,8 +236,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id " + "WHERE UPPER(substring(aluno.Nome,1,?)) = UPPER(?) ORDER BY aluno.Nome "
-					+ "AND ativo = TRUE");
+					+ "ON aluno.PlanoId = plano.Id " + "WHERE UPPER(substring(aluno.Nome,1,?)) = UPPER(?) ORDER BY aluno.Nome ");
 			
 			st.setInt(1, length);
 			st.setString(2, nome);
@@ -265,6 +260,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 	private Aluno instantiateAluno(ResultSet rs, Plano plano) throws SQLException {
 		Aluno aluno = new Aluno();
 		aluno.setId(rs.getInt("Id"));
+		aluno.setAtivo(rs.getBoolean("Ativo"));
 		aluno.setNome(rs.getString("Nome"));
 		aluno.setDataNasc(rs.getDate("DataNasc"));
 		aluno.setTelefone(rs.getString("Telefone"));
@@ -381,7 +377,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 		
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id WHERE Vencimento < ? ORDER BY aluno.Nome");
+					+ "ON aluno.PlanoId = plano.Id WHERE Vencimento < ? AND aluno.Ativo = TRUE ORDER BY aluno.Nome");
 			if (data != null) {
 				st.setDate(1,  new java.sql.Date(data.getTime()));
 			} else {
