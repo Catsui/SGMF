@@ -39,6 +39,8 @@ public interface AlunoDao {
 	
 	void lerBackup(String filepath);
 
+	Integer contarAlunos();
+
 	
 
 	

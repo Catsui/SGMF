@@ -40,8 +40,8 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement(
-					"INSERT INTO aluno " + "(Nome, DataNasc, Telefone, DataInicioTreino, PlanoId, Presenca, Treino) "
-							+ "VALUES " + "(?,?,?,?,?,?,?)",
+					"INSERT INTO aluno " + "(Ativo, Nome, DataNasc, Telefone, DataInicioTreino, PlanoId, Presenca, Treino) "
+							+ "VALUES " + "(TRUE,?,?,?,?,?,?,?)",
 					Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, aluno.getNome());
@@ -449,6 +449,26 @@ public class AlunoDaoJDBC implements AlunoDao {
 	@Override
 	public void lerBackup(String filepath) {
 		DB.lerBackup(filepath);
+	}
+	
+	@Override
+	public Integer contarAlunos() {
+		PreparedStatement st = null;
+		ResultSet rs = null;		
+		try {
+			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " 
+										+ "FROM aluno INNER JOIN plano "
+										+ "ON aluno.PlanoId = plano.Id " 
+										+ "WHERE ativo = TRUE");
+			rs = st.executeQuery();
+			rs.last();
+			return rs.getRow();
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
 	}
 
 }

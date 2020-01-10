@@ -74,6 +74,10 @@ public class AlunoService {
 	public void lerBackup(String filepath) {
 		dao.lerBackup(filepath);
 	}
+	
+	public Integer contarAlunos() {
+		return dao.contarAlunos();
+	}
 
 	
 

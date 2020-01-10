@@ -64,7 +64,6 @@
       </ToolBar>
       <TableView fx:id="tableViewAluno" prefHeight="171.0" prefWidth="900.0">
         <columns>
-          <TableColumn fx:id="tableColumnId" prefWidth="50.0" text="Id" />
           <TableColumn fx:id="tableColumnNome" prefWidth="200.0" text="Nome" />
             <TableColumn fx:id="tableColumnTelefone" prefWidth="100.0" text="Telefone" />
             <TableColumn fx:id="tableColumnPagamento" prefWidth="120.0" text="Data de Pagamento" />

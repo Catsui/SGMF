@@ -23,6 +23,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -89,6 +90,9 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private Button btnMostrarAusentes;
+	
+	@FXML
+	private Label labelTotalAtivos;
 	
 	private ObservableList<Aluno> obsList;
 
@@ -231,7 +235,11 @@ public class AlunoListController implements Initializable, DataChangeListener {
 				}
 				setGraphic(ativo);
 				ativo.setSelected(obj.getAtivo());
-				ativo.setOnAction(event -> updateAtivo(obj, ativo.isSelected()));
+				ativo.setOnAction(event -> {
+					updateAtivo(obj, ativo.isSelected());
+					labelTotalAtivos.setText(service.contarAlunos().toString());
+				});
+				
 			}
 
 		});
@@ -358,6 +366,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		}
 		obsList = FXCollections.observableArrayList(service.findAll());
 		tableViewAluno.setItems(obsList);
+		labelTotalAtivos.setText(service.contarAlunos().toString());
 		initEditButtons();
 		initRemoveButtons();
 		initViewButtons();
