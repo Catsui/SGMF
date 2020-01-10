@@ -43,7 +43,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	private TableView<Aluno> tableViewAluno;
 
 	@FXML
-	private TableColumn<Aluno, Integer> tableColumnId;
+	private TableColumn<Aluno, Aluno> tableColumnATIVO;
 
 	@FXML
 	private TableColumn<Aluno, String> tableColumnNome;
@@ -135,7 +135,6 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	}
 
 	private void initializeNodes() {
-		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 		tableColumnDataNasc.setCellValueFactory(new PropertyValueFactory<>("dataNasc"));
 		Utils.formatTableColumnDate(tableColumnDataNasc, "dd/MM/yyyy");
@@ -214,6 +213,29 @@ public class AlunoListController implements Initializable, DataChangeListener {
 			}
 		});
 	}
+	
+	private void initCheckBoxesAtivo() {
+		tableColumnATIVO.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnATIVO.setPrefWidth(58);
+		tableColumnATTEND.setStyle("-fx-alignment: CENTER");
+		tableColumnATTEND.setCellFactory(param -> new TableCell<Aluno, Aluno>(){
+			private final CheckBox ativo = new CheckBox();
+			
+			@Override
+			protected void updateItem(Aluno obj, boolean empty) {
+				super.updateItem(obj, empty);
+				
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(ativo);
+				ativo.setSelected(obj.getAtivo());
+				ativo.setOnAction(event -> updateAtivo(obj, ativo.isSelected()));
+			}
+
+		});
+	}
 
 	private void initCheckBoxesAttend() {
 		tableColumnATTEND.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
@@ -253,6 +275,18 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 		}
 	}
+	
+	private void updateAtivo(Aluno obj, Boolean ativo) {
+		if (service ==  null) {
+			throw new IllegalStateException("Serviço nulo");
+		}
+		try {
+			obj.setAtivo(ativo);
+			service.updateAtivo(obj);
+		} catch (DBIntegrityException e) {
+			Alerts.showAlert("Erro ao atualizar o estado do aluno", null, e.getMessage(), AlertType.ERROR);
+		}
+	}
 
 	private void updateAttend(Aluno obj, Boolean presenca) {
 		if (service == null) {
@@ -280,6 +314,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		initEditButtons();
 		initRemoveButtons();
 		initViewButtons();
+		initCheckBoxesAtivo();
 		initCheckBoxesAttend();
 	}
 
@@ -292,6 +327,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		initEditButtons();
 		initRemoveButtons();
 		initViewButtons();
+		initCheckBoxesAtivo();
 		initCheckBoxesAttend();
 	}
 	
@@ -324,6 +360,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		initEditButtons();
 		initRemoveButtons();
 		initViewButtons();
+		initCheckBoxesAtivo();
 		initCheckBoxesAttend();
 	}
 

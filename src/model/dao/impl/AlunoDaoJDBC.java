@@ -105,6 +105,21 @@ public class AlunoDaoJDBC implements AlunoDao {
 		}
 
 	}
+	
+	@Override
+	public void updateAtivo(Aluno aluno) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("UPDATE aluno SET Ativo = ? WHERE Id = ?");
+			st.setBoolean(1,  aluno.getAtivo());
+			st.setInt(2,  aluno.getId());
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+		}
+	}
 
 	@Override
 	public void updatePresenca(Aluno aluno) {
@@ -125,13 +140,23 @@ public class AlunoDaoJDBC implements AlunoDao {
 	public void updatePagamento(Aluno aluno) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("UPDATE aluno SET Pagamento = ? WHERE Id = ?");
+			st = conn.prepareStatement("UPDATE aluno SET Pagamento = ?, Referencia = ?, Vencimento = ? WHERE Id = ?");
 			if (aluno.getPagamento() != null) {
 				st.setDate(1, new java.sql.Date(aluno.getPagamento().getTime()));
 			} else {
 				st.setDate(1, null);
 			}
-			st.setInt(2,  aluno.getId());
+			if (aluno.getReferencia() != null) {
+				st.setDate(2, new java.sql.Date(aluno.getReferencia().getTime()));
+			} else {
+				st.setDate(2,  null);
+			}
+			if (aluno.getVencimento() != null) {
+				st.setDate(3, new java.sql.Date(aluno.getVencimento().getTime()));
+			} else {
+				st.setDate(3,  null);
+			}
+			st.setInt(4,  aluno.getId());
 			st.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
@@ -179,6 +204,34 @@ public class AlunoDaoJDBC implements AlunoDao {
 			DB.closeStatement(st);
 		}
 	}
+	
+	@Override
+	public List<Aluno> findByAtivo(Boolean ativo) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome "
+					+ "FROM aluno INNER JOIN plano "
+					+ "ON aluno.PlanoId = plano.Id "
+					+ "WHERE ativo = ?");
+			st.setBoolean(1,  ativo);
+			rs = st.executeQuery();
+			
+			List<Aluno> list = new ArrayList<>();
+			if (rs.next()) {
+				Plano plano = instantiatePlano(rs);
+				Aluno aluno = instantiateAluno(rs, plano);
+				list.add(aluno);
+			}
+			return list;
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
 
 	@Override
 	public List<Aluno> findByName(String nome, int length) {
@@ -187,8 +240,9 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id " + "WHERE UPPER(substring(aluno.Nome,1,?)) = UPPER(?) ORDER BY aluno.Nome");
-
+					+ "ON aluno.PlanoId = plano.Id " + "WHERE UPPER(substring(aluno.Nome,1,?)) = UPPER(?) ORDER BY aluno.Nome "
+					+ "AND ativo = TRUE");
+			
 			st.setInt(1, length);
 			st.setString(2, nome);
 			rs = st.executeQuery();
@@ -218,6 +272,8 @@ public class AlunoDaoJDBC implements AlunoDao {
 		aluno.setPlano(plano);
 		aluno.setPresenca(rs.getBoolean("Presenca"));
 		aluno.setPagamento(rs.getDate("Pagamento"));
+		aluno.setReferencia(rs.getDate("Referencia"));
+		aluno.setVencimento(rs.getDate("Vencimento"));
 		aluno.setTreino(rs.getString("Treino"));
 		return aluno;
 	}
@@ -236,7 +292,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id " + "ORDER BY SUBSTRING(aluno.Nome, 1, 1)");
+					+ "ON aluno.PlanoId = plano.Id " + "WHERE ativo = TRUE ORDER BY SUBSTRING(aluno.Nome, 1, 1)");
 
 			rs = st.executeQuery();
 
@@ -317,6 +373,38 @@ public class AlunoDaoJDBC implements AlunoDao {
 			DB.closeStatement(st);
 		}
 	}
+	
+	@Override
+	public List<Aluno> findByVencimento(Date data) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
+					+ "ON aluno.PlanoId = plano.Id WHERE Vencimento < ? ORDER BY aluno.Nome");
+			if (data != null) {
+				st.setDate(1,  new java.sql.Date(data.getTime()));
+			} else {
+				st.setDate(1,  null);
+			}
+			rs = st.executeQuery();
+			
+			List<Aluno> list = new ArrayList<>();
+			while(rs.next()) {
+				Plano plano = instantiatePlano(rs);
+				Aluno aluno = instantiateAluno(rs, plano);
+				list.add(aluno);
+			}
+			
+			return list;
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+	
 
 	@Override
 	public void saveByPresenca(Boolean presenca, String filename) {

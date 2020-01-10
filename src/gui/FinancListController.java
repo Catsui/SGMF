@@ -107,7 +107,7 @@ public class FinancListController implements Initializable, DataChangeListener {
 	private void initializeNodes() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-		tableColumnPagamento.setCellValueFactory(new PropertyValueFactory<>("vencimento"));
+		tableColumnPagamento.setCellValueFactory(new PropertyValueFactory<>("pagamento"));
 		Utils.formatTableColumnDate(tableColumnPagamento, "dd/MM/yyyy");
 		tableColumnTelefone.setCellValueFactory(new PropertyValueFactory<>("telefone"));
 

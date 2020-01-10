@@ -17,6 +17,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.robot.Robot;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -46,6 +48,12 @@ public class FinancFormController implements Initializable {
 	
 	@FXML
 	private DatePicker dpPagamento;
+	
+	@FXML
+	private DatePicker dpReferencia;
+	
+	@FXML
+	private DatePicker dpVencimento;
 
 	@FXML
 	private Button btnConfirm;
@@ -115,7 +123,32 @@ public class FinancFormController implements Initializable {
 			obj.setPagamento(Date.from(instant));
 		}
 		
+		if (dpReferencia.getValue() == null) {
+			exception.addError("referencia", "Campo obrigatório");
+		} else {
+			Instant instant = Instant.from(dpReferencia.getValue().atStartOfDay(ZoneId.systemDefault()));
+			obj.setReferencia(Date.from(instant));
+		}
+		
+		if (dpVencimento.getValue() == null) {
+			exception.addError("vencimento", "Campo obrigatório");
+		} else {
+			Instant instant = Instant.from(dpVencimento.getValue().atStartOfDay(ZoneId.systemDefault()));
+			obj.setVencimento(Date.from(instant));
+		}
+		
 		return obj;
+	}
+	
+	@FXML
+	private void validateDatePickers() {
+		Robot robot = new Robot();
+		dpPagamento.requestFocus();
+		robot.keyType(KeyCode.ENTER);
+		robot.keyType(KeyCode.TAB);
+		robot.keyType(KeyCode.ENTER);
+		robot.keyType(KeyCode.TAB);
+		robot.keyType(KeyCode.ENTER);
 	}
 
 	@FXML
@@ -123,7 +156,6 @@ public class FinancFormController implements Initializable {
 		Utils.currentStage(event).close();
 	}
 
-	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializeNodes();
 	}
@@ -133,6 +165,10 @@ public class FinancFormController implements Initializable {
 		Constraints.setTextFieldMaxLength(txtNome, 70);
 		Constraints.setTextFieldMaxLength(txtTelefone, 20);
 		Constraints.setTextFieldMaxLength(txtTelefone, 70);
+		Utils.enhanceDatePickers(dpPagamento, dpReferencia, dpVencimento);
+		Utils.formatDatePicker(dpPagamento, "dd/MM/yyyy");
+		Utils.formatDatePicker(dpReferencia, "dd/MM/yyyy");
+		Utils.formatDatePicker(dpVencimento, "dd/MM/yyyy");		
 	}
 
 	public void updateFormData() {

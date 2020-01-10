@@ -128,11 +128,12 @@ public class PayFormController implements Initializable {
 		obj.setTelefone(txtTelefone.getText());
 
 		if (dpPagamento.getValue() == null) {
-			exception.addError("birthDate", "Campo obrigatório.");
+			exception.addError("payment", "Campo obrigatório.");
 		} else {
 			Instant instant = Instant.from(dpPagamento.getValue().atStartOfDay(ZoneId.systemDefault()));
 			obj.setPagamento(Date.from(instant));
 		}
+		
 		
 		return obj;
 	}

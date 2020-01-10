@@ -8,6 +8,7 @@ public class Aluno implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
+	private Boolean ativo;
 	private String nome;
 	private String telefone;
 	private Date dataNasc;
@@ -15,14 +16,18 @@ public class Aluno implements Serializable {
 	private Plano plano;
 	private Boolean presenca;
 	private Date pagamento;
+	private Date referencia;
+	private Date vencimento;
 	private String treino;
 
 	public Aluno() {
 
 	}
 
-	public Aluno(Integer id, String nome, String telefone, Date dataNasc, Date dataInicio, Plano plano, Boolean presenca, Date pagamento, String treino) {
+	public Aluno(Integer id, Boolean ativo, String nome, String telefone, Date dataNasc, Date dataInicio, Plano plano,
+			Boolean presenca, Date pagamento, Date referencia, Date vencimento, String treino) {
 		this.id = id;
+		this.ativo = ativo;
 		this.nome = nome;
 		this.telefone = telefone;
 		this.dataNasc = dataNasc;
@@ -30,6 +35,8 @@ public class Aluno implements Serializable {
 		this.plano = plano;
 		this.presenca = presenca;
 		this.pagamento = pagamento;
+		this.referencia = referencia;
+		this.vencimento = vencimento;
 		this.treino = treino;
 	}
 
@@ -39,6 +46,14 @@ public class Aluno implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Boolean getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
 	}
 
 	public String getNome() {
@@ -72,43 +87,53 @@ public class Aluno implements Serializable {
 	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
 	}
-	
+
 	public Plano getPlano() {
 		return plano;
 	}
-	
+
 	public void setPlano(Plano plano) {
 		this.plano = plano;
 	}
-	
+
 	public Boolean getPresenca() {
 		return presenca;
 	}
-	
+
 	public void setPresenca(Boolean presenca) {
 		this.presenca = presenca;
 	}
-	
+
 	public Date getPagamento() {
 		return pagamento;
 	}
-	
+
 	public void setPagamento(Date pagamento) {
 		this.pagamento = pagamento;
 	}
-	
+
+	public Date getReferencia() {
+		return referencia;
+	}
+
+	public void setReferencia(Date referencia) {
+		this.referencia = referencia;
+	}
+
+	public Date getVencimento() {
+		return vencimento;
+	}
+
+	public void setVencimento(Date vencimento) {
+		this.vencimento = vencimento;
+	}
+
 	public String getTreino() {
 		return treino;
 	}
 
 	public void setTreino(String treino) {
 		this.treino = treino;
-	}
-
-	@Override
-	public String toString() {
-		return "Aluno [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", dataNasc=" + dataNasc
-				+ ", dataInicio=" + dataInicio + " pagamento=" + pagamento + "]";
 	}
 
 	@Override

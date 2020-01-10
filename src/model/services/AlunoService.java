@@ -15,13 +15,24 @@ public class AlunoService {
 		return dao.findAll();	
 	}
 	
+	public List<Aluno> findByAtivo(Boolean ativo){
+		return dao.findByAtivo(ativo);
+	}
+	
+	public void updateAtivo(Aluno obj) {
+		dao.updateAtivo(obj);
+	}
+	
+	
 	public List<Aluno> findByName(String nome, int length) {
 		return dao.findByName(nome, length);
 	}
 	
+	
 	public List<Aluno> findByPresenca(Boolean presenca) {
 		return dao.findByPresenca(presenca);
 	}
+	
 	
 	public void updatePresenca(Aluno obj) {
 		dao.updatePresenca(obj);
@@ -29,6 +40,10 @@ public class AlunoService {
 	
 	public List<Aluno> findByPagamento(Date data) {
 		return dao.findByPagamento(data);
+	}
+	
+	public List<Aluno> findByvencimento(Date data) {
+		return dao.findByVencimento(data);
 	}
 	
 	public void updatePagamento(Aluno obj) {
@@ -60,5 +75,6 @@ public class AlunoService {
 		dao.lerBackup(filepath);
 	}
 
+	
 
 }
