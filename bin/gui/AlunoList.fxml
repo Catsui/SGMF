@@ -66,6 +66,11 @@
                               <Insets left="10.0" top="5.0" />
                            </HBox.margin>
                         </Button>
+                        <Button fx:id="btnMostrarInativos" mnemonicParsing="false" onAction="#onBtnMostrarInativosAction" text="Mostrar Inativos">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
                      </children>
                   </HBox>
                </children>

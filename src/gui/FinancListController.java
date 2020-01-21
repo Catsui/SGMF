@@ -133,27 +133,27 @@ public class FinancListController implements Initializable, DataChangeListener {
 		});
 	}
 
-	private void initPayButtons() {
-		tableColumnPAY.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tableColumnPAY.setPrefWidth(84);
-		tableColumnPAY.setStyle("-fx-alignment: CENTER");
-		tableColumnPAY.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
-			private final Button button = new Button("Pagamento");
-
-			@Override
-			protected void updateItem(Aluno obj, boolean empty) {
-				super.updateItem(obj, empty);
-
-				if (obj == null) {
-					setGraphic(null);
-					return;
-				}
-
-				setGraphic(button);
-				button.setOnAction(event -> createDialogPayForm(obj, "/gui/PayForm.fxml", Utils.currentStage(event)));
-			}
-		});
-	}
+//	private void initPayButtons() {
+//		tableColumnPAY.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+//		tableColumnPAY.setPrefWidth(84);
+//		tableColumnPAY.setStyle("-fx-alignment: CENTER");
+//		tableColumnPAY.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
+//			private final Button button = new Button("Pagamento");
+//
+//			@Override
+//			protected void updateItem(Aluno obj, boolean empty) {
+//				super.updateItem(obj, empty);
+//
+//				if (obj == null) {
+//					setGraphic(null);
+//					return;
+//				}
+//
+//				setGraphic(button);
+//				button.setOnAction(event -> createDialogPayForm(obj, "/gui/PayForm.fxml", Utils.currentStage(event)));
+//			}
+//		});
+//	}
 
 	public void findByName() {
 		if (service == null) {
@@ -166,7 +166,7 @@ public class FinancListController implements Initializable, DataChangeListener {
 			obsList = FXCollections.observableArrayList(service.findAll());
 		}
 		tableViewAluno.setItems(obsList);
-		initPayButtons();
+		//initPayButtons();
 		initEditButtons();
 	}
 
@@ -177,7 +177,7 @@ public class FinancListController implements Initializable, DataChangeListener {
 		obsList = FXCollections.observableArrayList(service.findAll());
 
 		tableViewAluno.setItems(obsList);
-		initPayButtons();
+		//initPayButtons();
 		initEditButtons();
 	}
 	
@@ -188,7 +188,7 @@ public class FinancListController implements Initializable, DataChangeListener {
 		obsList = FXCollections.observableArrayList(service.findByPagamento(data));
 		
 		tableViewAluno.setItems(obsList);
-		initPayButtons();
+		//initPayButtons();
 		initEditButtons();
 		
 	}
@@ -200,7 +200,7 @@ public class FinancListController implements Initializable, DataChangeListener {
 		obsList = FXCollections.observableArrayList(service.findByVencimento(data));
 		
 		tableViewAluno.setItems(obsList);
-		initPayButtons();
+		//initPayButtons();
 		initEditButtons();
 	}
 
@@ -210,7 +210,7 @@ public class FinancListController implements Initializable, DataChangeListener {
 		}
 		obsList = FXCollections.observableArrayList(service.findAll());
 		tableViewAluno.setItems(obsList);
-		initPayButtons();
+		//initPayButtons();
 		initEditButtons();
 	}
 

@@ -215,7 +215,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 			rs = st.executeQuery();
 			
 			List<Aluno> list = new ArrayList<>();
-			if (rs.next()) {
+			while (rs.next()) {
 				Plano plano = instantiatePlano(rs);
 				Aluno aluno = instantiateAluno(rs, plano);
 				list.add(aluno);
@@ -288,7 +288,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id " + "WHERE ativo = TRUE ORDER BY SUBSTRING(aluno.Nome, 1, 1)");
+					+ "ON aluno.PlanoId = plano.Id " + "WHERE ativo = TRUE ORDER BY UPPER(aluno.Nome)");
 
 			rs = st.executeQuery();
 

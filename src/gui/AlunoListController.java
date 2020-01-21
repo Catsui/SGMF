@@ -92,6 +92,9 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	private Button btnMostrarAusentes;
 	
 	@FXML
+	private Button btnMostrarInativos;
+	
+	@FXML
 	private Label labelTotalAtivos;
 	
 	private ObservableList<Aluno> obsList;
@@ -127,6 +130,11 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	@FXML
 	public void onBtnMostrarAusentesAction() {
 		findByPresenca(false);
+	}
+	
+	@FXML
+	public void onBtnMostrarInativosAction() {
+		findByAtivos(false);
 	}
 
 	public void setAlunoService(AlunoService service) {
@@ -331,6 +339,20 @@ public class AlunoListController implements Initializable, DataChangeListener {
 			throw new IllegalStateException("Serviço nulo.");
 		}
 		obsList = FXCollections.observableArrayList(service.findByPresenca(presenca));
+		tableViewAluno.setItems(obsList);
+		initEditButtons();
+		initRemoveButtons();
+		initViewButtons();
+		initCheckBoxesAtivo();
+		initCheckBoxesAttend();
+	}
+	
+	public void findByAtivos(Boolean ativo) {
+		if (service == null) {
+			throw new IllegalStateException("Serviço nulo.");
+		}
+		
+		obsList = FXCollections.observableArrayList(service.findByAtivo(ativo));
 		tableViewAluno.setItems(obsList);
 		initEditButtons();
 		initRemoveButtons();
