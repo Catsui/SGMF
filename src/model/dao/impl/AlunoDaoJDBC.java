@@ -319,7 +319,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id WHERE Presenca = ? ORDER BY aluno.Nome");
+					+ "ON aluno.PlanoId = plano.Id WHERE Presenca = ? ORDER BY UPPER(aluno.Nome)");
 			st.setBoolean(1, presenca);
 			rs = st.executeQuery();
 
@@ -346,7 +346,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 		
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id WHERE Pagamento < ? ORDER BY aluno.Nome");
+					+ "ON aluno.PlanoId = plano.Id WHERE Pagamento < ? ORDER BY UPPER(aluno.Nome)");
 			if (data != null) {
 				st.setDate(1, new java.sql.Date(data.getTime()));
 			} else {
@@ -377,7 +377,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 		
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id WHERE Vencimento < ? AND aluno.Ativo = TRUE ORDER BY aluno.Nome");
+					+ "ON aluno.PlanoId = plano.Id WHERE Vencimento < ? AND aluno.Ativo = TRUE ORDER BY UPPER(aluno.Nome)");
 			if (data != null) {
 				st.setDate(1,  new java.sql.Date(data.getTime()));
 			} else {
@@ -411,7 +411,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id WHERE Presenca = ?");
+					+ "ON aluno.PlanoId = plano.Id WHERE Presenca = ? ORDER BY UPPER(aluno.Nome)");
 			st.setBoolean(1, presenca);
 			rs = st.executeQuery();
 			while (rs.next()) {
