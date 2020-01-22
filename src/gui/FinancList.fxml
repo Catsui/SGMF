@@ -67,7 +67,9 @@
           <TableColumn fx:id="tableColumnNome" prefWidth="200.0" text="Nome" />
             <TableColumn fx:id="tableColumnTelefone" prefWidth="100.0" text="Telefone" />
             <TableColumn fx:id="tableColumnPagamento" prefWidth="120.0" text="Data de Pagamento" />
-            <TableColumn fx:id="tableColumnEDIT" prefWidth="75.0" />
+            <TableColumn fx:id="tableColumnReferencia" prefWidth="120.0" text="Data de Referência" />
+            <TableColumn fx:id="tableColumnVencimento" minWidth="0.0" prefWidth="125.0" text="Próximo Vencimento" />
+            <TableColumn fx:id="tableColumnEDIT" minWidth="0.0" prefWidth="73.0" />
         </columns>
       </TableView>
    </children>

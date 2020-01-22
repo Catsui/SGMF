@@ -46,6 +46,12 @@ public class FinancListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private TableColumn<Aluno, Date> tableColumnPagamento;
+	
+	@FXML
+	private TableColumn<Aluno, Date> tableColumnReferencia;
+	
+	@FXML
+	private TableColumn<Aluno, Date> tableColumnVencimento;
 
 	@FXML
 	private TableColumn<Aluno, Aluno> tableColumnPAY;
@@ -106,6 +112,10 @@ public class FinancListController implements Initializable, DataChangeListener {
 		tableColumnPagamento.setCellValueFactory(new PropertyValueFactory<>("pagamento"));
 		Utils.formatTableColumnDate(tableColumnPagamento, "dd/MM/yyyy");
 		tableColumnTelefone.setCellValueFactory(new PropertyValueFactory<>("telefone"));
+		tableColumnReferencia.setCellValueFactory(new PropertyValueFactory<>("referencia"));
+		Utils.formatTableColumnDate(tableColumnReferencia, "dd/MM/yyyy");
+		tableColumnVencimento.setCellValueFactory(new PropertyValueFactory<>("vencimento"));
+		Utils.formatTableColumnDate(tableColumnVencimento, "dd/MM/yyyy");
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewAluno.prefHeightProperty().bind(stage.heightProperty());
