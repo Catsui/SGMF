@@ -19,6 +19,10 @@ public class AlunoService {
 		return dao.findByAtivo(ativo);
 	}
 	
+	public List<Aluno> findByPlano(Integer planoId) {
+		return dao.findByPlano(planoId);
+	}
+	
 	public void updateAtivo(Aluno obj) {
 		dao.updateAtivo(obj);
 	}

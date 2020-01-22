@@ -32,6 +32,8 @@ public interface AlunoDao {
 	List<Aluno> findByPagamento(Date data);
 	
 	List<Aluno> findByVencimento(Date data);
+	
+	List<Aluno> findByPlano(Integer planoId);
 
 	void saveByPresenca(Boolean presenca, String filepath);
 	
@@ -40,11 +42,5 @@ public interface AlunoDao {
 	void lerBackup(String filepath);
 
 	Integer contarAlunos();
-
-	
-
-	
-
-	
 
 }

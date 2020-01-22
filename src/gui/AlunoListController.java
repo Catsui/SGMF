@@ -2,7 +2,9 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -23,7 +25,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -32,13 +37,21 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.entities.Aluno;
+import model.entities.Plano;
 import model.services.AlunoService;
 import model.services.PlanoService;
 
 public class AlunoListController implements Initializable, DataChangeListener {
 
 	private AlunoService service;
+	
+	private PlanoService planoService;
+	
+	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
+	
+	private ObservableList<Plano> obsListPlano;
 
 	@FXML
 	private TableView<Aluno> tableViewAluno;
@@ -81,6 +94,12 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private TextField txtPesquisaNome;
+	
+	@FXML
+	private ComboBox<Plano> comboBoxPlano;
+	
+	@FXML
+	private Button btnPesqusaPlano;
 
 	@FXML
 	private Button btnMostrarTodos;
@@ -116,6 +135,16 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		txtPesquisaNome.setText("");
 		findByName();
 	}
+	
+	@FXML
+	public void onBtnPesquisaPlanoAction() {
+		if (comboBoxPlano.getValue().getId() != null) {
+			findByPlano(comboBoxPlano.getValue().getId());
+
+		} else {
+			findAll();
+		}
+	}
 
 	@FXML
 	public void onBtnMostrarTodosAction() {
@@ -140,10 +169,25 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	public void setAlunoService(AlunoService service) {
 		this.service = service;
 	}
+	
+	public void setPlanoService(PlanoService planoService) {
+		this.planoService = planoService;
+	}
+	
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		dataChangeListeners.add(listener);
+	}
+	
+//	private void notifyDataChangeListeners() {
+//		for (DataChangeListener listener : dataChangeListeners) {
+//			listener.onDataChanged();
+//		}
+//	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializeNodes();
+		initializeComboBoxPlano();
 	}
 
 	private void initializeNodes() {
@@ -153,9 +197,36 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		tableColumnDataInicio.setCellValueFactory(new PropertyValueFactory<>("dataInicio"));
 		Utils.formatTableColumnDate(tableColumnDataInicio, "dd/MM/yyyy");
 		tableColumnTelefone.setCellValueFactory(new PropertyValueFactory<>("telefone"));
+		
+		initializeComboBoxPlano();
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewAluno.prefHeightProperty().bind(stage.heightProperty());
+		
+	}
+	
+	private void initializeComboBoxPlano() {
+		Callback<ListView<Plano>, ListCell<Plano>> factory = lv -> new ListCell<Plano> () {
+			@Override
+			protected void updateItem(Plano item, boolean empty) {
+				super.updateItem(item, empty);
+				setText(empty? "":item.getNome());
+			}
+		};
+		
+		comboBoxPlano.setCellFactory(factory);
+		comboBoxPlano.setButtonCell(factory.call(null));
+	}
+	
+	public void loadAssociatedObjects() {
+		if (planoService == null) {
+			throw new IllegalStateException("Serviço de plano está nulo.");
+		}
+		List<Plano> list = planoService.findAll();
+		Plano todos = new Plano(null, "Todos", null, null);
+		list.add(0, todos);
+		obsListPlano = FXCollections.observableArrayList(list);
+		comboBoxPlano.setItems(obsListPlano);
 	}
 
 	private void initEditButtons() {
@@ -323,6 +394,24 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		if (txtPesquisaNome.getText().length() > 0) {
 			obsList = FXCollections.observableArrayList(
 				service.findByName(txtPesquisaNome.getText(), txtPesquisaNome.getText().length()));
+		} else {
+			obsList = FXCollections.observableArrayList(service.findAll());
+		}
+		tableViewAluno.setItems(obsList);
+		initEditButtons();
+		initRemoveButtons();
+		initViewButtons();
+		initCheckBoxesAtivo();
+		initCheckBoxesAttend();
+	}
+	
+	public void findByPlano(Integer planoId) {
+		if (service == null) {
+			throw new IllegalStateException("Serviço nulo.");
+		}
+		if (comboBoxPlano.getValue() != null) {
+			obsList = FXCollections.observableArrayList(
+					service.findByPlano(comboBoxPlano.getValue().getId()));
 		} else {
 			obsList = FXCollections.observableArrayList(service.findAll());
 		}

@@ -51,6 +51,8 @@ public class MainViewController implements Initializable {
 	public void onMenuItemAlunoAction() {
 		loadView("/gui/AlunoList.fxml", (AlunoListController controller) -> {
 			controller.setAlunoService(new AlunoService());
+			controller.setPlanoService(new PlanoService());
+			controller.loadAssociatedObjects();
 			controller.updateTableView();
 		});
 	}

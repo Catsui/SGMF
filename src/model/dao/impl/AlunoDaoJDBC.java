@@ -311,6 +311,32 @@ public class AlunoDaoJDBC implements AlunoDao {
 			DB.closeStatement(st);
 		}
 	}
+	
+	@Override
+	public List<Aluno> findByPlano(Integer planoId) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
+					+ "ON aluno.Planoid = plano.Id WHERE aluno.PlanoId = ? ORDER BY UPPER(aluno.Nome)");
+			st.setInt(1,  planoId);
+			rs = st.executeQuery();
+			
+			List<Aluno> list = new ArrayList<>();
+			while(rs.next()) {
+				Plano plano = instantiatePlano(rs);
+				Aluno aluno = instantiateAluno(rs, plano);
+				list.add(aluno);
+			}
+			return list;
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
 
 	@Override
 	public List<Aluno> findByPresenca(Boolean presenca) {
