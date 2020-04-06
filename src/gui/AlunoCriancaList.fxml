@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="480.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.AlunoCriancaListController">
+   <children>
+      <Label text="GERENCIAMENTO DE ALUNOS - CRIANÇAS">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+         <padding>
+            <Insets left="10.0" top="10.0" />
+         </padding>
+      </Label>
+      <ToolBar prefHeight="77.0" prefWidth="900.0">
+        <items>
+            <VBox prefHeight="70.0" prefWidth="879.0">
+               <children>
+                  <HBox prefHeight="38.0" prefWidth="879.0">
+                     <children>
+                        <Label text="Nome">
+                           <HBox.margin>
+                              <Insets left="10.0" top="8.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txtPesquisaNome" onAction="#onBtnPesquisaNomeAction">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                           </HBox.margin>
+                        </TextField>
+                        <Button fx:id="btnPesquisaNome" mnemonicParsing="false" onAction="#onBtnPesquisaNomeAction" text="Pesquisar">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnLimpaNome" mnemonicParsing="false" onAction="#onBtnLimpaNomeAction" text="Limpar">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label text="Plano">
+                           <HBox.margin>
+                              <Insets left="30.0" top="8.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ComboBox fx:id="comboBoxPlano" prefWidth="150.0">
+                           <HBox.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                        <Button fx:id="btnPesqusaPlano" mnemonicParsing="false" onAction="#onBtnPesquisaPlanoAction" text="Filtrar por Plano">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="54.0" prefWidth="879.0">
+                     <children>
+                        <Button fx:id="btnNovo" mnemonicParsing="false" onAction="#onBtnNovoAction" text="Novo Aluno">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnMostrarTodos" mnemonicParsing="false" onAction="#onBtnMostrarTodosAction" text="Mostrar todos">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnMostrarPresentes" mnemonicParsing="false" onAction="#onBtnMostrarPresentesAction" text="Mostrar presentes">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnMostrarAusentes" mnemonicParsing="false" onAction="#onBtnMostrarAusentesAction" text="Mostrar ausentes">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnMostrarInativos" mnemonicParsing="false" onAction="#onBtnMostrarInativosAction" text="Mostrar Inativos">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+        </items>
+      </ToolBar>
+      <TableView fx:id="tableViewAluno" prefHeight="171.0" prefWidth="900.0">
+        <columns>
+          <TableColumn fx:id="tableColumnATIVO" prefWidth="50.0" text="Ativo" />
+          <TableColumn fx:id="tableColumnNome" prefWidth="200.0" text="Nome" />
+            <TableColumn fx:id="tableColumnTelefone" prefWidth="100.0" text="Telefone" />
+            <TableColumn fx:id="tableColumnDataNasc" prefWidth="120.0" text="Data de Nascimento" />
+            <TableColumn fx:id="tableColumnDataInicio" prefWidth="100.0" text="Início do Treino" />
+            <TableColumn fx:id="tableColumnATTEND" prefWidth="75.0" text="Presença" />
+            <TableColumn fx:id="tableColumnVIEW" prefWidth="75.0" />
+            <TableColumn fx:id="tableColumnEDIT" prefWidth="75.0" />
+            <TableColumn fx:id="tableColumnREMOVE" prefWidth="75.0" />
+        </columns>
+      </TableView>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Label alignment="CENTER_RIGHT" text="Número de alunos ativos:" textAlignment="JUSTIFY">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelTotalAtivos">
+               <padding>
+                  <Insets bottom="5.0" right="10.0" top="5.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </children>
+</VBox>
