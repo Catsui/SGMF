@@ -27,10 +27,16 @@ import model.services.PlanoService;
 public class MainViewController implements Initializable {
 
 	@FXML
-	private MenuItem menuItemAluno;
+	private MenuItem menuItemAlunoAdulto;
+	
+	@FXML
+	private MenuItem menuItemAlunoCrianca;
 
 	@FXML
-	private MenuItem menuItemPlano;
+	private MenuItem menuItemPlanoAdulto;
+	
+	@FXML
+	private MenuItem menuItemPlanoCrianca;
 
 	@FXML
 	private MenuItem menuItemSalvarPresencas;
@@ -48,7 +54,7 @@ public class MainViewController implements Initializable {
 	private MenuItem menuItemMensalidadesVencimentos;
 
 	@FXML
-	public void onMenuItemAlunoAction() {
+	public void onMenuItemAlunoAdultoAction() {
 		loadView("/gui/AlunoList.fxml", (AlunoListController controller) -> {
 			controller.setAlunoService(new AlunoService());
 			controller.setPlanoService(new PlanoService());
@@ -56,14 +62,32 @@ public class MainViewController implements Initializable {
 			controller.updateTableView();
 		});
 	}
+		
+	@FXML
+	public void onMenuItemAlunoCriancaAction() {
+		loadView("/gui/AlunoCriancaList.fxml", (AlunoCriancaListController controller) -> {
+			controller.setAlunoService(new AlunoService());
+			controller.setPlanoService(new PlanoService());
+			controller.loadAssociatedObjects();
+			controller.updateTableView();
+		});	
+	}
 
 	@FXML
-	public void onMenuItemPlanoAction() {
+	public void onMenuItemPlanoAdultoAction() {
 		loadView("/gui/PlanoList.fxml", (PlanoListController controller) -> {
 			controller.setPlanoService(new PlanoService());
 			controller.updateTableView();
 		});
 
+	}
+	
+	@FXML
+	public void onMenuItemPlanoCriancaAction() {
+		loadView("/gui/PlanoCriancaList.fxml", (PlanoCriancaListController controller) -> {
+			controller.setPlanoService(new PlanoService());
+			controller.updateTableView();
+		});	
 	}
 
 	@FXML
