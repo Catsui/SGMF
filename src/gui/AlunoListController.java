@@ -45,12 +45,16 @@ import model.services.PlanoService;
 
 public class AlunoListController implements Initializable, DataChangeListener {
 
+	private String tabelaAluno;
+	
+	private String tabelaPlano;
+
 	private AlunoService service;
-	
+
 	private PlanoService planoService;
-	
+
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
-	
+
 	private ObservableList<Plano> obsListPlano;
 
 	@FXML
@@ -94,10 +98,10 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private TextField txtPesquisaNome;
-	
+
 	@FXML
 	private ComboBox<Plano> comboBoxPlano;
-	
+
 	@FXML
 	private Button btnPesqusaPlano;
 
@@ -109,20 +113,39 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private Button btnMostrarAusentes;
-	
+
 	@FXML
 	private Button btnMostrarInativos;
-	
+
 	@FXML
 	private Label labelTotalAtivos;
-	
+
 	private ObservableList<Aluno> obsList;
+
+	public String getTabelaAluno() {
+		return tabelaAluno;
+	}
+	
+	public void setTabelas(String tabelaAluno, String tabelaPlano) {
+		this.tabelaAluno = tabelaAluno;
+		this.tabelaPlano = tabelaPlano;
+	}
+
+	public String getTabelaPlano() {
+		return tabelaPlano;
+	}
 
 	@FXML
 	public void onBtnNovoAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
 		Aluno obj = new Aluno();
-		createDialogForm(obj, "/gui/AlunoForm.fxml", parentStage);
+		if (tabelaAluno.equals("ALUNO")) {
+			createDialogForm(obj, "/gui/AlunoAdultoForm.fxml", parentStage);
+		} 
+		if (tabelaAluno.equals("ALUNOCRIANCA")) {
+			createDialogForm(obj, "/gui/AlunoCriancaForm.fxml", parentStage);
+		}
+		
 	}
 
 	@FXML
@@ -135,7 +158,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		txtPesquisaNome.setText("");
 		findByName();
 	}
-	
+
 	@FXML
 	public void onBtnPesquisaPlanoAction() {
 		if (comboBoxPlano.getValue().getId() != null) {
@@ -160,7 +183,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	public void onBtnMostrarAusentesAction() {
 		findByPresenca(false);
 	}
-	
+
 	@FXML
 	public void onBtnMostrarInativosAction() {
 		findByAtivos(false);
@@ -169,15 +192,15 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	public void setAlunoService(AlunoService service) {
 		this.service = service;
 	}
-	
+
 	public void setPlanoService(PlanoService planoService) {
 		this.planoService = planoService;
 	}
-	
+
 	public void subscribeDataChangeListener(DataChangeListener listener) {
 		dataChangeListeners.add(listener);
 	}
-	
+
 //	private void notifyDataChangeListeners() {
 //		for (DataChangeListener listener : dataChangeListeners) {
 //			listener.onDataChanged();
@@ -197,32 +220,33 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		tableColumnDataInicio.setCellValueFactory(new PropertyValueFactory<>("dataInicio"));
 		Utils.formatTableColumnDate(tableColumnDataInicio, "dd/MM/yyyy");
 		tableColumnTelefone.setCellValueFactory(new PropertyValueFactory<>("telefone"));
-		
+
 		initializeComboBoxPlano();
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewAluno.prefHeightProperty().bind(stage.heightProperty());
-		
+
 	}
-	
+
 	private void initializeComboBoxPlano() {
-		Callback<ListView<Plano>, ListCell<Plano>> factory = lv -> new ListCell<Plano> () {
+		Callback<ListView<Plano>, ListCell<Plano>> factory = lv -> new ListCell<Plano>() {
 			@Override
 			protected void updateItem(Plano item, boolean empty) {
 				super.updateItem(item, empty);
-				setText(empty? "":item.getNome());
+				setText(empty ? "" : item.getNome());
 			}
 		};
-		
+
 		comboBoxPlano.setCellFactory(factory);
 		comboBoxPlano.setButtonCell(factory.call(null));
 	}
-	
-	public void loadAssociatedObjects() {
+
+	public void loadAssociatedObjects(String tabelaPlano) {
 		if (planoService == null) {
 			throw new IllegalStateException("Serviço de plano está nulo.");
 		}
-		List<Plano> list = planoService.findAll();
+		tabelaPlano = this.tabelaPlano;
+		List<Plano> list = planoService.findAll(tabelaPlano);
 		Plano todos = new Plano(null, "Todos", null, null);
 		list.add(0, todos);
 		obsListPlano = FXCollections.observableArrayList(list);
@@ -288,7 +312,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 					setGraphic(null);
 					return;
 				}
-				
+
 				setGraphic(button);
 				button.setOnAction(event -> {
 					removeEntity(obj);
@@ -296,18 +320,18 @@ public class AlunoListController implements Initializable, DataChangeListener {
 			}
 		});
 	}
-	
+
 	private void initCheckBoxesAtivo() {
 		tableColumnATIVO.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnATIVO.setPrefWidth(58);
 		tableColumnATIVO.setStyle("-fx-alignment: CENTER");
-		tableColumnATIVO.setCellFactory(param -> new TableCell<Aluno, Aluno>(){
+		tableColumnATIVO.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
 			private final CheckBox ativo = new CheckBox();
-			
+
 			@Override
 			protected void updateItem(Aluno obj, boolean empty) {
 				super.updateItem(obj, empty);
-				
+
 				if (obj == null) {
 					setGraphic(null);
 					return;
@@ -316,9 +340,9 @@ public class AlunoListController implements Initializable, DataChangeListener {
 				ativo.setSelected(obj.getAtivo());
 				ativo.setOnAction(event -> {
 					updateAtivo(obj, ativo.isSelected());
-					labelTotalAtivos.setText(service.contarAlunos().toString());
+					labelTotalAtivos.setText(service.contarAlunos(tabelaAluno, tabelaPlano).toString());
 				});
-				
+
 			}
 
 		});
@@ -354,7 +378,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 				throw new IllegalStateException("Serviço nulo");
 			}
 			try {
-				service.remove(obj);
+				service.remove(obj, tabelaAluno);
 				updateTableView();
 			} catch (DBIntegrityException e) {
 				Alerts.showAlert("Erro ao remover o objeto", null, e.getMessage(), AlertType.ERROR);
@@ -362,14 +386,14 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 		}
 	}
-	
+
 	private void updateAtivo(Aluno obj, Boolean ativo) {
-		if (service ==  null) {
+		if (service == null) {
 			throw new IllegalStateException("Serviço nulo");
 		}
 		try {
 			obj.setAtivo(ativo);
-			service.updateAtivo(obj);
+			service.updateAtivo(obj, tabelaAluno);
 		} catch (DBIntegrityException e) {
 			Alerts.showAlert("Erro ao atualizar o estado do aluno", null, e.getMessage(), AlertType.ERROR);
 		}
@@ -381,7 +405,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		}
 		try {
 			obj.setPresenca(presenca);
-			service.updatePresenca(obj);
+			service.updatePresenca(obj, tabelaAluno);
 		} catch (DBIntegrityException e) {
 			Alerts.showAlert("Erro ao atualizar a presença", null, e.getMessage(), AlertType.ERROR);
 		}
@@ -392,10 +416,10 @@ public class AlunoListController implements Initializable, DataChangeListener {
 			throw new IllegalStateException("Serviço nulo.");
 		}
 		if (txtPesquisaNome.getText().length() > 0) {
-			obsList = FXCollections.observableArrayList(
-				service.findByName(txtPesquisaNome.getText(), txtPesquisaNome.getText().length()));
+			obsList = FXCollections.observableArrayList(service.findByName(txtPesquisaNome.getText(),
+					txtPesquisaNome.getText().length(), tabelaAluno, tabelaPlano));
 		} else {
-			obsList = FXCollections.observableArrayList(service.findAll());
+			obsList = FXCollections.observableArrayList(service.findAll(tabelaAluno, tabelaPlano));
 		}
 		tableViewAluno.setItems(obsList);
 		initEditButtons();
@@ -404,16 +428,16 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		initCheckBoxesAtivo();
 		initCheckBoxesAttend();
 	}
-	
+
 	public void findByPlano(Integer planoId) {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");
 		}
 		if (comboBoxPlano.getValue() != null) {
 			obsList = FXCollections.observableArrayList(
-					service.findByPlano(comboBoxPlano.getValue().getId()));
+					service.findByPlano(comboBoxPlano.getValue().getId(), tabelaAluno, tabelaPlano));
 		} else {
-			obsList = FXCollections.observableArrayList(service.findAll());
+			obsList = FXCollections.observableArrayList(service.findAll(tabelaAluno, tabelaPlano));
 		}
 		tableViewAluno.setItems(obsList);
 		initEditButtons();
@@ -427,7 +451,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");
 		}
-		obsList = FXCollections.observableArrayList(service.findByPresenca(presenca));
+		obsList = FXCollections.observableArrayList(service.findByPresenca(presenca, tabelaAluno, tabelaPlano));
 		tableViewAluno.setItems(obsList);
 		initEditButtons();
 		initRemoveButtons();
@@ -435,13 +459,13 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		initCheckBoxesAtivo();
 		initCheckBoxesAttend();
 	}
-	
+
 	public void findByAtivos(Boolean ativo) {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");
 		}
-		
-		obsList = FXCollections.observableArrayList(service.findByAtivo(ativo));
+
+		obsList = FXCollections.observableArrayList(service.findByAtivo(ativo, tabelaAluno, tabelaPlano));
 		tableViewAluno.setItems(obsList);
 		initEditButtons();
 		initRemoveButtons();
@@ -449,7 +473,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		initCheckBoxesAtivo();
 		initCheckBoxesAttend();
 	}
-	
+
 	public void saveByPresenca(Boolean presenca, String filepath) {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");
@@ -461,7 +485,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");
 		}
-		obsList = FXCollections.observableArrayList(service.findAll());
+		obsList = FXCollections.observableArrayList(service.findAll(tabelaAluno, tabelaPlano));
 
 		tableViewAluno.setItems(obsList);
 		initEditButtons();
@@ -475,9 +499,9 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");
 		}
-		obsList = FXCollections.observableArrayList(service.findAll());
+		obsList = FXCollections.observableArrayList(service.findAll(tabelaAluno, tabelaPlano));
 		tableViewAluno.setItems(obsList);
-		labelTotalAtivos.setText(service.contarAlunos().toString());
+		labelTotalAtivos.setText(service.contarAlunos(tabelaAluno, tabelaPlano).toString());
 		initEditButtons();
 		initRemoveButtons();
 		initViewButtons();
@@ -492,6 +516,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 
 			AlunoFormController controller = loader.getController();
 			controller.setAluno(obj);
+			controller.setTabelas(tabelaAluno, tabelaPlano);
 			controller.setServices(new AlunoService(), new PlanoService());
 			controller.loadAssociatedObjects();
 			controller.subscribeDataChangeListener(this);
@@ -543,7 +568,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 		}
 		service.backupDados();
 	}
-	
+
 	public void lerBackup(String filepath) {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");

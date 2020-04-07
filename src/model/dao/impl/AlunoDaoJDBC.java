@@ -35,14 +35,13 @@ public class AlunoDaoJDBC implements AlunoDao {
 	}
 
 	@Override
-	public void insert(Aluno aluno) {
+	public void insert(Aluno aluno, String tabelaAluno) {
 		PreparedStatement st = null;
 
 		try {
-			st = conn.prepareStatement(
-					"INSERT INTO aluno " + "(Ativo, Nome, DataNasc, Telefone, DataInicioTreino, PlanoId, Presenca, Treino) "
-							+ "VALUES " + "(TRUE,?,?,?,?,?,?,?)",
-					Statement.RETURN_GENERATED_KEYS);
+			st = conn.prepareStatement("INSERT INTO " + tabelaAluno
+					+ " (Ativo, Nome, DataNasc, Telefone, DataInicioTreino, PlanoId, Presenca, Treino) " + "VALUES "
+					+ "(TRUE,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, aluno.getNome());
 			st.setDate(2, new java.sql.Date(aluno.getDataNasc().getTime()));
@@ -52,7 +51,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 			} else {
 				st.setDate(4, new java.sql.Date(aluno.getDataInicio().getTime()));
 			}
-			
+
 			st.setInt(5, aluno.getPlano().getId());
 			st.setBoolean(6, false);
 			st.setString(7, aluno.getTreino());
@@ -79,13 +78,13 @@ public class AlunoDaoJDBC implements AlunoDao {
 	}
 
 	@Override
-	public void update(Aluno aluno) {
+	public void update(Aluno aluno, String tabelaAluno) {
 		PreparedStatement st = null;
 
 		try {
-			st = conn.prepareStatement("UPDATE aluno "
-					+ "SET Nome = ?, DataNasc = ?, Telefone = ?, DataInicioTreino = ?, PlanoId = ?, Treino = ? "
-					+ "WHERE Id = ?");
+			st = conn.prepareStatement("UPDATE " + tabelaAluno
+					+ " SET Nome = ?, DataNasc = ?, Telefone = ?, DataInicioTreino = ?, PlanoId = ?, Treino = ? "
+					+ " WHERE Id = ?");
 
 			st.setString(1, aluno.getNome());
 			st.setDate(2, new java.sql.Date(aluno.getDataNasc().getTime()));
@@ -107,14 +106,14 @@ public class AlunoDaoJDBC implements AlunoDao {
 		}
 
 	}
-	
+
 	@Override
-	public void updateAtivo(Aluno aluno) {
+	public void updateAtivo(Aluno aluno, String tabelaAluno) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("UPDATE aluno SET Ativo = ? WHERE Id = ?");
-			st.setBoolean(1,  aluno.getAtivo());
-			st.setInt(2,  aluno.getId());
+			st = conn.prepareStatement("UPDATE " + tabelaAluno + " SET Ativo = ? WHERE Id = ?");
+			st.setBoolean(1, aluno.getAtivo());
+			st.setInt(2, aluno.getId());
 			st.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
@@ -124,10 +123,10 @@ public class AlunoDaoJDBC implements AlunoDao {
 	}
 
 	@Override
-	public void updatePresenca(Aluno aluno) {
+	public void updatePresenca(Aluno aluno, String tabelaAluno) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("UPDATE aluno SET Presenca = ? WHERE Id = ?");
+			st = conn.prepareStatement("UPDATE " + tabelaAluno + " SET Presenca = ? WHERE Id = ?");
 			st.setBoolean(1, aluno.getPresenca());
 			st.setInt(2, aluno.getId());
 			st.executeUpdate();
@@ -137,23 +136,24 @@ public class AlunoDaoJDBC implements AlunoDao {
 			DB.closeStatement(st);
 		}
 	}
-	
+
 	@Override
-	public void updatePagamento(Aluno aluno) {
+	public void updatePagamento(Aluno aluno, String tabelaAluno) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("UPDATE aluno SET Pagamento = ?, Referencia = ?, Vencimento = ? WHERE Id = ?");
+			st = conn.prepareStatement(
+					"UPDATE " + tabelaAluno + " SET Pagamento = ?, Referencia = ?, Vencimento = ? WHERE Id = ?");
 			st.setDate(1, new java.sql.Date(aluno.getPagamento().getTime()));
 			st.setDate(2, new java.sql.Date(aluno.getReferencia().getTime()));
 			st.setDate(3, new java.sql.Date(aluno.getVencimento().getTime()));
 			st.setInt(4, aluno.getId());
 			st.executeUpdate();
-		} 
-		catch (NullPointerException e) {
-			Alerts.showAlert("Erro ao salvar as informações de pagamento", null, "Existem campos "
-					+ "obrigatórios sem preenchimento. Verifique as datas informadas e tente novamente.", AlertType.ERROR);
-		}
-		catch (SQLException e) {
+		} catch (NullPointerException e) {
+			Alerts.showAlert("Erro ao salvar as informações de pagamento", null,
+					"Existem campos "
+							+ "obrigatórios sem preenchimento. Verifique as datas informadas e tente novamente.",
+					AlertType.ERROR);
+		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
@@ -161,30 +161,29 @@ public class AlunoDaoJDBC implements AlunoDao {
 	}
 
 	@Override
-	public void deleteById(Integer id) {
+	public void deleteById(Integer id, String tabelaAluno) {
 		PreparedStatement st = null;
 
 		try {
-			st = conn.prepareStatement("DELETE FROM aluno WHERE Id = ?");
+			st = conn.prepareStatement("DELETE FROM " + tabelaAluno + " WHERE Id = ?");
 			st.setInt(1, id);
 			st.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
-		}
-		finally {
+		} finally {
 			DB.closeStatement(st);
 		}
 	}
 
 	@Override
-	public Aluno findById(Integer id) {
+	public Aluno findById(Integer id, String tabelaAluno, String tabelaPlano) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 
 		try {
-			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id " + "WHERE aluno.Id = ?");
-
+			st = conn.prepareStatement("SELECT " + tabelaAluno + ".*, " + tabelaPlano + ".Nome as PlanoNome " + "FROM "
+					+ tabelaAluno + " INNER JOIN " + tabelaPlano + "ON " + tabelaAluno + ".PlanoId = " + tabelaPlano
+					+ ".Id " + "WHERE " + tabelaAluno + ".Id = ?");
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
@@ -200,20 +199,19 @@ public class AlunoDaoJDBC implements AlunoDao {
 			DB.closeStatement(st);
 		}
 	}
-	
+
 	@Override
-	public List<Aluno> findByAtivo(Boolean ativo) {
+	public List<Aluno> findByAtivo(Boolean ativo, String tabelaAluno, String tabelaPlano) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
-		
+
 		try {
-			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome "
-					+ "FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id "
-					+ "WHERE ativo = ?");
-			st.setBoolean(1,  ativo);
+			st = conn.prepareStatement("SELECT " + tabelaAluno + ".*, " + tabelaPlano + ".Nome as PlanoNome " + "FROM "
+					+ tabelaAluno + " INNER JOIN " + tabelaPlano + " ON " + tabelaAluno + ".PlanoId = " + tabelaPlano
+					+ ".Id " + "WHERE ativo = ?");
+			st.setBoolean(1, ativo);
 			rs = st.executeQuery();
-			
+
 			List<Aluno> list = new ArrayList<>();
 			while (rs.next()) {
 				Plano plano = instantiatePlano(rs);
@@ -230,14 +228,16 @@ public class AlunoDaoJDBC implements AlunoDao {
 	}
 
 	@Override
-	public List<Aluno> findByName(String nome, int length) {
+	public List<Aluno> findByName(String nome, int length, String tabelaAluno, String tabelaPlano) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 
 		try {
-			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id " + "WHERE UPPER(substring(aluno.Nome,1,?)) = UPPER(?) ORDER BY aluno.Nome ");
-			
+			st = conn.prepareStatement("SELECT " + tabelaAluno + ".*, " + tabelaPlano + ".Nome as PlanoNome " + "FROM "
+					+ tabelaAluno + " INNER JOIN " + tabelaPlano + " ON " + tabelaAluno + ".PlanoId = " + tabelaPlano
+					+ ".Id " + "WHERE UPPER(substring(" + tabelaAluno + ".Nome,1,?)) = UPPER(?) ORDER BY " + tabelaAluno
+					+ ".Nome ");
+
 			st.setInt(1, length);
 			st.setString(2, nome);
 			rs = st.executeQuery();
@@ -282,14 +282,14 @@ public class AlunoDaoJDBC implements AlunoDao {
 	}
 
 	@Override
-	public List<Aluno> findAll() {
+	public List<Aluno> findAll(String tabelaAluno, String tabelaPlano) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 
 		try {
-			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " + "FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id " + "WHERE ativo = TRUE ORDER BY UPPER(aluno.Nome)");
-
+			st = conn.prepareStatement("SELECT " + tabelaAluno + ".*, " + tabelaPlano + ".Nome as PlanoNome " + "FROM "
+					+ tabelaAluno + " INNER JOIN " + tabelaPlano + " ON " + tabelaAluno + ".PlanoId = " + tabelaPlano
+					+ ".Id " + "WHERE ativo = TRUE ORDER BY UPPER(" + tabelaAluno + ".Nome)");
 			rs = st.executeQuery();
 
 			List<Aluno> list = new ArrayList<>();
@@ -311,20 +311,21 @@ public class AlunoDaoJDBC implements AlunoDao {
 			DB.closeStatement(st);
 		}
 	}
-	
+
 	@Override
-	public List<Aluno> findByPlano(Integer planoId) {
+	public List<Aluno> findByPlano(Integer planoId, String tabelaAluno, String tabelaPlano) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
-		
+
 		try {
-			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
-					+ "ON aluno.Planoid = plano.Id WHERE aluno.PlanoId = ? ORDER BY UPPER(aluno.Nome)");
-			st.setInt(1,  planoId);
+			st = conn.prepareStatement("SELECT " + tabelaAluno + ".*, " + tabelaPlano + ".Nome as PlanoNome FROM "
+					+ tabelaAluno + " INNER JOIN " + tabelaPlano + " ON " + tabelaAluno + ".Planoid = " + tabelaPlano
+					+ ".Id WHERE " + tabelaAluno + ".PlanoId = ? ORDER BY UPPER(" + tabelaAluno + ".Nome)");
+			st.setInt(1, planoId);
 			rs = st.executeQuery();
-			
+
 			List<Aluno> list = new ArrayList<>();
-			while(rs.next()) {
+			while (rs.next()) {
 				Plano plano = instantiatePlano(rs);
 				Aluno aluno = instantiateAluno(rs, plano);
 				list.add(aluno);
@@ -339,13 +340,15 @@ public class AlunoDaoJDBC implements AlunoDao {
 	}
 
 	@Override
-	public List<Aluno> findByPresenca(Boolean presenca) {
+	public List<Aluno> findByPresenca(Boolean presenca, String tabelaAluno, String tabelaPlano) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 
 		try {
-			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id WHERE Presenca = ? ORDER BY UPPER(aluno.Nome)");
+			st = conn.prepareStatement("SELECT " + tabelaAluno + ".*, " + tabelaPlano + ".Nome as PlanoNome FROM "
+					+ tabelaAluno + " INNER JOIN " + tabelaPlano + " ON " + tabelaAluno + ".PlanoId = " + tabelaPlano
+					+ ".Id WHERE Presenca = ? ORDER BY UPPER(" + tabelaAluno + ".Nome)");
+
 			st.setBoolean(1, presenca);
 			rs = st.executeQuery();
 
@@ -364,29 +367,30 @@ public class AlunoDaoJDBC implements AlunoDao {
 			DB.closeStatement(st);
 		}
 	}
-	
+
 	@Override
-	public List<Aluno> findByPagamento(Date data) {
+	public List<Aluno> findByPagamento(Date data, String tabelaAluno, String tabelaPlano) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
-		
+
 		try {
-			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id WHERE Pagamento < ? ORDER BY UPPER(aluno.Nome)");
+			st = conn.prepareStatement("SELECT " + tabelaAluno + ".*, " + tabelaPlano + ".Nome as PlanoNome FROM "
+					+ tabelaAluno + " INNER JOIN " + tabelaPlano + " ON " + tabelaAluno + ".PlanoId = " + tabelaPlano
+					+ ".Id WHERE Pagamento < ? ORDER BY UPPER(" + tabelaAluno + ".Nome)");
 			if (data != null) {
 				st.setDate(1, new java.sql.Date(data.getTime()));
 			} else {
 				st.setDate(1, null);
 			}
 			rs = st.executeQuery();
-			
+
 			List<Aluno> list = new ArrayList<>();
-			while(rs.next()) {
+			while (rs.next()) {
 				Plano plano = instantiatePlano(rs);
 				Aluno aluno = instantiateAluno(rs, plano);
 				list.add(aluno);
 			}
-			
+
 			return list;
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
@@ -395,29 +399,31 @@ public class AlunoDaoJDBC implements AlunoDao {
 			DB.closeStatement(st);
 		}
 	}
-	
+
 	@Override
-	public List<Aluno> findByVencimento(Date data) {
+	public List<Aluno> findByVencimento(Date data, String tabelaAluno, String tabelaPlano) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
-		
+
 		try {
-			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome FROM aluno INNER JOIN plano "
-					+ "ON aluno.PlanoId = plano.Id WHERE Vencimento < ? AND aluno.Ativo = TRUE ORDER BY UPPER(aluno.Nome)");
+			st = conn.prepareStatement("SELECT " + tabelaAluno + ".*, " + tabelaPlano + ".Nome as PlanoNome " + "FROM "
+					+ tabelaAluno + " INNER JOIN " + tabelaPlano + "ON " + tabelaAluno + ".PlanoId = " + tabelaPlano
+					+ ".Id WHERE Vencimento < ? AND " + tabelaAluno + "?.Ativo = TRUE ORDER BY UPPER(" + tabelaAluno
+					+ ".Nome)");
 			if (data != null) {
-				st.setDate(1,  new java.sql.Date(data.getTime()));
+				st.setDate(1, new java.sql.Date(data.getTime()));
 			} else {
-				st.setDate(1,  null);
+				st.setDate(1, null);
 			}
 			rs = st.executeQuery();
-			
+
 			List<Aluno> list = new ArrayList<>();
-			while(rs.next()) {
+			while (rs.next()) {
 				Plano plano = instantiatePlano(rs);
 				Aluno aluno = instantiateAluno(rs, plano);
 				list.add(aluno);
 			}
-			
+
 			return list;
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
@@ -426,7 +432,6 @@ public class AlunoDaoJDBC implements AlunoDao {
 			DB.closeStatement(st);
 		}
 	}
-	
 
 	@Override
 	public void saveByPresenca(Boolean presenca, String filename) {
@@ -446,9 +451,10 @@ public class AlunoDaoJDBC implements AlunoDao {
 				presentes.add(aluno.getId());
 			}
 			try {
-				Path path = Paths.get(System.getProperty("user.dir")+"\\presencas");
-				if (!Files.exists(path)) Files.createDirectories(path);
-				os = new FileOutputStream(".\\presencas\\"+filename, true);
+				Path path = Paths.get(System.getProperty("user.dir") + "\\presencas");
+				if (!Files.exists(path))
+					Files.createDirectories(path);
+				os = new FileOutputStream(".\\presencas\\" + filename, true);
 				os.write(("|" + String.valueOf(LocalDate.now())).getBytes());
 				for (int id : presentes) {
 					os.write(("," + id).getBytes());
@@ -466,26 +472,25 @@ public class AlunoDaoJDBC implements AlunoDao {
 			throw new DBException(e.getMessage());
 		}
 	}
-	
+
 	@Override
 	public void backupDados() {
 		DB.backupData();
 	}
-	
+
 	@Override
 	public void lerBackup(String filepath) {
 		DB.lerBackup(filepath);
 	}
-	
+
 	@Override
-	public Integer contarAlunos() {
+	public Integer contarAlunos(String tabelaAluno, String tabelaPlano) {
 		PreparedStatement st = null;
-		ResultSet rs = null;		
+		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT aluno.*, plano.Nome as PlanoNome " 
-										+ "FROM aluno INNER JOIN plano "
-										+ "ON aluno.PlanoId = plano.Id " 
-										+ "WHERE ativo = TRUE");
+			st = conn.prepareStatement("SELECT " + tabelaAluno + ".*, " + tabelaPlano + ".Nome as PlanoNome " + "FROM "
+					+ tabelaAluno + " INNER JOIN " + tabelaPlano + " ON " + tabelaAluno + ".PlanoId = " + tabelaPlano
+					+ ".Id " + "WHERE ativo = TRUE");
 			rs = st.executeQuery();
 			rs.last();
 			return rs.getRow();

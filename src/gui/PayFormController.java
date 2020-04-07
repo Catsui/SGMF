@@ -62,6 +62,8 @@ public class PayFormController implements Initializable {
 
 	@FXML
 	private Button btnCancel;
+	
+	private String tabelaAluno = "ALUNO";
 
 	public void setAluno(Aluno entity) {
 		this.entity = entity;
@@ -95,7 +97,7 @@ public class PayFormController implements Initializable {
 			}
 			cal.add(Calendar.MONTH, comboBoxMeses.getValue());
 			entity.setPagamento(cal.getTime());
-			service.updatePagamento(entity);
+			service.updatePagamento(entity, tabelaAluno);
 			notifyDataChangeListeners();
 			Utils.currentStage(event).close();
 		} catch (DBException e) {

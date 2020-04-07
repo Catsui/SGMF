@@ -65,6 +65,8 @@ public class AlunoViewController implements Initializable {
 
 	@FXML
 	private Button btnBack;
+	
+	private String tabela = "ALUNO";
 
 	public void setAluno(Aluno entity) {
 		this.entity = entity;

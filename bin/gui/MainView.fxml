@@ -14,8 +14,18 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Gerenciar">
                   <items>
-                    <MenuItem fx:id="menuItemAluno" mnemonicParsing="false" onAction="#onMenuItemAlunoAction" text="Alunos" />
-                        <MenuItem fx:id="menuItemPlano" mnemonicParsing="false" onAction="#onMenuItemPlanoAction" text="Planos" />
+                        <Menu mnemonicParsing="false" text="Alunos">
+                          <items>
+                          <MenuItem fx:id="menuItemAlunoAdulto" mnemonicParsing="false" onAction="#onMenuItemAlunoAdultoAction" text="Alunos" />
+                            <MenuItem fx:id="menuItemAlunoCrianca" mnemonicParsing="false" onAction="#onMenuItemAlunoCriancaAction" text="Crianças" />
+                          </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Planos">
+                          <items>
+                              <MenuItem fx:id="menuItemPlanoAdulto" mnemonicParsing="false" onAction="#onMenuItemPlanoAdultoAction" text="Adultos" />
+                            <MenuItem fx:id="menuItemPlanoCrianca" mnemonicParsing="false" onAction="#onMenuItemPlanoCriancaAction" text="Crianças" />
+                          </items>
+                        </Menu>
                         <MenuItem fx:id="menuItemSalvarPresencas" mnemonicParsing="false" onAction="#onMenuItemSalvarPresencasAction" text="Salvar Presenças" />
                   </items>
                 </Menu>

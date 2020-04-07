@@ -42,6 +42,10 @@ import model.services.PlanoService;
 public class AlunoFormController implements Initializable {
 
 	private Aluno entity;
+	
+	private String tabelaAluno;
+	
+	private String tabelaPlano;
 
 	private AlunoService service;
 	
@@ -92,9 +96,14 @@ public class AlunoFormController implements Initializable {
 
 	@FXML
 	private Button btnCancel;
-
+	
 	public void setAluno(Aluno entity) {
 		this.entity = entity;
+	}
+	
+	public void setTabelas(String tabelaAluno, String tabelaPlano) {
+		this.tabelaAluno = tabelaAluno;
+		this.tabelaPlano = tabelaPlano;
 	}
 
 	public void setServices(AlunoService service, PlanoService planoService) {
@@ -116,7 +125,7 @@ public class AlunoFormController implements Initializable {
 		}
 		try {
 			entity = getFormData();
-			service.saveOrUpdate(entity);
+			service.saveOrUpdate(entity, tabelaAluno);
 			notifyDataChangeListeners();
 			Utils.currentStage(event).close();
 		} catch (DBException e) {
@@ -173,7 +182,7 @@ public class AlunoFormController implements Initializable {
 		
 		obj.setPlano(comboBoxPlano.getValue());
 
-		obj.setTreino(txtTreino.getText());
+		//obj.setTreino(txtTreino.getText());
 
 		return obj;
 	}
@@ -229,7 +238,7 @@ public class AlunoFormController implements Initializable {
 			java.util.Date dataInicio = new Date(entity.getDataInicio().getTime());
 			dpDataInicio.setValue(dataInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		}
-		txtTreino.setText(entity.getTreino());
+		//txtTreino.setText(entity.getTreino());
 		if(entity.getPlano()==null) {
 			comboBoxPlano.getSelectionModel().selectFirst();
 		} else {
@@ -251,7 +260,7 @@ public class AlunoFormController implements Initializable {
 		if (planoService == null) {
 			throw new IllegalStateException("Serviço de plano está nulo.");
 		}
-		List<Plano> list = planoService.findAll();
+		List<Plano> list = planoService.findAll(tabelaPlano);
 		obsList = FXCollections.observableArrayList(list);
 		comboBoxPlano.setItems(obsList);
 	}

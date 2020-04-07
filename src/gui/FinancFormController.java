@@ -60,6 +60,8 @@ public class FinancFormController implements Initializable {
 
 	@FXML
 	private Button btnCancel;
+	
+	private String tabelaAluno = "ALUNO";
 
 	public void setAluno(Aluno entity) {
 		this.entity = entity;
@@ -84,7 +86,7 @@ public class FinancFormController implements Initializable {
 		}
 		try {
 			entity = getFormData();
-			service.updatePagamento(entity);
+			service.updatePagamento(entity, tabelaAluno);
 			notifyDataChangeListeners();
 			Utils.currentStage(event).close();
 		} catch (DBException e) {

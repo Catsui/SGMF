@@ -23,17 +23,17 @@ public class PlanoDaoJDBC implements PlanoDao {
 	}
 
 	@Override
-	public void insert(Plano plano) {
+	public void insert(Plano plano, String tabelaPlano) {
 		PreparedStatement st = null;
 		
 		try {
 			st = conn.prepareStatement(
-					"INSERT into plano "
-					+ "(Nome, Mensalidade) "
+					"INSERT into " 
+					+ tabelaPlano 
+					+ " (Nome, Mensalidade) "
 					+ "VALUES (?,?)",
 					Statement.RETURN_GENERATED_KEYS
 					);
-			
 			st.setString(1, plano.getNome());
 			st.setDouble(2,  plano.getMensalidade());
 			
@@ -58,19 +58,21 @@ public class PlanoDaoJDBC implements PlanoDao {
 	}
 
 	@Override
-	public void update(Plano plano) {
+	public void update(Plano plano, String tabelaPlano) {
 		PreparedStatement st = null;
 		
 		try {
 			st = conn.prepareStatement(
-					"UPDATE plano "
-					+ "SET Nome = ?, Mensalidade = ? "
+					"UPDATE " 
+					+ tabelaPlano
+					+ " SET Nome = ?, Mensalidade = ? "
 					+ "WHERE Id = ?"
 					);
 			
-			st.setString(1, plano.getNome());
-			st.setDouble(2, plano.getMensalidade());
-			st.setInt(3, plano.getId());
+			st.setString(1, tabelaPlano);
+			st.setString(2, plano.getNome());
+			st.setDouble(3, plano.getMensalidade());
+			st.setInt(4, plano.getId());
 					
 			st.executeUpdate();
 			
@@ -82,16 +84,18 @@ public class PlanoDaoJDBC implements PlanoDao {
 	}
 
 	@Override
-	public void deleteById(Integer id) {
+	public void deleteById(Integer id, String tabelaPlano) {
 		PreparedStatement st = null;
 		
 		try {
 			st = conn.prepareStatement(
-					"DELETE from plano "
-					+ "WHERE Id = ?"
+					"DELETE from "
+					+ tabelaPlano
+					+ " WHERE Id = ?"
 					);
 			
-			st.setInt(1, id);
+			st.setString(1, tabelaPlano);
+			st.setInt(2, id);
 			st.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBIntegrityException(e.getMessage());
@@ -101,14 +105,15 @@ public class PlanoDaoJDBC implements PlanoDao {
 	}
 
 	@Override
-	public Plano findById(Integer id) {
+	public Plano findById(Integer id, String tabelaPlano) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		
 		try {
 			st = conn.prepareStatement( 
-					"SELECT * from plano "
-					+ "where Id = ?"
+					"SELECT * from "
+					+ tabelaPlano
+					+ " WHERE Id = ?"
 					);
 			
 			st.setInt(1,id);
@@ -127,13 +132,13 @@ public class PlanoDaoJDBC implements PlanoDao {
 	}
 
 	@Override
-	public List<Plano> findAll() {
+	public List<Plano> findAll(String tabelaPlano) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 	
 		try {
 			st = conn.prepareStatement(
-					"SELECT * FROM PLANO "
+					"SELECT * FROM " + tabelaPlano
 					);
 			rs = st.executeQuery();
 			List<Plano> list = new ArrayList<>();

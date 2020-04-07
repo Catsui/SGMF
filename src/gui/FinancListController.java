@@ -46,10 +46,10 @@ public class FinancListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private TableColumn<Aluno, Date> tableColumnPagamento;
-	
+
 	@FXML
 	private TableColumn<Aluno, Date> tableColumnReferencia;
-	
+
 	@FXML
 	private TableColumn<Aluno, Date> tableColumnVencimento;
 
@@ -76,6 +76,10 @@ public class FinancListController implements Initializable, DataChangeListener {
 
 	private ObservableList<Aluno> obsList;
 
+	private String tabelaAluno = "ALUNO";
+
+	private String tabelaPlano = "PLANO";
+
 	@FXML
 	public void onBtnPesquisaNomeAction() {
 		findByName();
@@ -96,7 +100,6 @@ public class FinancListController implements Initializable, DataChangeListener {
 	public void onBtnMostrarPendentesAction() {
 		findByVencimento(java.sql.Date.valueOf(LocalDate.now()));
 	}
-
 
 	public void setAlunoService(AlunoService service) {
 		this.service = service;
@@ -138,7 +141,8 @@ public class FinancListController implements Initializable, DataChangeListener {
 				}
 
 				setGraphic(button);
-				button.setOnAction(event -> createDialogFinancForm(obj, "/gui/FinancForm.fxml", Utils.currentStage(event)));
+				button.setOnAction(
+						event -> createDialogFinancForm(obj, "/gui/FinancForm.fxml", Utils.currentStage(event)));
 			}
 		});
 	}
@@ -170,13 +174,13 @@ public class FinancListController implements Initializable, DataChangeListener {
 			throw new IllegalStateException("Serviço nulo.");
 		}
 		if (txtPesquisaNome.getText().length() > 0) {
-			obsList = FXCollections.observableArrayList(
-				service.findByName(txtPesquisaNome.getText(), txtPesquisaNome.getText().length()));
+			obsList = FXCollections.observableArrayList(service.findByName(txtPesquisaNome.getText(),
+					txtPesquisaNome.getText().length(), tabelaAluno, tabelaPlano));
 		} else {
-			obsList = FXCollections.observableArrayList(service.findAll());
+			obsList = FXCollections.observableArrayList(service.findAll(tabelaAluno, tabelaPlano));
 		}
 		tableViewAluno.setItems(obsList);
-		//initPayButtons();
+		// initPayButtons();
 		initEditButtons();
 	}
 
@@ -184,33 +188,33 @@ public class FinancListController implements Initializable, DataChangeListener {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");
 		}
-		obsList = FXCollections.observableArrayList(service.findAll());
+		obsList = FXCollections.observableArrayList(service.findAll(tabelaAluno, tabelaPlano));
 
 		tableViewAluno.setItems(obsList);
-		//initPayButtons();
+		// initPayButtons();
 		initEditButtons();
 	}
-	
+
 	public void findByPagamento(Date data) {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");
 		}
-		obsList = FXCollections.observableArrayList(service.findByPagamento(data));
-		
+		obsList = FXCollections.observableArrayList(service.findByPagamento(data, tabelaAluno, tabelaPlano));
+
 		tableViewAluno.setItems(obsList);
-		//initPayButtons();
+		// initPayButtons();
 		initEditButtons();
-		
+
 	}
-	
+
 	public void findByVencimento(Date data) {
-		if (service ==  null) {
+		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");
 		}
-		obsList = FXCollections.observableArrayList(service.findByVencimento(data));
-		
+		obsList = FXCollections.observableArrayList(service.findByVencimento(data, tabelaAluno, tabelaPlano));
+
 		tableViewAluno.setItems(obsList);
-		//initPayButtons();
+		// initPayButtons();
 		initEditButtons();
 	}
 
@@ -218,9 +222,9 @@ public class FinancListController implements Initializable, DataChangeListener {
 		if (service == null) {
 			throw new IllegalStateException("Serviço nulo.");
 		}
-		obsList = FXCollections.observableArrayList(service.findAll());
+		obsList = FXCollections.observableArrayList(service.findAll(tabelaAluno, tabelaPlano));
 		tableViewAluno.setItems(obsList);
-		//initPayButtons();
+		// initPayButtons();
 		initEditButtons();
 	}
 
@@ -248,7 +252,7 @@ public class FinancListController implements Initializable, DataChangeListener {
 			Alerts.showAlert("IO Exception", "Erro ao carregar nova janela.", e.getMessage(), AlertType.ERROR);
 		}
 	}
-	
+
 	public void createDialogFinancForm(Aluno obj, String absoluteName, Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));

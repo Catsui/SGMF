@@ -55,27 +55,30 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemAlunoAdultoAction() {
-		loadView("/gui/AlunoList.fxml", (AlunoListController controller) -> {
+		loadView("/gui/AlunoAdultoList.fxml", (AlunoListController controller) -> {
+			controller.setTabelas("ALUNO", "PLANO");
 			controller.setAlunoService(new AlunoService());
 			controller.setPlanoService(new PlanoService());
-			controller.loadAssociatedObjects();
+			controller.loadAssociatedObjects(controller.getTabelaPlano());
 			controller.updateTableView();
 		});
 	}
 		
 	@FXML
 	public void onMenuItemAlunoCriancaAction() {
-		loadView("/gui/AlunoCriancaList.fxml", (AlunoCriancaListController controller) -> {
+		loadView("/gui/AlunoCriancaList.fxml", (AlunoListController controller) -> {
+			controller.setTabelas("ALUNOCRIANCA", "PLANOCRIANCA");
 			controller.setAlunoService(new AlunoService());
 			controller.setPlanoService(new PlanoService());
-			controller.loadAssociatedObjects();
+			controller.loadAssociatedObjects(controller.getTabelaPlano());
 			controller.updateTableView();
 		});	
 	}
 
 	@FXML
 	public void onMenuItemPlanoAdultoAction() {
-		loadView("/gui/PlanoList.fxml", (PlanoListController controller) -> {
+		loadView("/gui/PlanoAdultoList.fxml", (PlanoListController controller) -> {
+			controller.setTabelas("PLANO");
 			controller.setPlanoService(new PlanoService());
 			controller.updateTableView();
 		});
@@ -84,7 +87,8 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	public void onMenuItemPlanoCriancaAction() {
-		loadView("/gui/PlanoCriancaList.fxml", (PlanoCriancaListController controller) -> {
+		loadView("/gui/PlanoCriancaList.fxml", (PlanoListController controller) -> {
+			controller.setTabelas("PLANOCRIANCA");
 			controller.setPlanoService(new PlanoService());
 			controller.updateTableView();
 		});	

@@ -33,6 +33,10 @@ import model.entities.Plano;
 import model.services.PlanoService;
 
 public class PlanoListController implements Initializable, DataChangeListener {
+	
+	private String tabelaPlano;
+	
+	private String telaPlanoForm;
 
 	private PlanoService service;
 
@@ -58,17 +62,28 @@ public class PlanoListController implements Initializable, DataChangeListener {
 	private TableColumn<Plano, Plano> tableColumnREMOVE;
 
 	private ObservableList<Plano> obsList;
-
+	
+	public void setTabelas(String tabelaPlano) {
+		this.tabelaPlano = tabelaPlano;
+		if (tabelaPlano.equals("PLANO")) {
+			telaPlanoForm = "/gui/PlanoAdultoForm.fxml";
+		}
+		if (tabelaPlano.equals("PLANOCRIANCA")) {
+			telaPlanoForm = "/gui/PlanoCriancaForm.fxml";
+		}
+	}
+	
 	@FXML
 	public void onBtnNovoPlanoAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
 		Plano obj = new Plano();
-		createDialogForm(obj, "/gui/PlanoForm.fxml", parentStage);
+		createDialogForm(obj, telaPlanoForm, parentStage);
 	}
 
 	public void setPlanoService(PlanoService service) {
 		this.service = service;
 	}
+
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -90,7 +105,7 @@ public class PlanoListController implements Initializable, DataChangeListener {
 		if (service == null) {
 			throw new IllegalStateException("O serviço não existe.");
 		}
-		List<Plano> list = service.findAll();
+		List<Plano> list = service.findAll(tabelaPlano);
 		obsList = FXCollections.observableArrayList(list);
 		tableViewPlano.setItems(obsList);
 		initEditButtons();
@@ -104,6 +119,7 @@ public class PlanoListController implements Initializable, DataChangeListener {
 
 			PlanoFormController controller = loader.getController();
 			controller.setPlano(obj);
+			controller.setTabelas(tabelaPlano);
 			controller.setService(new PlanoService());
 			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
@@ -161,6 +177,7 @@ public class PlanoListController implements Initializable, DataChangeListener {
 					return;
 				}
 				
+				
 				setGraphic(button);
 				button.setOnAction(event -> removeEntity(obj));
 				
@@ -179,7 +196,7 @@ public class PlanoListController implements Initializable, DataChangeListener {
 			}
 			
 			try {
-				service.remove(obj);
+				service.remove(obj, tabelaPlano);
 				updateTableView();
 			} catch (DBIntegrityException e) {
 				Alerts.showAlert("Erro ao remover o objeto", null, 

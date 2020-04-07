@@ -26,7 +26,10 @@ import model.services.PlanoService;
 public class PlanoFormController implements Initializable {
 
 	private Plano entity;
+	
 	private PlanoService service;
+	
+	private String tabelaPlano;
 
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
@@ -55,6 +58,10 @@ public class PlanoFormController implements Initializable {
 		this.entity = entity;
 	}
 
+	public void setTabelas(String tabelaPlano) {
+		this.tabelaPlano = tabelaPlano;
+	}
+
 	public void setService(PlanoService service) {
 		this.service = service;
 	}
@@ -62,7 +69,6 @@ public class PlanoFormController implements Initializable {
 	public void subscribeDataChangeListener(DataChangeListener listener) {
 		dataChangeListeners.add(listener);
 	}
-	
 
 	@FXML
 	public void onBtnSaveAction(ActionEvent event) {
@@ -75,7 +81,7 @@ public class PlanoFormController implements Initializable {
 
 		try {
 			entity = getFormData();
-			service.saveOrUpdate(entity);
+			service.saveOrUpdate(entity, tabelaPlano);
 			notifyDataChangeListeners();
 			Utils.currentStage(event).close();
 		} catch (DBException e) {
@@ -84,10 +90,10 @@ public class PlanoFormController implements Initializable {
 			setErrorMsgs(e.getErrors());
 		}
 	}
-	
+
 	@FXML
 	public void onBtnCancelAction(ActionEvent event) {
-		Utils.currentStage(event).close();		
+		Utils.currentStage(event).close();
 	}
 
 	private void setErrorMsgs(Map<String, String> errors) {
