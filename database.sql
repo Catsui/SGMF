@@ -22,6 +22,7 @@ INSERT INTO PLANOCRIANCA (Nome, Mensalidade) VALUES ('Plano 1: Todos os dias',92
 
 CREATE TABLE ALUNO (
   Id int(11) NOT NULL AUTO_INCREMENT,
+  Ativo boolean NOT NULL,
   Nome varchar(60) NOT NULL,
   DataNasc datetime(6) NOT NULL,
   Telefone varchar(20) DEFAULT NULL,

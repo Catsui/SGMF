@@ -31,7 +31,8 @@
                 </Menu>
                   <Menu mnemonicParsing="false" text="Mensalidades">
                     <items>
-                      <MenuItem fx:id="menuItemMensalidadesVencimentos" mnemonicParsing="false" onAction="#onMenuItemMensalidadesVencimentos" text="Vencimentos" />
+                        <MenuItem fx:id="menuItemMensalidadesAdultos" mnemonicParsing="false" onAction="#onMenuItemMensalidadesAdultosAction" text="Adultos" />
+                        <MenuItem mnemonicParsing="false" text="Crianças" />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Backup">

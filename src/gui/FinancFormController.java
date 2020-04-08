@@ -34,6 +34,8 @@ public class FinancFormController implements Initializable {
 	private AlunoService service;
 	
 	private PlanoService planoService;
+	
+	private String tabelaAluno;
 
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
@@ -61,7 +63,6 @@ public class FinancFormController implements Initializable {
 	@FXML
 	private Button btnCancel;
 	
-	private String tabelaAluno = "ALUNO";
 
 	public void setAluno(Aluno entity) {
 		this.entity = entity;
@@ -70,6 +71,10 @@ public class FinancFormController implements Initializable {
 	public void setServices(AlunoService service, PlanoService planoService) {
 		this.service = service;
 		this.planoService = planoService;
+	}
+	
+	public void setTabelas(String tabelaAluno) {
+		this.tabelaAluno = tabelaAluno;
 	}
 
 	public void subscribeDataChangeListener(DataChangeListener listener) {

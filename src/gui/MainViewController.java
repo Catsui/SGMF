@@ -51,8 +51,11 @@ public class MainViewController implements Initializable {
 	private MenuItem menuItemBackupRecuperarDados;
 	
 	@FXML
-	private MenuItem menuItemMensalidadesVencimentos;
-
+	private MenuItem menuItemMensalidadesAdultos;
+	
+	@FXML
+	private MenuItem menuItemMensalidadesCriancas;
+	
 	@FXML
 	public void onMenuItemAlunoAdultoAction() {
 		loadView("/gui/AlunoAdultoList.fxml", (AlunoListController controller) -> {
@@ -98,6 +101,15 @@ public class MainViewController implements Initializable {
 	public void onMenuItemSalvarPresencasAction(ActionEvent event) {
 		salvarPresencas(true, "presencas.csv");
 		Platform.exit();
+	}
+	
+	@FXML
+	public void onMenuItemMensalidadesAdultosAction() {
+		loadView("/gui/FinancAdultoList.fxml", (FinancListController controller) -> {
+			controller.setTabelas("ALUNO", "PLANO");
+			controller.setAlunoService(new AlunoService());
+			controller.updateTableView();
+		});
 	}
 
 	@FXML

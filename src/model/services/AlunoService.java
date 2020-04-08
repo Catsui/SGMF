@@ -39,8 +39,8 @@ public class AlunoService {
 		return dao.findByPresenca(presenca, tabelaAluno, tabelaPlano);
 	}
 
-	public void updatePresenca(Aluno obj, String tabela) {
-		dao.updatePresenca(obj, tabela);
+	public void updatePresenca(Aluno obj, String tabelaAluno) {
+		dao.updatePresenca(obj, tabelaAluno);
 	}
 
 	public List<Aluno> findByPagamento(Date data, String tabelaAluno, String tabelaPlano) {
@@ -67,8 +67,8 @@ public class AlunoService {
 		dao.saveByPresenca(presenca, filepath);
 	}
 
-	public void remove(Aluno obj, String tabela) {
-		dao.deleteById(obj.getId(), tabela);
+	public void remove(Aluno obj, String tabelaAluno) {
+		dao.deleteById(obj.getId(), tabelaAluno);
 	}
 
 	public void backupDados() {

@@ -34,6 +34,10 @@ import model.services.PlanoService;
 public class FinancListController implements Initializable, DataChangeListener {
 
 	private AlunoService service;
+	
+	private String tabelaAluno;
+
+	private String tabelaPlano;
 
 	@FXML
 	private TableView<Aluno> tableViewAluno;
@@ -75,10 +79,20 @@ public class FinancListController implements Initializable, DataChangeListener {
 	private Button btnMostrarPendentes;
 
 	private ObservableList<Aluno> obsList;
+	
+	public void setTabelas(String tabelaAluno, String tabelaPlano) {
+		this.tabelaAluno = tabelaAluno;
+		this.tabelaPlano = tabelaPlano;
+	}
+	
+	public String getTabelaAluno() {
+		return tabelaAluno;
+	}
+	
+	public String getTabelaPlano() {
+		return tabelaPlano;
+	}
 
-	private String tabelaAluno = "ALUNO";
-
-	private String tabelaPlano = "PLANO";
 
 	@FXML
 	public void onBtnPesquisaNomeAction() {
