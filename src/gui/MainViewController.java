@@ -111,6 +111,15 @@ public class MainViewController implements Initializable {
 			controller.updateTableView();
 		});
 	}
+	
+	@FXML
+	public void onMenuItemMensalidadesCriancasAction() {
+		loadView("/gui/FinancCriancaList.fxml", (FinancListController controller) -> {
+			controller.setTabelas("ALUNOCRIANCA", "PLANOCRIANCA");
+			controller.setAlunoService(new AlunoService());
+			controller.updateTableView();
+		});
+	}
 
 	@FXML
 	public void onMenuItemAjudaSobreAction() {

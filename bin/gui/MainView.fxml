@@ -16,7 +16,7 @@
                   <items>
                         <Menu mnemonicParsing="false" text="Alunos">
                           <items>
-                          <MenuItem fx:id="menuItemAlunoAdulto" mnemonicParsing="false" onAction="#onMenuItemAlunoAdultoAction" text="Alunos" />
+                          <MenuItem fx:id="menuItemAlunoAdulto" mnemonicParsing="false" onAction="#onMenuItemAlunoAdultoAction" text="Adultos" />
                             <MenuItem fx:id="menuItemAlunoCrianca" mnemonicParsing="false" onAction="#onMenuItemAlunoCriancaAction" text="Crianças" />
                           </items>
                         </Menu>
@@ -32,7 +32,7 @@
                   <Menu mnemonicParsing="false" text="Mensalidades">
                     <items>
                         <MenuItem fx:id="menuItemMensalidadesAdultos" mnemonicParsing="false" onAction="#onMenuItemMensalidadesAdultosAction" text="Adultos" />
-                        <MenuItem mnemonicParsing="false" text="Crianças" />
+                        <MenuItem fx:id="menuItemMensalidadesCriancas" mnemonicParsing="false" onAction="#onMenuItemMensalidadesCriancasAction" text="Crianças" />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Backup">

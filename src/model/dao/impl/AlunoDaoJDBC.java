@@ -407,8 +407,8 @@ public class AlunoDaoJDBC implements AlunoDao {
 
 		try {
 			st = conn.prepareStatement("SELECT " + tabelaAluno + ".*, " + tabelaPlano + ".Nome as PlanoNome " + "FROM "
-					+ tabelaAluno + " INNER JOIN " + tabelaPlano + "ON " + tabelaAluno + ".PlanoId = " + tabelaPlano
-					+ ".Id WHERE Vencimento < ? AND " + tabelaAluno + "?.Ativo = TRUE ORDER BY UPPER(" + tabelaAluno
+					+ tabelaAluno + " INNER JOIN " + tabelaPlano + " ON " + tabelaAluno + ".PlanoId = " + tabelaPlano
+					+ ".Id WHERE Vencimento < ? AND " + tabelaAluno + ".Ativo = TRUE ORDER BY UPPER(" + tabelaAluno
 					+ ".Nome)");
 			if (data != null) {
 				st.setDate(1, new java.sql.Date(data.getTime()));

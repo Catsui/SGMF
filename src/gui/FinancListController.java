@@ -275,6 +275,7 @@ public class FinancListController implements Initializable, DataChangeListener {
 			FinancFormController controller = loader.getController();
 			controller.setAluno(obj);
 			controller.setServices(new AlunoService(), new PlanoService());
+			controller.setTabelas(tabelaAluno);
 			controller.loadAssociatedObjects();
 			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();

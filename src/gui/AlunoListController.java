@@ -139,13 +139,7 @@ public class AlunoListController implements Initializable, DataChangeListener {
 	public void onBtnNovoAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
 		Aluno obj = new Aluno();
-		if (tabelaAluno.equals("ALUNO")) {
-			createDialogForm(obj, "/gui/AlunoAdultoForm.fxml", parentStage);
-		} 
-		if (tabelaAluno.equals("ALUNOCRIANCA")) {
-			createDialogForm(obj, "/gui/AlunoCriancaForm.fxml", parentStage);
-		}
-		
+		createDialogForm(obj, "/gui/AlunoForm.fxml", parentStage);		
 	}
 
 	@FXML
