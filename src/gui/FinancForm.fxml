@@ -60,7 +60,7 @@
                         <DatePicker fx:id="dpPagamento" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <DatePicker fx:id="dpReferencia" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <DatePicker fx:id="dpVencimento" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <Label text="Valor" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
+                        <Label text="Valor (Último pagamento)" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
                            <GridPane.margin>
                               <Insets right="10.0" />
                            </GridPane.margin>
