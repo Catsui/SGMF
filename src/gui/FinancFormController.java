@@ -19,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.robot.Robot;
@@ -56,6 +57,12 @@ public class FinancFormController implements Initializable {
 	
 	@FXML
 	private DatePicker dpVencimento;
+	
+	@FXML
+	private TextField txtMensalidade;
+	
+	@FXML
+	private TextArea txtObserv;	
 
 	@FXML
 	private Button btnConfirm;
@@ -138,6 +145,14 @@ public class FinancFormController implements Initializable {
 			obj.setVencimento(Date.from(instant));
 		}
 		
+		if (txtMensalidade.getText() != null) {
+			obj.setMensalidade(Utils.tryParseToDouble(txtMensalidade.getText()));
+		}
+		
+		if (txtObserv.getText() != null) {
+			obj.setObserv(txtObserv.getText());
+		}
+				
 		return obj;
 	}
 	
@@ -184,6 +199,9 @@ public class FinancFormController implements Initializable {
 			java.util.Date referencia = new Date(entity.getVencimento().getTime());
 			dpReferencia.setValue(referencia.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		}
+		txtMensalidade.setText(entity.getMensalidade() == null? "" : String.valueOf(entity.getMensalidade()));
+		txtObserv.setText(entity.getObserv());
+		
 	}
 	
 	public void loadAssociatedObjects() {

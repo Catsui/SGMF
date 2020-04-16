@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -12,76 +13,109 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="328.0" prefWidth="411.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.FinancFormController">
+<AnchorPane prefHeight="328.0" prefWidth="724.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.FinancFormController">
    <children>
-      <HBox layoutY="282.0" prefHeight="46.0" prefWidth="411.0" spacing="50.0">
+      <HBox>
          <children>
-            <Button fx:id="btnConfirm" mnemonicParsing="false" onAction="#onBtnConfirmAction" onMouseEntered="#validateDatePickers" text="Confirmar">
-               <HBox.margin>
-                  <Insets left="110.0" top="5.0" />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#onBtnCancelAction" text="Cancelar">
-               <HBox.margin>
-                  <Insets left="10.0" top="5.0" />
-               </HBox.margin></Button>
+            <VBox prefHeight="330.0" prefWidth="400.0">
+               <children>
+                  <GridPane prefHeight="275.0" prefWidth="400.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="186.0" minWidth="10.0" prefWidth="130.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="261.0" minWidth="10.0" prefWidth="211.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Id" GridPane.halignment="RIGHT">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="Nome" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="Telefone" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <TextField fx:id="txtId" editable="false" GridPane.columnIndex="1" />
+                        <TextField fx:id="txtNome" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtTelefone" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label text="Data de Pagamento" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <DatePicker fx:id="dpPagamento" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <DatePicker fx:id="dpReferencia" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <DatePicker fx:id="dpVencimento" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label text="Valor" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <TextField fx:id="txtMensalidade" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                           <GridPane.margin>
+                              <Insets right="65.0" />
+                           </GridPane.margin>
+                        </TextField>
+                        <Label text="Mês de Referência" wrapText="true" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="Próximo Vencimento" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                     </children>
+                  </GridPane>
+                  <HBox prefWidth="400.0" spacing="50.0">
+                     <children>
+                        <Button fx:id="btnConfirm" mnemonicParsing="false" onAction="#onBtnConfirmAction" onMouseEntered="#validateDatePickers" text="Confirmar">
+                           <HBox.margin>
+                              <Insets left="110.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#onBtnCancelAction" text="Cancelar">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </VBox>
+            <VBox prefHeight="330.0" prefWidth="321.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Observações (Pagamentos excedentes, exceções em geral)" textAlignment="CENTER" wrapText="true">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="5.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextArea fx:id="txtObserv" prefHeight="200.0" prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </VBox.margin>
+                  </TextArea>
+               </children>
+            </VBox>
          </children>
       </HBox>
-      <VBox layoutY="3.0" prefHeight="273.0" prefWidth="400.0">
-         <children>
-            <GridPane prefHeight="275.0" prefWidth="400.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="186.0" minWidth="10.0" prefWidth="130.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="261.0" minWidth="10.0" prefWidth="211.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label text="Id" GridPane.halignment="RIGHT">
-                     <GridPane.margin>
-                        <Insets right="10.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Nome" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets right="10.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Telefone" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets right="10.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <TextField fx:id="txtId" editable="false" GridPane.columnIndex="1" />
-                  <TextField fx:id="txtNome" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="txtTelefone" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label text="Pagamento" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
-                     <GridPane.margin>
-                        <Insets right="10.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <DatePicker fx:id="dpPagamento" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <DatePicker fx:id="dpReferencia" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <DatePicker fx:id="dpVencimento" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <Label text="Mês de Referência" wrapText="true" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
-                     <GridPane.margin>
-                        <Insets right="10.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label prefHeight="27.0" prefWidth="117.0" text="Próximo Vencimento" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
-                     <GridPane.margin>
-                        <Insets right="10.0" />
-                     </GridPane.margin>
-                  </Label>
-               </children>
-            </GridPane>
-         </children>
-      </VBox>
    </children>
 </AnchorPane>

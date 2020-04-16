@@ -142,11 +142,13 @@ public class AlunoDaoJDBC implements AlunoDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"UPDATE " + tabelaAluno + " SET Pagamento = ?, Referencia = ?, Vencimento = ? WHERE Id = ?");
+					"UPDATE " + tabelaAluno + " SET Pagamento = ?, Referencia = ?, Vencimento = ?, Mensalidade = ?, Observ = ? WHERE Id = ?");
 			st.setDate(1, new java.sql.Date(aluno.getPagamento().getTime()));
 			st.setDate(2, new java.sql.Date(aluno.getReferencia().getTime()));
 			st.setDate(3, new java.sql.Date(aluno.getVencimento().getTime()));
-			st.setInt(4, aluno.getId());
+			st.setDouble(4, aluno.getMensalidade());
+			st.setString(5, aluno.getObserv());
+			st.setInt(6, aluno.getId());
 			st.executeUpdate();
 		} catch (NullPointerException e) {
 			Alerts.showAlert("Erro ao salvar as informações de pagamento", null,
@@ -270,7 +272,9 @@ public class AlunoDaoJDBC implements AlunoDao {
 		aluno.setPagamento(rs.getDate("Pagamento"));
 		aluno.setReferencia(rs.getDate("Referencia"));
 		aluno.setVencimento(rs.getDate("Vencimento"));
+		aluno.setMensalidade(rs.getDouble("Mensalidade"));
 		aluno.setTreino(rs.getString("Treino"));
+		aluno.setObserv(rs.getString("Observ"));
 		return aluno;
 	}
 
@@ -278,6 +282,7 @@ public class AlunoDaoJDBC implements AlunoDao {
 		Plano plano = new Plano();
 		plano.setId(rs.getInt("PlanoId"));
 		plano.setNome(rs.getString("PlanoNome"));
+		plano.setMensalidade(rs.getDouble("Mensalidade"));
 		return plano;
 	}
 

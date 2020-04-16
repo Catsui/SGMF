@@ -113,7 +113,7 @@ public class AlunoViewController implements Initializable {
 		if (entity.getPlano() != null) {
 			txtPlano.setText(entity.getPlano().getNome());
 		}
-		txtTreino.setText(entity.getTreino());
+		//txtTreino.setText(entity.getTreino());
 	}
 
 }

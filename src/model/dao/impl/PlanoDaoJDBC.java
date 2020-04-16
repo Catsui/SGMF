@@ -69,10 +69,9 @@ public class PlanoDaoJDBC implements PlanoDao {
 					+ "WHERE Id = ?"
 					);
 			
-			st.setString(1, tabelaPlano);
-			st.setString(2, plano.getNome());
-			st.setDouble(3, plano.getMensalidade());
-			st.setInt(4, plano.getId());
+			st.setString(1, plano.getNome());
+			st.setDouble(2, plano.getMensalidade());
+			st.setInt(3, plano.getId());
 					
 			st.executeUpdate();
 			
@@ -94,8 +93,7 @@ public class PlanoDaoJDBC implements PlanoDao {
 					+ " WHERE Id = ?"
 					);
 			
-			st.setString(1, tabelaPlano);
-			st.setInt(2, id);
+			st.setInt(1, id);
 			st.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBIntegrityException(e.getMessage());

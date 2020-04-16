@@ -156,7 +156,9 @@ public class FinancListController implements Initializable, DataChangeListener {
 
 				setGraphic(button);
 				button.setOnAction(
-						event -> createDialogFinancForm(obj, "/gui/FinancForm.fxml", Utils.currentStage(event)));
+						event -> {
+							createDialogFinancForm(obj, "/gui/FinancForm.fxml", Utils.currentStage(event));
+						});
 			}
 		});
 	}

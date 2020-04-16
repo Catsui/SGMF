@@ -18,14 +18,17 @@ public class Aluno implements Serializable {
 	private Date pagamento;
 	private Date referencia;
 	private Date vencimento;
+	private Double mensalidade;
 	private String treino;
+	private String observ;
+	
 
 	public Aluno() {
 
 	}
 
 	public Aluno(Integer id, Boolean ativo, String nome, String telefone, Date dataNasc, Date dataInicio, Plano plano,
-			Boolean presenca, Date pagamento, Date referencia, Date vencimento, String treino) {
+			Boolean presenca, Date pagamento, Date referencia, Date vencimento, Double mensalidade, String treino, String observ) {
 		this.id = id;
 		this.ativo = ativo;
 		this.nome = nome;
@@ -37,7 +40,9 @@ public class Aluno implements Serializable {
 		this.pagamento = pagamento;
 		this.referencia = referencia;
 		this.vencimento = vencimento;
+		this.mensalidade = mensalidade;
 		this.treino = treino;
+		this.observ = observ;
 	}
 
 	public Integer getId() {
@@ -127,6 +132,14 @@ public class Aluno implements Serializable {
 	public void setVencimento(Date vencimento) {
 		this.vencimento = vencimento;
 	}
+	
+	public Double getMensalidade() {
+		return mensalidade;
+	}
+	
+	public void setMensalidade(Double mensalidade) {
+		this.mensalidade = mensalidade;
+	}
 
 	public String getTreino() {
 		return treino;
@@ -134,6 +147,14 @@ public class Aluno implements Serializable {
 
 	public void setTreino(String treino) {
 		this.treino = treino;
+	}
+	
+	public String getObserv() {
+		return observ;
+	}
+	
+	public void setObserv(String observ) {
+		this.observ = observ;
 	}
 
 	@Override
