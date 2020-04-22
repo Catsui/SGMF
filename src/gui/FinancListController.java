@@ -62,6 +62,9 @@ public class FinancListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private TableColumn<Aluno, Aluno> tableColumnEDIT;
+	
+	@FXML
+	private TableColumn<Aluno, Aluno> tableColumnEDITAUX;
 
 	@FXML
 	private Button btnPesquisaNome;
@@ -140,10 +143,10 @@ public class FinancListController implements Initializable, DataChangeListener {
 
 	private void initEditButtons() {
 		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tableColumnEDIT.setPrefWidth(53);
+		tableColumnEDIT.setPrefWidth(80);
 		tableColumnEDIT.setStyle("-fx-alignment: CENTER");
 		tableColumnEDIT.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
-			private final Button button = new Button("Editar");
+			private final Button button = new Button("Pagamento");
 
 			@Override
 			protected void updateItem(Aluno obj, boolean empty) {
@@ -158,6 +161,31 @@ public class FinancListController implements Initializable, DataChangeListener {
 				button.setOnAction(
 						event -> {
 							createDialogFinancForm(obj, "/gui/FinancForm.fxml", Utils.currentStage(event));
+						});
+			}
+		});
+	}
+	
+	private void initEditAuxButtons() {
+		tableColumnEDITAUX.setCellValueFactory(param -> new ReadOnlyObjectWrapper<> (param.getValue()));
+		tableColumnEDITAUX.setPrefWidth(95);
+		tableColumnEDITAUX.setStyle("-fx-alignment: CENTER");
+		tableColumnEDITAUX.setCellFactory(param -> new TableCell<Aluno, Aluno>() {
+			private final Button button = new Button("Editar Valores");
+			
+			@Override
+			protected void updateItem(Aluno obj, boolean empty) {
+				super.updateItem(obj, empty);
+				
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				
+				setGraphic(button);
+				button.setOnAction(
+						event -> {
+							createDialogFinancForm(obj, "/gui/FinancFormAux.fxml", Utils.currentStage(event));
 						});
 			}
 		});
@@ -242,6 +270,7 @@ public class FinancListController implements Initializable, DataChangeListener {
 		tableViewAluno.setItems(obsList);
 		// initPayButtons();
 		initEditButtons();
+		initEditAuxButtons();
 	}
 
 	public void createDialogPayForm(Aluno obj, String absoluteName, Stage parentStage) {

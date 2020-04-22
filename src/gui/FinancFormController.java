@@ -30,7 +30,7 @@ import model.services.PlanoService;
 
 public class FinancFormController implements Initializable {
 
-	private Aluno entity;
+	protected Aluno entity;
 
 	private AlunoService service;
 	
@@ -41,34 +41,34 @@ public class FinancFormController implements Initializable {
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
 	@FXML
-	private TextField txtId;
+	protected TextField txtId;
 
 	@FXML
-	private TextField txtNome;
+	protected TextField txtNome;
 
 	@FXML
-	private TextField txtTelefone;
+	protected TextField txtTelefone;
 	
 	@FXML
-	private DatePicker dpPagamento;
+	protected DatePicker dpPagamento;
 	
 	@FXML
-	private DatePicker dpReferencia;
+	protected DatePicker dpReferencia;
 	
 	@FXML
-	private DatePicker dpVencimento;
+	protected DatePicker dpVencimento;
 	
 	@FXML
-	private TextField txtMensalidade;
+	protected TextField txtMensalidade;
 	
 	@FXML
-	private TextArea txtObserv;	
+	protected TextArea txtObserv;	
 
 	@FXML
-	private Button btnConfirm;
+	protected Button btnConfirm;
 
 	@FXML
-	private Button btnCancel;
+	protected Button btnCancel;
 	
 
 	public void setAluno(Aluno entity) {
